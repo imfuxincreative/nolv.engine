@@ -69,7 +69,7 @@ function Layer3() {
     <div>
       <svg
         ref={svgRef}
-        className="absolute z-[40] top-[10vw] -left-[10vw] w-full h-full cursor-grab"
+        className="absolute z-[40] top-[10vw] h-[120vw] -left-[10vw] w-full  cursor-grab"
       >
         {/* Define the mask */}
         <defs>

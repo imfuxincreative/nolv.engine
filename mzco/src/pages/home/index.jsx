@@ -13,7 +13,7 @@ import Layer10 from './Layer10.jsx'
 
 function Index() {
   return (
-    <div className='h-screen w-screen overflow-hidden'>
+    <div className='h-screen  w-screen overflow-hidden'>
       <PixelBg/>
       <Layer1/>
       <Layer2/>

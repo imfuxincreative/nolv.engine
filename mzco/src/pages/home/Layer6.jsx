@@ -47,7 +47,7 @@ function Layer6() {
   }, []);
 
   return (
-    <div>
+    <div className='pointer-events-none'>
       <img
         ref={imageRef}
         className="z-[50] absolute top-[63vw] left-[10vw]"
