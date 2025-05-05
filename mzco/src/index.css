@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+
+@layer base {
+    @font-face {
+        font-family : inter-regular;
+        src : url(./assets/fonts/Inter_28pt-Regular.ttf)
+    }
+    @font-face {
+        font-family : inter-medium;
+        src : url(./assets/fonts/Inter_28pt-Medium.ttf)
+    }
+}
+
+@layer base {
+   
+    h5{
+        font-family : 'inter-regular' ;
+        font-size : 3vw ;
+        letter-spacing : 0;
+        line-height : 1.5vh;
+        color : black ; 
+ 
+    } 
+      
+    h4{
+        font-family : 'inter-regular' ;
+        font-size : 4vw ;
+        letter-spacing : 0;
+        line-height : 1.5vh;
+        color : black ; 
+
+    } 
+    button{
+        font-family : 'inter-medium' ;
+        border : 1px , solid black ;
+        border-radius: 20px;
+        padding : 4px 8px 3px 8px ;
+        font-size : 4vw ;
+        letter-spacing : -0.1vw;
+        line-height : 1.5vh;
+        color : black ; 
+
+    } 
+    h6{
+        font-family : 'inter-regular' ;
+        font-size : 3.5vw ;
+        letter-spacing : 0;
+        line-height : 1.5vh;
+        color : black ; 
+
+    } 
+}
