@@ -32,7 +32,7 @@ function Layer9() {
   />
 </svg>
 
-<div className='absolute top-[54vw] z-[70] -translate-x-[110vw] w-[200vw] h-[200vw] border pointer-events-none rounded-[40vw]'>
+<div className='absolute top-[54vw] z-[70] -translate-x-[110vw] w-[200vw] h-[163vw] border-t border-r  pointer-events-none rounded-[40vw]'>
 
 </div>
 
