@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Index from "./pages/home/index.jsx";
-import Visuals from "./pages/home/visuals/Visuals.jsx";
+import Visuals from "./pages/home/ImageViewer/Visuals.jsx";
 import DynamicBlur from "./components/DynamicBlur.jsx";
+import ParallaxImageAlgo from "./pages/home/ImageViewer/parallaxImageAlgo.jsx";
 
 function App() {
   const [blur, setBlur] = useState(0); // default blur
@@ -24,7 +25,7 @@ function App() {
         <Index />
       </div>
 <div className="z-[999] relative">
-<Visuals/>
+<ParallaxImageAlgo/>
 
 </div>
 <DynamicBlur/>
