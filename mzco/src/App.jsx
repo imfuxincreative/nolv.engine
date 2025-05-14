@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/home/home.jsx";
+import Home from "./pages/home/Home.jsx";
 import AllWorks from "./pages/Works/AllWorks.jsx";
 import { BlurProvider, BlurContext } from "./context/BlurContext.jsx";
 import DynamicBlur from "./components/DynamicBlur.jsx";
