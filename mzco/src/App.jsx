@@ -1,37 +1,51 @@
-import React, { useEffect, useState } from "react";
-import Index from "./pages/home/index.jsx";
-import Visuals from "./pages/home/ImageViewer/Visuals.jsx";
+import React, { useEffect, useContext } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/home/home.jsx";
+import AllWorks from "./pages/Works/AllWorks.jsx";
+import { BlurProvider, BlurContext } from "./context/BlurContext.jsx";
 import DynamicBlur from "./components/DynamicBlur.jsx";
-import ParallaxImageAlgo from "./pages/home/ImageViewer/parallaxImageAlgo.jsx";
+import ControlBar from "./components/ControlBar.jsx";
+import PixelBg from "./components/pixelbg.jsx";
 
 function App() {
-  const [blur, setBlur] = useState(0); // default blur
+  const AppWithBlur = () => {
+    const { setBlur } = useContext(BlurContext);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      // Clamp value between 20 and 80
-      const blurValue = Math.min(0, 0 + scrollY / 10);
-      setBlur(blurValue);
-    };
+    useEffect(() => {
+      const handleScroll = () => {
+        const scrollY = window.scrollY;
+        const blurValue = Math.min(80, scrollY / 10);
+        setBlur(blurValue);
+      };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, [setBlur]);
+
+    return (
+      <div >
+         <PixelBg/>
+      <div className="sticky z-[999] top-0">
+      <ControlBar/>
+        
+      </div>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/works" element={<AllWorks />} />
+        </Routes>
+        <div className="z-[10]">
+
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="">
-      <div className="sticky top-0 z-[10]">
-        <Index />
-      </div>
-<div className="z-[999] relative">
-<ParallaxImageAlgo/>
-
-</div>
-<DynamicBlur/>
-
-
-  </div>
+    <BlurProvider>
+      <Router>
+        <AppWithBlur />
+      </Router>
+    </BlurProvider>
   );
 }
 

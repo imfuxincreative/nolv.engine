@@ -1,9 +1,13 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import logo from '../assets/images/logo.png';
+import { BlurContext } from '../context/BlurContext';
+import { useNavigate } from 'react-router-dom';
 
 function ControlBar() {
   const barRef = useRef(null);
-
+  const [menuOpen, setMenuOpen] = useState(false);
+  const {setBlurValue} = useContext(BlurContext)
+const navigate  =  useNavigate()
   useEffect(() => {
     const bar = barRef.current;
     if (!bar) return;
@@ -68,19 +72,48 @@ function ControlBar() {
     };
   }, []);
 
+  const menuItems = [
+    {name : 'Home', func : ()=>{navigate('/')}},
+    {name : 'Visuals', func : ()=>{navigate('/works')}},
+    {name : 'Designs', func : ()=>{navigate('/works')}},
+    {name : 'Templates', func : ()=>{navigate('/works')}},
+
+
+  ];
+
   return (
     <div
       ref={barRef}
-      className="h-[8vw] w-[50vw] flex justify-between items-center px-1 absolute top-[20vw] right-[40vw] rounded bg-black/5 border-[#dddddd] border z-[500] backdrop-blur-2xl cursor-grab"
+      className="h-[8vw] w-[50vw] flex justify-between items-center px-1 fixed top-[10vw] right-[28vw] rounded bg-black/5 border-[#d2d2d2] border z-[900] backdrop-blur-2xl cursor-grab"
       style={{ position: 'absolute' }}
     >
       <div className="flex gap-1 items-center">
         <div className="rounded-full overflow-hidden content-center h-[6vw] w-[6vw] bg-white">
-          <img src={logo} alt="" />
+          <img className='' src={logo} alt="" />
         </div>
         <h5>mzco.</h5>
       </div>
-      <button className="bg-white h-[6vw] w-[6vw] font-[inter-regular] text-[5vw] border-none px-1 py-1 rounded-full">+</button>
+      <div className="relative">
+        <button
+          onClick={() =>{ setMenuOpen(!menuOpen)}}
+          className="bg-white h-[6vw] w-[6vw] font-[inter-regular] text-[5vw] border-none px-1 py-1 rounded-full"
+        >
+          +
+        </button>
+
+        {/* Dropdown */}
+        <div className={`absolute right-0 mt-2 flex flex-col bg-white overflow-hidden shadow-lg transition-all duration-300 ease-in-out ${menuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
+          {menuItems.map((item, index) => (
+            <h5 onClick={item.func}
+              key={index}
+              className={`px-2 py border-b border-[#d8d8d8] text-sm text-black hover:bg-gray-100 transition-all duration-300 ease-in-out`}
+              style={{ transitionDelay: `${menuOpen ? index * 100 : 0}ms` }}
+            >
+              {item.name}
+            </h5>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
