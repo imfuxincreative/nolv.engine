@@ -21,11 +21,6 @@ function Home() {
         <Index />
       </div>
      
-<div className="z-[999] relative">
-<ParallaxImageAlgo/>
-
-</div>
-<DynamicBlur/>
 </div>: <div className="h-screen w-screen items-center justify-center  flex"><h5 className="text-[20px] tracking-tight">Switch to Mobile</h5></div>}
 
   </div>

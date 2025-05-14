@@ -2,8 +2,10 @@ import React, { useRef, useEffect, useState, useContext } from 'react';
 import logo from '../assets/images/logo.png';
 import { BlurContext } from '../context/BlurContext';
 import { useNavigate } from 'react-router-dom';
+import { ReverseAnimeContext } from '../context/ReverseAnime';
 
 function ControlBar() {
+  const {setReverseAnimation} = useContext(ReverseAnimeContext)
   const barRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const {setBlurValue} = useContext(BlurContext)

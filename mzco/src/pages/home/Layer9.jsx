@@ -36,9 +36,8 @@ function Layer9() {
 
 </div>
 
-    <h5 className='absolute top-[103vw] left-[0vw] z-[70]'> 15cm</h5>           ``
+    <h5 className='absolute top-[103vw] left-[0vw] z-[70]'> 15cm</h5> 
     <h5 className='absolute top-[136vw] left-[12vw] z-[70] rotate-270'> 90</h5>
-     thiet amount of the athe call and the for 
     <h5 className='absolute top-[124vw] left-[48vw] z-[70]'> 360</h5>
 
 
