@@ -1,15 +1,19 @@
 import React from 'react'
+import rect from '../../assets/images/rect.svg'
+import rectext from '../../assets/images/rectext.svg'
+
+
 
 function layer4() {
   return (
     <div className=''>
-        <div className=' w-[36vw] h-[8vw] z-[30] absolute  top-[112vw] left-[8vw] border border-[#cecece] bg-white'>
-            </div>
-
-            <div className=' w-[36vw] h-[5vw] z-[30] absolute  top-[108vw] right-[8vw] bg-white'>
-            <h6  className='absolute bottom-1 right-1'>
-            \ creative mind</h6></div>
-
+      <div>
+         {/* <h1 className='text-[45vw] absolute  z-[60] top-[50vw] '>独創的</h1>  */}
+      </div>
+      <div>
+        
+      </div>
+        <img className='absolute z-[60] top-[80vw]' src={rectext} alt="" />
           
 
     </div>
