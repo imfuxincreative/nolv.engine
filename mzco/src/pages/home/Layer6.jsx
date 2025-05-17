@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import flatShapes from '../../assets/elements/Vector.svg';
+import PixelBg from '../../components/pixelbg';
 
 function Layer6() {
   const tilt = useRef({ beta: 0, gamma: 0 });
@@ -48,6 +49,7 @@ function Layer6() {
 
   return (
     <div className='pointer-events-none'>
+
       <img
         ref={imageRef}
         className="z-[50] absolute top-[63vw] left-[10vw]"

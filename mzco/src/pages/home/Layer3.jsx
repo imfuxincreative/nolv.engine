@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import bg from '../../assets/images/streetbg.jpg';
+import bg from '../../assets/images/meeza2.jpg';
 
 function Layer3() {
   const svgRef = useRef(null);
@@ -82,7 +82,7 @@ function Layer3() {
         </defs>
 
         {/* Background Image */}
-        <image href={bg} x="0" y="15vh" width="100vw" mask="url(#mask1)" />
+        <image className='fixed' href={bg} x="0" y="15vh" width="100vw" mask="url(#mask1)" />
       </svg>
     </div>
   );

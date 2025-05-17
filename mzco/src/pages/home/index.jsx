@@ -15,7 +15,7 @@ import Layer8 from './Layer8.jsx';
 import Layer9 from './Layer9.jsx';
 import Layer10 from './Layer10.jsx';
 
-const layers = [Layer1, Layer2, Layer3, Layer4, Layer5, Layer6, Layer7, Layer8];
+const layers = [Layer1, Layer3, Layer5, Layer6, Layer7, Layer8];
 
 function Index() {
   const { reverseAnime, setReverseAnime } = useContext(ReverseAnimeContext);

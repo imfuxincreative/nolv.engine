@@ -85,13 +85,13 @@ function Layer8() {
       >
         logo.png
       </h6>
-      <h6
+      {/* <h6
         ref={refs.loading}
         className="absolute bottom-[78vw] z-[70] bg-white pl-2 pb-1 right-[30vw]"
         style={{ transition: 'transform 0.1s ease-out' }}
       >
         / Loading creation
-      </h6>
+      </h6> */}
     </div>
   );
 }

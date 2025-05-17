@@ -78,7 +78,7 @@ function Layer10() {
         <h6 className='pl-1 translate-y-[9vw]'>service</h6>
       </div>
 
-      <button className='absolute bottom-[10vw] left-[42vw]'>Say Hii !</button>
+      {/* <button className='absolute bottom-[10vw] left-[42vw]'>Say Hii !</button> */}
       <button className='absolute top-[5vw] right-[5vw]'>What if ?</button>
     </div>
   );
