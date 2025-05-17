@@ -75,7 +75,7 @@ function Layer10() {
           alt=""
           style={{ position: 'absolute', left: 0, top: 0, touchAction: 'none' }}
         />
-        <h6 className='pl-1 translate-y-[9vw]'>service</h6>
+        <h6 className='pl-1 translate-y-[9vw] opacity-0'>service</h6>
       </div>
 
       {/* <button className='absolute bottom-[10vw] left-[42vw]'>Say Hii !</button> */}

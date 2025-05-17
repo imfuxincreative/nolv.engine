@@ -8,6 +8,7 @@ import DynamicBlur from "./components/DynamicBlur.jsx";
 import ControlBar from "./components/ControlBar.jsx";
 import PixelBg from "./components/pixelbg.jsx";
 import Loader from "./components/loading.jsx";
+import { LoadProvider } from "./context/LoadingContext.jsx";
 
 function App() {
   const AppWithBlur = () => {
@@ -37,6 +38,8 @@ useEffect(()=>{
   };
 
   return (
+    <LoadProvider>
+
     <BlurProvider>
       <ReverseAnimeProvider>
 
@@ -45,6 +48,7 @@ useEffect(()=>{
       </Router>
       </ReverseAnimeProvider>
     </BlurProvider>
+    </LoadProvider>
   );
 }
 
