@@ -76,8 +76,8 @@ const navigate  =  useNavigate()
 
   const menuItems = [
     {name : 'Home', func : ()=>{navigate('/')}},
-    {name : 'Visuals', func : ()=>{navigate('/works')}},
-    {name : 'Designs', func : ()=>{navigate('/works')}},
+    {name : 'Visuals', func : ()=>{navigate('/visuals')}},
+    {name : 'Designs', func : ()=>{navigate('/design')}},
     {name : 'Templates', func : ()=>{navigate('/works')}},
 
 
@@ -87,7 +87,7 @@ const navigate  =  useNavigate()
     <div
       ref={barRef}
       className="h-[8vw] w-[50vw] flex justify-between items-center px-1 fixed top-[10vw] right-[28vw] rounded bg-black/5 border-[#d2d2d2] border z-[900] backdrop-blur-2xl cursor-grab"
-      style={{ position: 'absolute' }}
+      style={{ position: 'fixed' }}
     >
       <div className="flex gap-1 items-center">
         <div className="rounded-full overflow-hidden content-center h-[6vw] w-[6vw] bg-white">
