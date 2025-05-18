@@ -14,7 +14,7 @@ import DynamicBlur from "./components/DynamicBlur.jsx";
 import ControlBar from "./components/ControlBar.jsx";
 import PixelBg from "./components/pixelbg.jsx";
 import Loader from "./components/loading.jsx";
-import Visuals from "./pages/home/ImageViewer/Visuals.jsx";
+import Visuals from "./pages/visuals/Visuals.jsx";
 
 // Page animation settings
 const pageVariants = {

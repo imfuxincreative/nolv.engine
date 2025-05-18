@@ -76,9 +76,9 @@ const navigate  =  useNavigate()
 
   const menuItems = [
     {name : 'Home', func : ()=>{navigate('/')}},
-    {name : 'Visuals', func : ()=>{navigate('/visuals')}},
+    {name : 'Captures', func : ()=>{navigate('/visuals')}},
     {name : 'Designs', func : ()=>{navigate('/design')}},
-    {name : 'Templates', func : ()=>{navigate('/works')}},
+    {name : 'About', func : ()=>{navigate('/works')}},
 
 
   ];

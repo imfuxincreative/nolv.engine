@@ -22,6 +22,14 @@
         color : black ; 
  
     } 
+      h2{
+        font-family : 'inter-regular' ;
+        font-size : 7vw ;
+        letter-spacing : -0.1vw;
+        line-height : 1.5vh;
+        color : white ; 
+ 
+    } 
       
     h4{
         font-family : 'inter-regular' ;
