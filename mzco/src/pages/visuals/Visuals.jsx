@@ -17,14 +17,13 @@ function Visuals() {
     { image: img2, isVisible: false, name : 'Outdoor', },
     { image: img3, isVisible: true , name : 'Black & white'}, // initially true
     { image: img4, isVisible: false , name : 'Abandoned'},
-    { image: img4, isVisible: false , name : 'Aesthetic'},
-      { image: img1, isVisible: false , name : 'Sunset'},
+    { image: img1, isVisible: false , name : 'Aesthetic'},
+      { image:img3, isVisible: false , name : 'Sunset'},
     { image: img2, isVisible: false , name : 'Serenity'},
-    { image: img1, isVisible: false , name : 'Serenity'},
-    { image: img2, isVisible: false, name : 'Outdoor', },
+    { image: img4, isVisible: false, name : 'Outdoor', },
     { image: img3, isVisible: true , name : 'Black & white'}, // initially true
     { image: img4, isVisible: false , name : 'Abandoned'},
-    { image: img4, isVisible: false , name : 'Aesthetic'},
+    { image: img2, isVisible: false , name : 'Aesthetic'},
       { image: img1, isVisible: false , name : 'Sunset'},
     { image: img2, isVisible: false , name : 'Serenity'},
 
@@ -84,7 +83,7 @@ function Visuals() {
               ref={el => headingRefs.current[i] = el}
               className={`h-fit text-center  w-[50vw] transition-opacity duration-500 ${el.isVisible ? 'opacity-100 text-[8vw]  ' : ' opacity-20'}`}
             >
-            {el.name}
+            0{i}
             </h2>
           ))}
         </div>
@@ -93,7 +92,7 @@ function Visuals() {
       {/* Blur overlay */}
       <div
         style={{ opacity: blur ? 1 : 0 }}
-        className='h-screen w-screen duration-500 absolute z-[10] bg-black/30 backdrop-blur-lg'
+        className='h-screen w-screen duration-500 absolute z-[10] bg-white/30 backdrop-blur-lg'
       ></div>
 
       {/* Background image layer */}

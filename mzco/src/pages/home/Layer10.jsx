@@ -79,7 +79,7 @@ function Layer10() {
       </div>
 
       {/* <button className='absolute bottom-[10vw] left-[42vw]'>Say Hii !</button> */}
-      <button className='absolute top-[5vw] right-[5vw]'>What if ?</button>
+      <button className='absolute bg-white/80 border border-[#d8d8d8] top-[5vw] right-[5vw]'>What if ?</button>
     </div>
   );
 }
