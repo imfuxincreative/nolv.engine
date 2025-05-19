@@ -6,15 +6,32 @@
         font-family : inter-regular;
         src : url(./assets/fonts/Inter_28pt-Regular.ttf)
     }
+       @font-face {
+        font-family : inter-light;
+        src : url(./assets/fonts/Inter_28pt-Regular.ttf)
+    }
     @font-face {
         font-family : inter-medium;
         src : url(./assets/fonts/Inter_28pt-Medium.ttf)
+    }
+       @font-face {
+        font-family : inter-light;
+        src : url(./assets/fonts/Inter_24pt-Light.ttf)
     }
 }
 
 @layer base {
    
     h5{
+        font-family : 'inter-regular' ;
+        font-size : 3vw ;
+        letter-spacing : 0;
+        line-height : 1.5vh;
+        color : black ; 
+ 
+    }
+       
+    a{
         font-family : 'inter-regular' ;
         font-size : 3vw ;
         letter-spacing : 0;
@@ -28,6 +45,14 @@
         letter-spacing : -0.1vw;
         line-height : 1.5vh;
         color : white ; 
+ 
+    } 
+      h1{
+        font-family : 'inter-light' ;
+        font-size : 5.5vw ;
+        letter-spacing : -0.2vw;
+        line-height : 2.1vh;
+        color : black ; 
  
     } 
       

@@ -93,7 +93,7 @@ function Visuals() {
       {/* Blur overlay */}
       <div
         style={{ opacity: blur ? 1 : 0 }}
-        className='h-screen w-screen duration-500 absolute z-[10] bg-white/20 backdrop-blur-lg'
+        className='h-screen w-screen duration-500 absolute z-[10] bg-black/30 backdrop-blur-lg'
       ></div>
 
       {/* Background image layer */}

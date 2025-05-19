@@ -42,7 +42,7 @@ function Design() {
     
   ])
   return (
-    <div className=' absolute w-screen mb-[20vw] mt-[20vw] flex flex-col gap-8 justify-center items-center top-0 z-[900]'>
+    <div className='  w-screen Pb-[20vw] bg-white/90 mt-[20vw] flex flex-col gap-8 justify-center items-center relative z-[900]'>
       {designs.map((dsgn , index )=>{
         const Algo  = dsgn.algo
         return <div >{<Algo image = {dsgn.image} name = {dsgn.name} tech = {dsgn.tech} video = {dsgn.video} index={index}/>}</div>

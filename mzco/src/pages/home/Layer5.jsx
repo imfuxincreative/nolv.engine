@@ -73,17 +73,17 @@ function Layer5() {
     <div>
       <div
         ref={(el) => (boxRefs.current[0] = el)}
-        className="w-[16vw] h-[12vw] z-[140] absolute top-[94vw] left-[36vw] bg-transparent backdrop-blur-md cursor-grab"
+        className="w-[16vw] h-[12vw] z-[60] absolute top-[94vw] left-[36vw] bg-transparent backdrop-blur-md cursor-grab"
         style={{ position: 'absolute' }}
       ></div>
       <div
         ref={(el) => (boxRefs.current[1] = el)}
-        className="w-[20vw] h-[12vw] z-[140] absolute top-[70vw] left-[3vw] bg-transparent backdrop-blur-md cursor-grab"
+        className="w-[20vw] h-[12vw] z-[60] absolute top-[70vw] left-[3vw] bg-transparent backdrop-blur-md cursor-grab"
         style={{ position: 'absolute' }}
       ></div>
       <div
         ref={(el) => (boxRefs.current[2] = el)}
-        className="w-[12vw] h-[12vw] z-[140] absolute top-[82vw] left-[52vw] bg-transparent backdrop-blur-md cursor-grab"
+        className="w-[12vw] h-[12vw] z-[60] absolute top-[82vw] left-[52vw] bg-transparent backdrop-blur-md cursor-grab"
         style={{ position: 'absolute', right: '24vw' }}
       ></div>
     </div>

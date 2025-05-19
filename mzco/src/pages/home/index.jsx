@@ -14,8 +14,9 @@ import Layer7 from './Layer7.jsx';
 import Layer8 from './Layer8.jsx';
 import Layer9 from './Layer9.jsx';
 import Layer10 from './Layer10.jsx';
+import DynamicBlur from '../../components/DynamicBlur.jsx';
 
-const layers = [ Layer3,Layer4, Layer5,  Layer8];
+const layers = [ Layer3,Layer4,  Layer8];
 
 function Index() {
   const { reverseAnime, setReverseAnime } = useContext(ReverseAnimeContext);
@@ -50,6 +51,7 @@ function Index() {
         ))}
         
         <Layer10 />
+  
       </div>
      
     </div>

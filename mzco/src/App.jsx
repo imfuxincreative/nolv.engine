@@ -15,6 +15,7 @@ import ControlBar from "./components/ControlBar.jsx";
 import PixelBg from "./components/pixelbg.jsx";
 import Loader from "./components/loading.jsx";
 import Visuals from "./pages/visuals/Visuals.jsx";
+import Navber from "./components/Navber.jsx";
 
 // Page animation settings
 const pageVariants = {
@@ -107,9 +108,10 @@ function App() {
 
   const AppWithBlur = () => (
     <div>
+      <Navber/>
       <PixelBg />
       <div className="sticky z-[999] top-0">
-        <ControlBar />
+        {/* <ControlBar /> */}
       </div>
       {isLoading && <Loader />}
       {!isLoading && <AnimatedRoutes />}
