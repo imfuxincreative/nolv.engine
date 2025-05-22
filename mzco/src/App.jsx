@@ -139,7 +139,7 @@ const AnimatedRoutes = () => {
           }
         />
          <Route
-          path="/architecture"
+          path="/arcitecture"
           element={
             <motion.div
               variants={pageVariants}

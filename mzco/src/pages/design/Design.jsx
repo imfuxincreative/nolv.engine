@@ -9,29 +9,34 @@ import DesignAlgo4 from '../../components/DesignAlgo/DesignAlgo4.jsx'
 import firstImg1 from  '../../assets/images/Designs/1/img1.jpg'
 import firstImg2 from  '../../assets/images/Designs/1/img2.webp'
 import firstImg3 from  '../../assets/images/Designs/1/img3.jpg'
-import timeless1 from '../../assets/images/Designs/2/timeless1.jpg'
+import timeless1 from '../../assets/images/Designs/timeless/timeless1.jpg'
 import nosta1 from '../../assets/images/Designs/3/nostalogia1.jpg'
 import nosta2 from '../../assets/images/Designs/3/nostalogia2.jpg'
 import aband1 from '../../assets/images/Designs/4/aband1.jpg'
 import aband2 from '../../assets/images/Designs/4/aband2.webp'
 import aband3 from '../../assets/images/Designs/4/aband3.webp'
 import aband4 from '../../assets/images/Designs/4/aband4.jpg'
-import mzverse1 from '../../assets/images/Designs/5/mzverse.png'
+import mzverse1 from '../../assets/images/Designs/mzverse/mzverse.png'
 import starlight1 from '../../assets/images/Designs/6/starlight.webp'
 import starlight2 from '../../assets/images/Designs/6/starlight2.jpg'
 import starlight3 from '../../assets/images/Designs/6/starlight3.jpg'
-
+import folio2024 from '../../assets/images/Designs/portfolio24/mockup.webp'
+import arcitecture from '../../assets/images/Designs/arcitecture/arcitecture.jpg'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Portfolio24 from './Portfolio24.jsx'
 function Design() {
   const navigate = useNavigate()
   const [designs , setDesigns] = useState([
     {name : 'Upcoming' , tech : 'Graphics Design' , image : [firstImg1 , firstImg2 , firstImg3] , video : false , algo : DesignAlgo1},
-    {name : 'Timeless Edition' , tech : 'Graphics Design' , image : [timeless1 ] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/portfolio-2024')}},
+    {name : 'Timeless Edition' , tech : 'Graphics Design' , image : [timeless1 ] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/timeless')}},
     {name : 'Nostalogia' , tech : 'Graphics Design' , image : [nosta1 , nosta2] , video : false , algo : DesignAlgo3},
     {name : 'Abandoned' , tech : 'Graphics Design' , image : [aband1 , aband2 , aband3 , aband4] , video : false , algo : DesignAlgo4},
-    {name : 'mzverse.io' , tech : 'UI/UX + MERN' , image : [mzverse1] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/portfolio-2024')}},
+    {name : 'mzverse.io' , tech : 'UI/UX + MERN' , image : [mzverse1] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/mzverse')}},
     {name : 'Starlight' , tech : 'UI/UX + MERN' , image : [starlight1 , starlight2] , video : false , algo : DesignAlgo3},
+ {name : 'Portfolio-2024' , tech : 'Design + Development' , image : [folio2024] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/portfolio-2024')}},
+
+        
 
 
 
