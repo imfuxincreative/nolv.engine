@@ -73,12 +73,12 @@ function Navber() {
           </div>
         ))}
       </div>
-<div className='w-screen absolute  overflow-hidden bottom-2  h-[3vh]'>
+<div className='w-screen absolute  overflow-hidden bottom--3  h-[25px]'>
 
-<div className='menu-control'>
+<div className='menu-control '>
 
 
-      <div  className=" pr-3 w-screen mt-[2px]  flex items-center justify-between px-2">
+      <div  className=" pr-3 w-screen mt-[1.5px]  flex items-center justify-between px-2">
         <div className="flex gap-1 items-center">
           <div className="rounded-full overflow-hidden content-center h-[6vw] w-[6vw] bg-white">
             <img className="" src={logo} alt="" />

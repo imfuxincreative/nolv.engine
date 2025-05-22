@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-
+import Architecture from "./pages/design/Architecture.jsx";
+import Timeless from "./pages/design/Timeless.jsx";
+import Mzverse from "./pages/design/Mzverse.jsx";
+import Portfolio24 from "./pages/design/Portfolio24.jsx";
 import Home from "./pages/home/Home.jsx";
 import AllWorks from "./pages/Works/AllWorks.jsx";
 import Design from './pages/design/Design.jsx';
@@ -90,6 +93,62 @@ const AnimatedRoutes = () => {
               transition={pageTransition}
             >
               <Design />
+            </motion.div>
+          }
+        />
+         <Route
+          path="/mzverse"
+          element={
+            <motion.div
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <Mzverse />
+            </motion.div>
+          }
+        />
+         <Route
+          path="/portfolio-2024"
+          element={
+            <motion.div
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <Portfolio24 />
+            </motion.div>
+          }
+        />
+         <Route
+          path="/timeless"
+          element={
+            <motion.div
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <Timeless />
+            </motion.div>
+          }
+        />
+         <Route
+          path="/architecture"
+          element={
+            <motion.div
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <Architecture />
             </motion.div>
           }
         />
