@@ -19,9 +19,9 @@ function Navber() {
 
   const menuItems = [
     { name: 'Home', path: '/', func: () => navigate('/') },
-    { name: 'Visuals', path: '/visuals', func: () => navigate('/visuals') },
-    { name: 'Designs', path: '/designs', func: () => navigate('/works') },
-    { name: 'About', path: '/home', func: () => navigate('/') },
+    { name: 'components', path: '/visuals', func: () => navigate('/components') },
+    { name: 'Resources', path: '/resources', func: () => navigate('/resources') },
+    { name: 'About', path: '/about', func: () => navigate('/about') },
   ];
 
   useEffect(() => {

@@ -19,6 +19,9 @@ import PixelBg from "./components/pixelbg.jsx";
 import Loader from "./components/loading.jsx";
 import Visuals from "./pages/visuals/Visuals.jsx";
 import Navber from "./components/Navber.jsx";
+import About from "./pages/About.jsx";
+import Templates from "./pages/templates/Templates.jsx";
+import Resources from "./pages/Resources/Resources.jsx";
 
 // Page animation settings
 const pageVariants = {
@@ -30,7 +33,7 @@ const pageVariants = {
 const pageTransition = {
   type: "tween",
   ease: "easeInOut",
-  duration: 0.6,
+  duration: 0.3,
 };
 
 // Wrap routes with AnimatePresence and motion.div
@@ -79,6 +82,48 @@ const AnimatedRoutes = () => {
               transition={pageTransition}
             >
               <AllWorks />
+            </motion.div>
+          }
+        />
+         <Route
+          path="/resources"
+          element={
+            <motion.div
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <Resources />
+            </motion.div>
+          }
+        />
+         <Route
+          path="/about"
+          element={
+            <motion.div
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <About/>
+            </motion.div>
+          }
+        />
+          <Route
+          path="/templates"
+          element={
+            <motion.div
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <Templates />
             </motion.div>
           }
         />

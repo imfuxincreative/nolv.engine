@@ -83,7 +83,7 @@ function Layer8() {
         className="absolute top-[100vw] z-[70] bg-white border  bg-opacity-5 border-[#efefef] rounded-[2px] px-1  right-[20vw]"
         style={{ transition: 'transform 0.1s ease-out' }}
       >
-        logo.png
+        text.png
       </h6>
       {/* <h6
         ref={refs.loading}

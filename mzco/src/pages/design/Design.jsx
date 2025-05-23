@@ -35,6 +35,7 @@ function Design() {
     {name : 'mzverse.io' , tech : 'UI/UX + MERN' , image : [mzverse1] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/mzverse')}},
     {name : 'Starlight' , tech : 'UI/UX + MERN' , image : [starlight1 , starlight2] , video : false , algo : DesignAlgo3},
  {name : 'Portfolio-2024' , tech : 'Design + Development' , image : [folio2024] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/portfolio-2024')}},
+  {name : 'Arcitecture' , tech : 'UIUX Design' , image : [arcitecture] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/arcitecture')}},
 
         
 
