@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import { RxCross1 } from "react-icons/rx";
-import meeza from '../assets/images/Designs/6/starlight3.jpg'
+import meeza from '../assets/images/Designs/starlight/starlight3.jpg'
 import { GoArrowUpRight } from "react-icons/go";
 
 gsap.registerPlugin(ScrollTrigger);
