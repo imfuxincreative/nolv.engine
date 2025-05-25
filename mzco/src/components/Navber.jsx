@@ -8,7 +8,7 @@ import { RxCross1 } from "react-icons/rx";
 import meeza from '../assets/images/Designs/starlight/starlight3.jpg';
 import { GoArrowUpRight } from "react-icons/go";
 import { MenuBgContext } from '../context/MenuBgContext';
-
+import { MdHomeFilled } from "react-icons/md";
 gsap.registerPlugin(ScrollTrigger);
 
 function Navber() {
@@ -68,7 +68,7 @@ function Navber() {
         stagger: {each : 0.024,from : 'end'}
       });
          tl.to('.menu-control', {
-        y: '0vw',
+        y: '-13vw',
         stagger: 0.059,
         ease: 'power1.inOut',
       }, '1');
@@ -92,7 +92,11 @@ function Navber() {
   };
 
   const toggleMenu = () => {
-    setMenuOpen(menuOpen === 'open' ? 'close' : 'open');
+    navigate(menuItems[0].path)
+    setTimeout(()=>{
+      setMenuOpen(menuOpen === 'open' ? 'close' : 'open');
+
+    },400)
   };
 
   return (
@@ -117,7 +121,8 @@ function Navber() {
 
       <div className='w-screen absolute overflow-hidden bottom--3 h-[25px]'>
         <div className='menu-control'>
-          {/* Top Row */}
+           
+          {/* middle Row */}
           <div className="pr-3 w-screen mt-[1.5px] flex items-center justify-between px-2">
             <div className="flex gap-1 items-center">
               <div className="rounded-full overflow-hidden content-center h-[6vw] w-[6vw] bg-white">
@@ -133,7 +138,7 @@ function Navber() {
             </button>
           </div>
 
-          {/* Bottom Row */}
+          {/* middle Row */}
           <div className="pr-3 w-screen flex items-center justify-between px-2">
             <div className="flex gap-1 items-center">
               <div className="rounded-full overflow-hidden content-center h-[6vw] w-[6vw] bg-white">
@@ -149,6 +154,21 @@ function Navber() {
               className="h-[6vw] w-[6vw] font-[inter-regular] text-[5vw] border-none px-1 py-1 rounded-full"
             >
               <RxCross1 size={17} />
+            </button>
+          </div>
+           {/* bottom Row */}
+          <div className="pr-3 w-screen mt-[1.5px] flex items-center justify-between px-2">
+            <div className="flex gap-1 items-center">
+              <div className="rounded-full overflow-hidden content-center h-[6vw] w-[6vw] bg-white">
+                <img className="" src={logo} alt="logo" />
+              </div>
+              <h5>mzco.</h5>
+            </div>
+            <button
+              onClick={toggleMenu}
+              className="h-[6vw] w-[6vw] font-[inter-regular] text-[5vw] border-none px-1 py-1 rounded-full"
+            >
+              <MdHomeFilled />
             </button>
           </div>
         </div>

@@ -104,6 +104,8 @@ const AnimatedRoutes = () => {
           path="/about"
           element={
             <motion.div
+            
+  className="relative z-[9999]"
               variants={pageVariants}
               initial="initial"
               animate="animate"
@@ -160,6 +162,7 @@ const AnimatedRoutes = () => {
           path="/portfolio-2024"
           element={
             <motion.div
+            
               variants={pageVariants}
               initial="initial"
               animate="animate"
@@ -213,6 +216,7 @@ function App() {
 
   const AppWithBlur = () => (
     <div>{window.innerWidth < 640 ? <div>
+      {/* <About/> */}
       <Navber/>
 
       <PixelBg />
@@ -222,6 +226,7 @@ function App() {
       {isLoading && <Loader />}
       {!isLoading && <AnimatedRoutes />}
     </div>: <div className="h-screen w-screen flex items-center justify-center bg-white">
+      
       <h5 className="text-[20px] tracking-tight">Please, Switch to mobile.</h5></div>}
     </div>
   );
