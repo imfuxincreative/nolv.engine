@@ -48,11 +48,11 @@ const AnimatedRoutes = () => {
           path="/"
           element={
             <motion.div
-              // variants={pageVariants}
-              // initial="initial"
-              // animate="animate"
-              // exit="exit"
-              // transition={pageTransition}
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
             >
               <Home />
             </motion.div>
@@ -214,6 +214,7 @@ function App() {
   const AppWithBlur = () => (
     <div>{window.innerWidth < 640 ? <div>
       <Navber/>
+
       <PixelBg />
       <div className="sticky z-[999] top-0">
         {/* <ControlBar /> */}

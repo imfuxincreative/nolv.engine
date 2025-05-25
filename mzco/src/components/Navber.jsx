@@ -35,7 +35,8 @@ function Navber() {
       });
       tl.to('.items', {
         y: '0vw',
-        stagger: 0.1,
+        stagger: 0.059,
+        
         ease: 'power1.inOut',
       }, '1');
       tl.to('.menu-control', {
@@ -58,20 +59,36 @@ function Navber() {
       });
     } else if (menuOpen === 'open-full') {
       tl.to(menuRef.current, {
-        height: '100vh',
-        duration: 1,
+        height: '100dvh',
+        duration: 0.6,
         ease: 'power1.inOut',
       });
+     tl.to('.items', {
+        y: '-6.2vw',
+        stagger: {each : 0.024,from : 'end'}
+      });
+         tl.to('.menu-control', {
+        y: '0vw',
+        stagger: 0.059,
+        ease: 'power1.inOut',
+      }, '1');
 
     }
   }, [menuOpen]);
 
   const handleMenuItemClick = (path) => {
+    if(path === '/about'){
+      
+    
     setMenuOpen('open-full');
     setTimeout(() => {
       navigate(path);
-      setMenuOpen('open');
-    }, 1300); // Delay to allow the animation to finish
+      // setMenuOpen('open');
+     
+    }, 1200);
+    }else{
+        navigate(path)
+    }
   };
 
   const toggleMenu = () => {
@@ -81,7 +98,7 @@ function Navber() {
   return (
     <div
       ref={menuRef}
-      className="bg-white w-screen pt-2 h-[34vw] flex-col flex fixed z-[100] bottom-0 justify-between"
+      className="bg-white w-screen pt-2 h-[34vw] flex-col flex fixed z-[10] bottom-0 justify-between"
     >
       <div className="flex absolute bottom-[5vh] w-screen items-center justify-center flex-col">
         {menuItems.map((el, i) => (
