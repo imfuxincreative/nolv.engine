@@ -6,6 +6,7 @@ import ControlBar from '../../components/ControlBar.jsx';
 import Design from '../design/Design.jsx';
 import PixelBg from '../../components/pixelbg.jsx';
 import Navber from '../../components/Navber.jsx';
+import { MenuBgContext } from '../../context/MenuBgContext.jsx';
 
 
 

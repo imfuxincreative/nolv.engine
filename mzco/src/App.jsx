@@ -22,6 +22,7 @@ import Navber from "./components/Navber.jsx";
 import About from "./pages/About.jsx";
 import Templates from "./pages/templates/Templates.jsx";
 import Resources from "./pages/Resources/Resources.jsx";
+import { MenuBgContext, MenuBgProvider } from "./context/MenuBgContext.jsx";
 
 // Page animation settings
 const pageVariants = {
@@ -47,11 +48,11 @@ const AnimatedRoutes = () => {
           path="/"
           element={
             <motion.div
-              variants={pageVariants}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              transition={pageTransition}
+              // variants={pageVariants}
+              // initial="initial"
+              // animate="animate"
+              // exit="exit"
+              // transition={pageTransition}
             >
               <Home />
             </motion.div>
@@ -211,7 +212,7 @@ function App() {
   }, []);
 
   const AppWithBlur = () => (
-    <div>
+    <div>{window.innerWidth < 640 ? <div>
       <Navber/>
       <PixelBg />
       <div className="sticky z-[999] top-0">
@@ -219,11 +220,14 @@ function App() {
       </div>
       {isLoading && <Loader />}
       {!isLoading && <AnimatedRoutes />}
+    </div>: <div className="h-screen w-screen flex items-center justify-center bg-white">
+      <h5 className="text-[20px] tracking-tight">Please, Switch to mobile.</h5></div>}
     </div>
   );
 
   return (
     <LoadProvider>
+      <MenuBgProvider>
       <BlurProvider>
         <ReverseAnimeProvider>
           <Router>
@@ -231,6 +235,7 @@ function App() {
           </Router>
         </ReverseAnimeProvider>
       </BlurProvider>
+    </MenuBgProvider>
     </LoadProvider>
   );
 }

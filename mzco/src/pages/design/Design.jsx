@@ -25,6 +25,9 @@ import folio2024 from '../../assets/images/Designs/portfolio24/mockup.webp'
 import arcitecture from '../../assets/images/Designs/arcitecture/arcitecture.jpg'
 import abundance from '../../assets/images/Designs/surrelism/abundance.webp'
 import freedom from '../../assets/images/Designs/surrelism/freedom.webp'
+import founder from '../../assets/images/Designs/anime/founder.webp'
+import unreveled from '../../assets/images/Designs/anime/obito.jpg'
+
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Portfolio24 from './Portfolio24.jsx'
@@ -39,6 +42,10 @@ function Design() {
     {name : 'Abandoned' , tech : 'Graphics Design' , image : [aband1 , aband2 , aband3 , aband4] , video : false , algo : DesignAlgo4},
 
     {name : 'Surrelism' , tech : 'Graphics Design' , image : [abundance , freedom] , video : false , algo : DesignAlgo5},
+    {name : 'Surrelism' , tech : 'Graphics Design' , image : [founder ,unreveled ] , video : false , algo : DesignAlgo5},
+
+    
+    
     
 
   //  {name : 'Timeless Edition' , tech : 'Graphics Design' , image : [timeless1 ] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/timeless')}},

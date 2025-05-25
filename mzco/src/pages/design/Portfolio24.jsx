@@ -28,6 +28,7 @@ function Portfolio24() {
 <img src={footer} className='w-screen' alt="" />
 
 <div className='w-screen  overflow-hidden  h-[50vw] relative bg-black' onClick={()=>{navigate('/mzverse')}}>
+  
     <img  className = 'object-cover object-top'src={next} alt="" />
   <div  className = 'bg-white h-[4.7vw] absolute top-[2vw] right-[2vw] w-[4.7vw] flex items-center justify-center rounded-full'><MdArrowOutward 
    className = ' size-5 max-sm:size-[3.5vw] '/></div>  
