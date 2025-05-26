@@ -57,7 +57,7 @@ function PixelBg() {
   }, []);
 
   return (
-    <div className=" -translate-x-[40vw] fixed top-0 -translate-y-[20vw] ">
+    <div className=" -translate-x-[40vw] fixed top-0 -translate-y-[20vw] pointer-events-none">
       <div
         id="bg-element"
         className="flex -translate-y-[4vw]"

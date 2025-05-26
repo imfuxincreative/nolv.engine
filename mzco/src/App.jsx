@@ -105,7 +105,7 @@ const AnimatedRoutes = () => {
           element={
             <motion.div
             
-  className="relative z-[9999]"
+  className="relative z-[100]"
               variants={pageVariants}
               initial="initial"
               animate="animate"

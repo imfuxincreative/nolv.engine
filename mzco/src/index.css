@@ -32,8 +32,8 @@
     }
        
     a{
-        font-family : 'inter-regular' ;
-        font-size : 3vw ;
+        font-family : 'inter-medium' ;
+        font-size : 3.3vw ;
         letter-spacing : 0;
         line-height : 1.5vh;
         color : black ; 
@@ -44,7 +44,7 @@
         font-size : 7vw ;
         letter-spacing : -0.2vw;
         line-height : 1.5vh;
-        color : white ; 
+        color : black ; 
  
     } 
       h1{
@@ -65,12 +65,11 @@
 
     } 
     button{
-        font-family : 'inter-regular' ;
+        font-family : 'inter-medium' ;
 
         border-radius: 20px;
         padding : 6px 10px 5px 10px ;
-        font-size : 4vw ;
-        letter-spacing : -0.1vw;
+        font-size : 3.8vw ;
         line-height : 1.5vh;
         color : black ; 
 
