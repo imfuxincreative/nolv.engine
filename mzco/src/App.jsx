@@ -23,12 +23,13 @@ import About from "./pages/About.jsx";
 import Templates from "./pages/templates/Templates.jsx";
 import Resources from "./pages/Resources/Resources.jsx";
 import { MenuBgContext, MenuBgProvider } from "./context/MenuBgContext.jsx";
+import Projects from "./pages/Projects/Projects.jsx";
 
 // Page animation settings
 const pageVariants = {
-  initial: { opacity: 0, filter: "blur(10px)" },
-  animate: { opacity: 1, filter: "blur(0px)" },
-  exit: { opacity: 0, filter: "blur(50px)" },
+  initial: { opacity: 0,  },
+  animate: { opacity: 1,  },
+  exit: { opacity: 0,  },
 };
 
 const pageTransition = {
@@ -88,8 +89,10 @@ const AnimatedRoutes = () => {
         />
          <Route
           path="/resources"
+          
           element={
             <motion.div
+            className="relative z-[300]"
               variants={pageVariants}
               initial="initial"
               animate="animate"
@@ -198,6 +201,21 @@ const AnimatedRoutes = () => {
               transition={pageTransition}
             >
               <Architecture />
+            </motion.div>
+          }
+        />
+         <Route
+          path="/projects"
+          element={
+            <motion.div  
+            className="relative z-[100]"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <Projects/>
             </motion.div>
           }
         />

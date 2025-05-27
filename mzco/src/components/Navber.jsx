@@ -20,7 +20,7 @@ function Navber() {
 
   const menuItems = [
     { name: 'Home', path: '/' },
-    { name: 'components', path: '/components' },
+    { name: 'Projects', path: '/projects' },
     { name: 'Resources', path: '/resources' },
     { name: 'About', path: '/about' },
   ];
@@ -77,7 +77,7 @@ function Navber() {
   }, [menuOpen]);
 
   const handleMenuItemClick = (path) => {
-    if(path === '/about'){
+  
       
     
     setMenuOpen('open-full');
@@ -86,9 +86,7 @@ function Navber() {
       // setMenuOpen('open');
      
     }, 1200);
-    }else{
-        navigate(path)
-    }
+   
   };
 
   const toggleMenu = () => {
@@ -102,7 +100,7 @@ function Navber() {
   return (
     <div
       ref={menuRef}
-      className="bg-white w-screen pt-2 h-[34vw] flex-col flex fixed z-[10] bottom-0 justify-between"
+      className="bg-white w-screen pt-2 h-[34vw] flex-col flex fixed z-[50] bottom-0 justify-between"
     >
       <div className="flex absolute bottom-[5vh] w-screen items-center justify-center flex-col">
         {menuItems.map((el, i) => (

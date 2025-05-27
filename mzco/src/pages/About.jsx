@@ -9,10 +9,10 @@ function About() {
     textRefs.current.forEach((el, i) => {
       gsap.fromTo(
         el,
-        { opacity: 0, filter: 'blur(10px)' },
+        { opacity: 0,  },
         {
           opacity: 1,
-          filter: 'blur(0px)',
+
           duration: 0.8,
           delay: i * 0.5,
           ease: 'power2.out',
