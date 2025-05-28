@@ -24,7 +24,7 @@ function Timeless() {
     const navigate = useNavigate()
   
   return (
-<div className='flex bg-white/80 h-full pb-[10vw] ] flex-col  items-center w-screen'>
+<div className='flex bg-white/80 h-full pb-[10vw] ] flex-col relative z-[10] items-center w-screen'>
 {/* <img src={mockup} alt="" className="object-cover w-screen" /> */}
 <img src={img2} className='w-screen' alt="" />
 

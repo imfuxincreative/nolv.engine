@@ -9,6 +9,7 @@ import meeza from '../assets/images/Designs/starlight/starlight3.jpg';
 import { GoArrowUpRight } from "react-icons/go";
 import { MenuBgContext } from '../context/MenuBgContext';
 import { MdHomeFilled } from "react-icons/md";
+import { IoIosArrowBack } from "react-icons/io";
 gsap.registerPlugin(ScrollTrigger);
 
 function Navber() {
@@ -78,18 +79,31 @@ function Navber() {
 
   const handleMenuItemClick = (path) => {
   
+    if(path === '/'){
+      console.log('sdfd')
+    setMenuOpen('open');
+
+    }else{
+
       
-    
-    setMenuOpen('open-full');
-    setTimeout(() => {
-      navigate(path);
-      // setMenuOpen('open');
-     
-    }, 1200);
+      setMenuOpen('open-full');
+      setTimeout(() => {
+        navigate(path);
+        // setMenuOpen('open');
+        
+      }, 1200);
+    }
    
   };
 
   const toggleMenu = () => {
+    navigate(menuItems[0].path)
+    setTimeout(()=>{
+      setMenuOpen(menuOpen === 'open' ? 'close' : 'open');
+
+    },400)
+  };
+    const toggleFirstMenu = () => {
     navigate(menuItems[0].path)
     setTimeout(()=>{
       setMenuOpen(menuOpen === 'open' ? 'close' : 'open');
@@ -129,7 +143,7 @@ function Navber() {
               <h5>mzco.</h5>
             </div>
             <button
-              onClick={toggleMenu}
+              onClick={toggleFirstMenu}
               className="h-[6vw] w-[6vw] font-[inter-regular] text-[5vw] border-none px-1 py-1 rounded-full"
             >
               <IoMenuSharp />
@@ -166,7 +180,7 @@ function Navber() {
               onClick={toggleMenu}
               className="h-[6vw] w-[6vw] font-[inter-regular] text-[5vw] border-none px-1 py-1 rounded-full"
             >
-              <MdHomeFilled />
+              <IoIosArrowBack  size={16}  />
             </button>
           </div>
         </div>

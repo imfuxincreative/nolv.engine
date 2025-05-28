@@ -4,6 +4,7 @@ import DesignAlgo2 from '../../components/DesignAlgo/DesignAlgo2.jsx'
 import DesignAlgo3 from '../../components/DesignAlgo/DesignAlgo3.jsx'
 import DesignAlgo4 from '../../components/DesignAlgo/DesignAlgo4.jsx'
 import DesignAlgo5 from '../../components/DesignAlgo/DesignAlgo5.jsx'
+import DesignAlgo7 from '../../components/DesignAlgo/DesignAlgo7.jsx'
 
 
 
@@ -29,10 +30,16 @@ import founder from '../../assets/images/Designs/anime/founder.webp'
 import unreveled from '../../assets/images/Designs/anime/obito.jpg'
 import wanted from '../../assets/images/Designs/wanted/wanted.jpg'
 import unwanted from '../../assets/images/Designs/wanted/starlight3.jpg'
+import lake1 from '../../assets/images/Designs/serenity/1.jpg'
+import lake2 from '../../assets/images/Designs/serenity/2.jpg'
+import lake3 from '../../assets/images/Designs/serenity/3.jpg'
 
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Portfolio24 from './Portfolio24.jsx'
+import Mergin from '../../components/DesignAlgo/Mergin.jsx'
+import DesignAlgo6 from '../../components/DesignAlgo/DesignAlgo6.jsx'
+
 function Design() {
   const navigate = useNavigate()
   const [designs , setDesigns] = useState([
@@ -40,6 +47,7 @@ function Design() {
     {name : 'Nostalogia' , tech : 'Graphics Design' , image : [nosta1 , nosta2] , video : false , algo : DesignAlgo3},
      {name : 'Arcitecture' , tech : 'UIUX Design' , image : [arcitecture] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/arcitecture')}},
      {name : 'Starlight' , tech : 'Graphics Design' , image : [starlight1 , starlight2] , video : false , algo : DesignAlgo5},
+     {name : 'Serenity of Sea' , tech : 'Visuals' , image : [lake1 , lake2 , lake3] , video : false , algo : DesignAlgo7 , },
     {name : 'Abandoned' , tech : 'Graphics Design' , image : [aband1 , aband2 , aband3 , aband4] , video : false , algo : DesignAlgo4},
 
     {name : 'Surrelism' , tech : 'Graphics Design' , image : [founder ,unreveled ] , video : false , algo : DesignAlgo5},
@@ -48,10 +56,9 @@ function Design() {
     
     
 
-   {name : 'Timeless Edition' , tech : 'Graphics Design' , image : [timeless1 ] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/timeless')}},
+   {name : 'Timeless Edition' , tech : 'Graphics Design' , image : [timeless1 ] , video : false , algo : DesignAlgo6, navigation : ()=>{navigate('/timeless')}},
   //  {name : 'Nostalogia' , tech : 'Graphics Design' , image : [wanted , unwanted] , video : false , algo : DesignAlgo3},
     {name : 'Surrelism' , tech : 'Graphics Design' , image : [abundance , freedom] , video : false , algo : DesignAlgo5},
-
   //      {name : 'mzverse.io' , tech : 'UI/UX + MERN' , image : [mzverse1] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/mzverse')}},
   //  {name : 'Portfolio-2024' , tech : 'Design + Development' , image : [folio2024] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/portfolio-2024')}},
 
@@ -68,6 +75,7 @@ function Design() {
         const Algo  = dsgn.algo
         return <div onClick={dsgn.navigation? dsgn.navigation  : null} >{<Algo image = {dsgn.image} name = {dsgn.name} tech = {dsgn.tech} video = {dsgn.video}  index={index}/>}</div>
       })}
+      <Mergin/>
     </div>
   )
 }

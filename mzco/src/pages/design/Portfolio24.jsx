@@ -13,7 +13,7 @@ import {useNavigate} from 'react-router-dom'
 function Portfolio24() {
     const navigate  = useNavigate()
   return (
-    <div className='flex bg-white/80 h-full pb-[10vw] pt-[2.2vw] flex-col gap-[4vw] items-center w-screen'>
+    <div className='flex bg-white/80 h-full pb-[10vw] pt-[2.2vw] relative z-100 flex-col gap-[4vw] items-center w-screen'>
 <img src={mockup} alt="" className="object-cover " />
 <div className='border flex rounded-full justify-between items-center p-[3px] pl-[5px] w-[22vw] h-[6.3vw]'>
 <h5 className='font-[inter-medium] text-[14px] '>View live</h5>

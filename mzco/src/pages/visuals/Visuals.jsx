@@ -64,7 +64,7 @@ function Visuals() {
   }
 
   return (
-    <div className='relative h-screen w-screen'>
+    <div className='relative h-screen bg-white w-screen'>
 
       {/* Scrollable container */}
       <div
@@ -97,7 +97,7 @@ function Visuals() {
 
       {/* Background image layer */}
       <div className='w-screen h-screen'>
-        {visuals.map((el, index) => (
+        {/* {visuals.map((el, index) => (
           <div key={index}>
             <img
               src={el.image}
@@ -106,7 +106,7 @@ function Visuals() {
               alt=""
             />
           </div>
-        ))}
+        ))} */}
       </div>
     </div>
   )
