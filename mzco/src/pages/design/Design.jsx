@@ -49,6 +49,7 @@ import Mergin from '../../components/DesignAlgo/Mergin.jsx'
 import DesignAlgo6 from '../../components/DesignAlgo/DesignAlgo6.jsx'
 
 function Design() {
+  const [isImageOpen , setIsImageOpen ] = useState(false)
   const navigate = useNavigate()
   const [designs , setDesigns] = useState([
     {name : 'Upcoming' , tech : 'Graphics Design' , image : [firstImg1 , firstImg2 , firstImg3] , video : false , algo : DesignAlgo1},
@@ -64,9 +65,11 @@ function Design() {
     
     
 
-   {name : 'Timeless Edition' , tech : 'Graphics Design' , image : [timeless1 ] , video : false , algo : DesignAlgo6, navigation : ()=>{navigate('/timeless')}},
+   {name : 'Timeless Edition' , tech : 'Graphics Design' , image : [timeless1 ] , video : false , algo : DesignAlgo6,
+    
+   },
   //  {name : 'Nostalogia' , tech : 'Graphics Design' , image : [wanted , unwanted] , video : false , algo : DesignAlgo3},
-    {name : 'Surrelism' , tech : 'Graphics Design' , image : [abundance , freedom] , video : false , algo : DesignAlgo5},
+    {name : 'Surrelism' , tech : 'Graphics Design'  ,  image : [abundance , freedom] , video : false , algo : DesignAlgo5},
     {name : 'Root' , tech : 'Graphics Design' , image : [ root1 ,root3 , root2 , ] , video : false , algo : DesignAlgo4},
      {name : 'Serenity of Sea' , tech : 'Visuals' , image : [rain1] , video : false , algo : DesignAlgo7 , },
     // {name : 'Surrelism' , tech : 'Graphics Design' , image : [flower1 , flower2] , video : false , algo : DesignAlgo8},
@@ -83,9 +86,10 @@ function Design() {
   ])
   return (
     <div className='  mb-[20vw] w-screen Pb-[20vw] bg-white/90 mt-[20vw] flex flex-col gap-2 justify-center items-center relative z-[10]'>
+      <div style={isImageOpen ? {opacity : 0.8 , pointerEvents :'auto'} : {opacity : 0 , pointerEvents : 'none'}} className='h-screen w-screen z-[20] fixed top-0 bg-white duration-500' onClick={()=>{setIsImageOpen(false)}} ></div>
       {designs.map((dsgn , index )=>{
         const Algo  = dsgn.algo
-        return <div onClick={dsgn.navigation? dsgn.navigation  : null} >{<Algo image = {dsgn.image} name = {dsgn.name} tech = {dsgn.tech} video = {dsgn.video}  index={index}/>}</div>
+        return <div onClick={dsgn.navigation? dsgn.navigation  : null} >{<Algo isImageOpen={isImageOpen} setIsImageOpen={setIsImageOpen} image = {dsgn.image} name = {dsgn.name} tech = {dsgn.tech} video = {dsgn.video}  index={index}/>}</div>
       })}
       <Mergin/>
     </div>
