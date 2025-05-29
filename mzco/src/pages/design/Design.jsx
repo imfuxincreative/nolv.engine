@@ -5,7 +5,12 @@ import DesignAlgo3 from '../../components/DesignAlgo/DesignAlgo3.jsx'
 import DesignAlgo4 from '../../components/DesignAlgo/DesignAlgo4.jsx'
 import DesignAlgo5 from '../../components/DesignAlgo/DesignAlgo5.jsx'
 import DesignAlgo7 from '../../components/DesignAlgo/DesignAlgo7.jsx'
+import DesignAlgo8 from '../../components/DesignAlgo/DesignAlgo8.jsx'
 
+import root1 from '../../assets/images/Designs/root/root1.jpg'
+import root2 from '../../assets/images/Designs/root/root2.jpg'
+import root3 from '../../assets/images/Designs/root/root3.webp'
+import rain1 from '../../assets/images/Designs/rain/rain1.jpg'
 
 
 import firstImg1 from  '../../assets/images/Designs/1/img1.jpg'
@@ -33,6 +38,9 @@ import unwanted from '../../assets/images/Designs/wanted/starlight3.jpg'
 import lake1 from '../../assets/images/Designs/serenity/1.jpg'
 import lake2 from '../../assets/images/Designs/serenity/2.jpg'
 import lake3 from '../../assets/images/Designs/serenity/3.jpg'
+import flower1 from '../../assets/images/Designs/flower/valentine.webp'
+import flower2 from '../../assets/images/Designs/flower/root.webp'
+
 
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -47,7 +55,7 @@ function Design() {
     {name : 'Nostalogia' , tech : 'Graphics Design' , image : [nosta1 , nosta2] , video : false , algo : DesignAlgo3},
      {name : 'Arcitecture' , tech : 'UIUX Design' , image : [arcitecture] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/arcitecture')}},
      {name : 'Starlight' , tech : 'Graphics Design' , image : [starlight1 , starlight2] , video : false , algo : DesignAlgo5},
-     {name : 'Serenity of Sea' , tech : 'Visuals' , image : [lake1 , lake2 , lake3] , video : false , algo : DesignAlgo7 , },
+     {name : 'Serenity of Sea' , tech : 'Visuals' , image : [lake3 , lake1 , lake2 , ] , video : false , algo : DesignAlgo7 , },
     {name : 'Abandoned' , tech : 'Graphics Design' , image : [aband1 , aband2 , aband3 , aband4] , video : false , algo : DesignAlgo4},
 
     {name : 'Surrelism' , tech : 'Graphics Design' , image : [founder ,unreveled ] , video : false , algo : DesignAlgo5},
@@ -59,6 +67,10 @@ function Design() {
    {name : 'Timeless Edition' , tech : 'Graphics Design' , image : [timeless1 ] , video : false , algo : DesignAlgo6, navigation : ()=>{navigate('/timeless')}},
   //  {name : 'Nostalogia' , tech : 'Graphics Design' , image : [wanted , unwanted] , video : false , algo : DesignAlgo3},
     {name : 'Surrelism' , tech : 'Graphics Design' , image : [abundance , freedom] , video : false , algo : DesignAlgo5},
+    {name : 'Root' , tech : 'Graphics Design' , image : [ root1 ,root3 , root2 , ] , video : false , algo : DesignAlgo4},
+     {name : 'Serenity of Sea' , tech : 'Visuals' , image : [rain1] , video : false , algo : DesignAlgo7 , },
+    // {name : 'Surrelism' , tech : 'Graphics Design' , image : [flower1 , flower2] , video : false , algo : DesignAlgo8},
+
   //      {name : 'mzverse.io' , tech : 'UI/UX + MERN' , image : [mzverse1] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/mzverse')}},
   //  {name : 'Portfolio-2024' , tech : 'Design + Development' , image : [folio2024] , video : false , algo : DesignAlgo2 , navigation : ()=>{navigate('/portfolio-2024')}},
 
