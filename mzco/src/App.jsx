@@ -24,6 +24,7 @@ import Templates from "./pages/templates/Templates.jsx";
 import Resources from "./pages/Resources/Resources.jsx";
 import { MenuBgContext, MenuBgProvider } from "./context/MenuBgContext.jsx";
 import Projects from "./pages/Projects/Projects.jsx";
+import InfiniteGrid from "./pages/InfiniteGrid/InfiniteGrid.jsx";
 
 // Page animation settings
 const pageVariants = {
@@ -63,6 +64,7 @@ const AnimatedRoutes = () => {
           path="/visuals"
           element={
             <motion.div
+            className = 'relative z-[300]'
               variants={pageVariants}
               initial="initial"
               animate="animate"
@@ -70,6 +72,21 @@ const AnimatedRoutes = () => {
               transition={pageTransition}
             >
               <Visuals />
+            </motion.div>
+          }
+        />
+           <Route
+          path="/infinitegrid"
+          element={
+            <motion.div
+            className = 'relative z-[100]'
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+          <InfiniteGrid/>
             </motion.div>
           }
         />

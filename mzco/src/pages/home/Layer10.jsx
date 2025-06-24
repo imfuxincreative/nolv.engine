@@ -67,7 +67,7 @@ function Layer10() {
 
   return (
     <div className=''>
-      <div className='absolute z-[90] top-[120vw] right-[20vw] flex flex-col items-start justify-start'>
+      <div className='absolute z-[10] top-[120vw] right-[20vw] flex flex-col items-start justify-start'>
         <img
           ref={imgRef}
           className='w-[15vw] absolute cursor-grab'
@@ -79,7 +79,7 @@ function Layer10() {
       </div>
 
       {/* <button className='absolute bottom-[10vw] left-[42vw]'>Say Hii !</button> */}
-      <button className='absolute bg-white/80 border border-[#fee0ff] top-[5vw] right-[5vw]'>What if ?</button>
+      <button className='absolute bg-white/80 border z-[888] border-[#fee0ff] top-[5vw] right-[5vw]'>What if ?</button>
     </div>
   );
 }

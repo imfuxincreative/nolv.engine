@@ -21,9 +21,11 @@ function Navber() {
 
   const menuItems = [
     { name: 'Home', path: '/' },
+    { name: 'Playground', path: '/infinitegrid' },
     { name: 'Projects', path: '/projects' },
     { name: 'Resources', path: '/resources' },
     { name: 'About', path: '/about' },
+
   ];
 
   useEffect(() => {
@@ -131,7 +133,7 @@ function Navber() {
         ))}
       </div>
 
-      <div className='w-screen absolute overflow-hidden bottom--3 h-[25px]'>
+      <div className='w-screen absolute overflow-hidden bottom-3 h-[25px]'>
         <div className='menu-control'>
            
           {/* middle Row */}
