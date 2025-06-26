@@ -74,15 +74,15 @@ function Layer3() {
         {/* Define the mask */}
         <defs>
           <mask id="mask1" x="0" y="0" width="100%" height="100%">
-            <rect x="80vw" y="48vw" width="12vw" height="12vw" fill="white" />
-            <rect x="8vw" y="48vw" width="52vw" height="12vw" fill="white" />
-            <rect x="16vw" y="68vw" width="40vw" height="48vw" fill="white" />
-            <rect x="56vw" y="96vw" width="20vw" height="20vw" fill="white" />
+            {/* <rect x="80vw" y="48vw" width="12vw" height="12vw" fill="white" /> */}
+            {/* <rect x="8vw" y="48vw" width="52vw" height="12vw" fill="white" /> */}
+            {/* <rect x="16vw" y="68vw" width="30vw" height="30vw" fill="white" /> */}
+            <rect x="40vw" y="96vw" width="30vw" height="40vw" fill="white" />
           </mask>
         </defs>
 
         {/* Background Image */}
-        <image className='fixed' href={bg} x="0" y="15vh" width="100vw" mask="url(#mask1)" />
+        <image className='fixed' href={bg} x="-5vw" y="5vh" width="140vw" mask="url(#mask1)" />
       </svg>
     </div>
   );

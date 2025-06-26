@@ -13,7 +13,7 @@ function layer4() {
       <div>
         
       </div>
-        <img className='absolute z-[60] top-[80vw]' src={rectext} alt="" />
+        <img className='absolute z-[90] top-[70vw]' src={rectext} alt="" />
           
 
     </div>

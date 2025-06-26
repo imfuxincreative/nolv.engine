@@ -1,91 +1,89 @@
 import React, { useRef, useEffect } from 'react';
+import bg from '../../assets/images/meeza2.jpg';
 
 function Layer5() {
-  const boxRefs = useRef([]);
+  const svgRef = useRef(null);
 
   useEffect(() => {
-    const boxes = boxRefs.current;
+    const svg = svgRef.current;
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
 
-    boxes.forEach((box) => {
-      let isDragging = false;
-      let offsetX = 0;
-      let offsetY = 0;
+    const startDrag = (x, y) => {
+      isDragging = true;
+      offsetX = x - svg.getBoundingClientRect().left;
+      offsetY = y - svg.getBoundingClientRect().top;
+    };
 
-      const startDrag = (e) => {
-        isDragging = true;
-        const rect = box.getBoundingClientRect();
-        offsetX = e.clientX - rect.left;
-        offsetY = e.clientY - rect.top;
+    const onMouseDown = (e) => {
+      e.preventDefault();
+      startDrag(e.clientX, e.clientY);
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    };
 
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', stopDrag);
-      };
+    const onMouseMove = (e) => {
+      if (!isDragging) return;
+      svg.style.left = `${e.clientX - offsetX}px`;
+      svg.style.top = `${e.clientY - offsetY}px`;
+    };
 
-      const onMouseMove = (e) => {
-        if (!isDragging) return;
-        box.style.left = `${e.clientX - offsetX}px`;
-        box.style.top = `${e.clientY - offsetY}px`;
-      };
+    const onMouseUp = () => {
+      isDragging = false;
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
 
-      const stopDrag = () => {
-        isDragging = false;
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', stopDrag);
-      };
+    const onTouchStart = (e) => {
+      const touch = e.touches[0];
+      startDrag(touch.clientX, touch.clientY);
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
+      document.addEventListener('touchend', onTouchEnd);
+    };
 
-      const onTouchStart = (e) => {
-        const touch = e.touches[0];
-        const rect = box.getBoundingClientRect();
-        offsetX = touch.clientX - rect.left;
-        offsetY = touch.clientY - rect.top;
-        isDragging = true;
+    const onTouchMove = (e) => {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      svg.style.left = `${touch.clientX - offsetX}px`;
+      svg.style.top = `${touch.clientY - offsetY}px`;
+      e.preventDefault(); // Prevent scrolling while dragging
+    };
 
-        document.addEventListener('touchmove', onTouchMove, { passive: false });
-        document.addEventListener('touchend', stopTouchDrag);
-      };
+    const onTouchEnd = () => {
+      isDragging = false;
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+    };
 
-      const onTouchMove = (e) => {
-        if (!isDragging) return;
-        const touch = e.touches[0];
-        box.style.left = `${touch.clientX - offsetX}px`;
-        box.style.top = `${touch.clientY - offsetY}px`;
-        e.preventDefault();
-      };
+    svg.addEventListener('mousedown', onMouseDown);
+    svg.addEventListener('touchstart', onTouchStart);
 
-      const stopTouchDrag = () => {
-        isDragging = false;
-        document.removeEventListener('touchmove', onTouchMove);
-        document.removeEventListener('touchend', stopTouchDrag);
-      };
-
-      box.addEventListener('mousedown', startDrag);
-      box.addEventListener('touchstart', onTouchStart);
-
-      // Cleanup
-      return () => {
-        box.removeEventListener('mousedown', startDrag);
-        box.removeEventListener('touchstart', onTouchStart);
-      };
-    });
+    return () => {
+      svg.removeEventListener('mousedown', onMouseDown);
+      svg.removeEventListener('touchstart', onTouchStart);
+    };
   }, []);
 
   return (
     <div>
-      <div
-        ref={(el) => (boxRefs.current[0] = el)}
-        className="w-[16vw] h-[12vw] z-[60] absolute top-[94vw] left-[36vw] bg-transparent backdrop-blur-md cursor-grab"
-        style={{ position: 'absolute' }}
-      ></div>
-      <div
-        ref={(el) => (boxRefs.current[1] = el)}
-        className="w-[20vw] h-[12vw] z-[60] absolute top-[70vw] left-[3vw] bg-transparent backdrop-blur-md cursor-grab"
-        style={{ position: 'absolute' }}
-      ></div>
-      <div
-        ref={(el) => (boxRefs.current[2] = el)}
-        className="w-[12vw] h-[12vw] z-[60] absolute top-[82vw] left-[52vw] bg-transparent backdrop-blur-md cursor-grab"
-        style={{ position: 'absolute', right: '24vw' }}
-      ></div>
+      <svg
+        ref={svgRef}
+        className="absolute z-[60] top-[10vw] h-[120vw] -left-[10vw] w-full  cursor-grab"
+      >
+        {/* Define the mask */}
+        <defs>
+          <mask id="mask2" x="0" y="0" width="100%" height="100%">
+            {/* <rect x="80vw" y="48vw" width="12vw" height="12vw" fill="white" /> */}
+            {/* <rect x="8vw" y="48vw" width="52vw" height="12vw" fill="white" /> */}
+            <rect x="0vw" y="78vw" width="40vw" height="48vw" fill="white" />
+            <rect x="36vw" y="106vw" width="30vw" height="20vw" fill="white" />
+          </mask>
+        </defs>
+
+        {/* Background Image */}
+        <image className='fixed' href={bg} x="-30vw" y="-5vh" width="160vw" mask="url(#mask2)" />
+      </svg>
     </div>
   );
 }

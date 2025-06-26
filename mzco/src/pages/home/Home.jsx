@@ -25,7 +25,7 @@ function Home() {
    
 
       <div className="sticky top-0">
-        <Layer10/>
+        {/* <Layer10/> */}
         {/* <InfiniteImageCanvas/> */}
         <Index/>
       </div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-
+import beach from '../assets/images/meeza2.jpg'
 function PixelBg() {
   const pixels = Array.from({ length: 100 });
   const pixLine = Array.from({ length: 40 });
@@ -57,22 +57,13 @@ function PixelBg() {
   }, []);
 
   return (
-    <div className=" -translate-x-[40vw] fixed top-0 z-[0] -translate-y-[20vw] pointer-events-none">
+    <div className=" fixed top-0 z-[0]  pointer-events-none">
       <div
         id="bg-element"
-        className="flex -translate-y-[4vw]"
+        className="flex -translate-y-[4vw] "
         style={{ transition: 'transform 0.1s ease-out' }} // Smooth transition
       >
-        {pixLine.map((_, rowIndex) => (
-          <div key={rowIndex} className={`${rowIndex % 2 === 0 ? 'translate-y-[4vw]' : ''}`}>
-            {pixels.map((_, colIndex) => (
-              <div
-                key={rowIndex * 100 + colIndex}
-                className={`h-[4vw] w-[4vw] ${colIndex % 2 !== 0 ? 'bg-[#e1e1e1]' : ''}`}
-              ></div>
-            ))}
-          </div>
-        ))}
+        <img className=' h-screen w-screen object-cover' src={beach} alt="" />
       </div>
     </div>
   );
