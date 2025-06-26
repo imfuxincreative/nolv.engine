@@ -259,7 +259,9 @@ function App() {
       <div className="sticky z-[999] top-0">
         {/* <ControlBar /> */}
       </div>
-      {isLoading && <Loader />}
+      {/* {isLoading && <AnimatePresence>
+        <Loader />
+      </AnimatePresence> } */}
       {!isLoading && <AnimatedRoutes />}
     </div>: <div className="h-screen w-screen flex items-center justify-center bg-white">
       

@@ -1,9 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import folder from '../../assets/elements/folder.png';
+import { useNavigate } from 'react-router-dom';
 
 function Layer10() {
   const imgRef = useRef(null);
-
+const navigate = useNavigate()
   // useEffect(() => {
   //   const img = imgRef.current;
   //   let isDragging = false;
@@ -79,7 +80,7 @@ function Layer10() {
       </div> */}
 
       {/* <button className='absolute bottom-[10vw] left-[42vw]'>Say Hii !</button> */}
-      <button className='absolute bg-white/50  z-[888] top-[5vw] right-[5vw]'>What if ?</button>
+      <button className='absolute bg-white/50  z-[888] top-[5vw] right-[5vw]' onClick={()=>{navigate('/')}}>What if ?</button>
     </div>
   );
 }

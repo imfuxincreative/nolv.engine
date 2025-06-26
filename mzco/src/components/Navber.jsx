@@ -27,7 +27,7 @@ function Navber() {
     { name: 'About', path: '/about' },
 
   ];
-
+const didMountRef  = useRef(false)
   useEffect(() => {
     const tl = gsap.timeline();
 
@@ -79,24 +79,20 @@ function Navber() {
     }
   }, [menuOpen]);
 
-  const handleMenuItemClick = (path) => {
-  
-    if(path === '/'){
-      console.log('sdfd')
-    setMenuOpen('open');
-
-    }else{
-
-      
-      setMenuOpen('open-full');
-      setTimeout(() => {
-        navigate(path);
-        // setMenuOpen('open');
-        
-      }, 1200);
+const handleMenuItemClick = (path) => {
+  if (path === '/') {
+    if (menuOpen !== 'open') {
+      setMenuOpen('open');
     }
-   
-  };
+  } else {
+    if (menuOpen !== 'open-full') {
+      setMenuOpen('open-full');
+    }
+    setTimeout(() => {
+      navigate(path);
+    }, 1200);
+  }
+};
 
   const toggleMenu = () => {
     navigate(menuItems[0].path)
@@ -117,14 +113,14 @@ function Navber() {
     <>
     <div
       ref={menuRef}
-      className="bg-white w-screen pt-2 h-[34vw] flex-col flex fixed z-[50]  bottom-0 justify-between"
+      className="bg-white w-screen pt-2 h-[10vw] flex-col flex fixed z-[50]  bottom-0 justify-between"
     >
       <div className="flex absolute bottom-[5vh] w-screen items-center justify-center flex-col">
         {menuItems.map((el, i) => (
           <div key={i} className="overflow-hidden py-1">
             <h1
               onClick={() => handleMenuItemClick(el.path)}
-              className={`items opacity-50 cursor-pointer ${
+              className={`items -translate-y-[-6vw] opacity-50 cursor-pointer ${
                 location.pathname === el.path ? 'opacity-100 ' : ''
               }`}
             >
