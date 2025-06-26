@@ -114,9 +114,10 @@ function Navber() {
   };
 
   return (
+    <>
     <div
       ref={menuRef}
-      className="bg-white w-screen pt-2 h-[34vw] flex-col flex fixed z-[50] bottom-0 justify-between"
+      className="bg-white w-screen pt-2 h-[34vw] flex-col flex fixed z-[50]  bottom-0 justify-between"
     >
       <div className="flex absolute bottom-[5vh] w-screen items-center justify-center flex-col">
         {menuItems.map((el, i) => (
@@ -133,7 +134,9 @@ function Navber() {
         ))}
       </div>
 
-      <div className='w-screen absolute overflow-hidden bottom-3 h-[25px]'>
+     
+    </div>
+     <div className='w-screen fixed z-[999] overflow-hidden bottom-3 h-[25px]'>
         <div className='menu-control'>
            
           {/* middle Row */}
@@ -187,7 +190,7 @@ function Navber() {
           </div>
         </div>
       </div>
-    </div>
+      </>
   );
 }
 

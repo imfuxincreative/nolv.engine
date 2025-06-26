@@ -140,21 +140,23 @@ export default function InfiniteImageCanvas() {
   }, []);
 
   return (
+    <div className=''>
+      
     <div
       {...bind()}
-      className={` ${scaleDown ? 'scale-90 ' :'scale-100'} duration-300 -translate-x-[10vw] -translate-y-[10vh] relative w-[120vw] h-[120vh] overflow-hidden bg-white touch-none`}
+      className={` ${scaleDown ? 'scale-90 ' :'scale-100'} duration-300 -translate-x-[10vw] -translate-y-[10vh] fixed w-[120vw] h-[120vh] overflow-hidden bg-transpatent touch-none`}
     >
       {Array.from({ length: GRID_SIZE }).map((_, row) =>
         Array.from({ length: GRID_SIZE }).map((_, col) => {
           const index = (row * GRID_SIZE + col) % imageDeta.length;
           const { name, image , isFull } = imageDeta[index];
           const tileIndex = row * GRID_SIZE + col;
-
+          
           return (
             <div
-              key={`${row}-${col}`}
-              ref={(el) => (tilesRef.current[tileIndex] = el)}
-              className="absolute will-change-transform"
+            key={`${row}-${col}`}
+            ref={(el) => (tilesRef.current[tileIndex] = el)}
+            className="absolute will-change-transform"
             >
               <ImageCard scaleDown={scaleDown} image={image} name={name} isFull={isFull} />
             </div>
@@ -162,5 +164,6 @@ export default function InfiniteImageCanvas() {
         })
       )}
     </div>
+      </div>
   );
 }
