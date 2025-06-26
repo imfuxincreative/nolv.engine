@@ -59,7 +59,7 @@ function PixelBg() {
   return (
     <div className=" fixed top-0 z-[0]  pointer-events-none">
       <div
-        id="bg-element"
+        id="bg-elementdd"
         className="flex -translate-y-[4vw] "
         style={{ transition: 'transform 0.1s ease-out' }} // Smooth transition
       >
