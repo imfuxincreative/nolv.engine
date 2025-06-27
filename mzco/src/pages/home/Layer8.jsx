@@ -66,21 +66,17 @@ function Layer8() {
     <div>
       <h6
         ref={refs.intro}
-        className="absolute top-[78vw] z-[70] bg-white border  bg-opacity-5 border-[#ffffff] rounded-[2px] pl-2 right-[30vw]"
+        className="absolute top-[78vw] z-[100] bg-white border  bg-opacity-5 border-[#ffffff] 
+       pl-2 right-[30vw]"
         style={{ transition: 'transform 0.1s ease-out' }}
       >
         \ Introducing the mzco.
       </h6>
-      <h6
-        ref={refs.founder}
-        className="absolute top-[95vw] z-[70] bg-white border  bg-opacity-5 border-[#d8d8d8] pl-2 rounded-[2px] left-[10vw]"
-        style={{ transition: 'transform 0.1s ease-out' }}
-      >
-        Founded by meeza™
-      </h6>
+   
       <h6
         ref={refs.logo}
-        className="absolute top-[100vw] z-[70] bg-white border  bg-opacity-5 border-[#efefef] rounded-[2px] px-1  right-[20vw]"
+        className="absolute top-[100vw] z-[100] bg-white border  bg-opacity-5 border-[#efefef] 
+       px-1  right-[20vw]"
         style={{ transition: 'transform 0.1s ease-out' }}
       >
         text.png

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import beach from '../assets/images/meeza2.jpg'
+import beach from '../assets/images/InfiniteImages/beach1.jpg'
 function PixelBg() {
   const pixels = Array.from({ length: 100 });
   const pixLine = Array.from({ length: 40 });
