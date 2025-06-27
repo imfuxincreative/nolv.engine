@@ -113,7 +113,7 @@ const handleMenuItemClick = (path) => {
     <>
     <div
       ref={menuRef}
-      className="bg-white w-screen pt-2 h-[10vw] flex-col flex fixed z-[50]  bottom-0 justify-between"
+      className="bg-white/75 w-screen pt-2 h-[10vw] flex-col flex fixed z-[50]  bottom-0 justify-between"
     >
       <div className="flex absolute bottom-[5vh] w-screen items-center justify-center flex-col">
         {menuItems.map((el, i) => (
