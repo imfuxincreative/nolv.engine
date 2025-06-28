@@ -38,8 +38,8 @@ function Layer8() {
     let animationId;
 
     const updatePosition = () => {
-      const deltaX = (tilt.current.gamma - prevTilt.current.gamma) * 0.3;
-      const deltaY = (tilt.current.beta - prevTilt.current.beta) * 0.3;
+      const deltaX = (tilt.current.gamma - prevTilt.current.gamma) * 0.1;
+      const deltaY = (tilt.current.beta - prevTilt.current.beta) * 0.1;
 
       Object.entries(refs).forEach(([key, ref]) => {
         if (ref.current) {

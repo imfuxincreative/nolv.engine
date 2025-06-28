@@ -29,8 +29,8 @@ function PixelBg() {
     const updateBgPosition = () => {
       // Calculate the change in tilt (deltaX and deltaY)
 
-      const deltaX = (tilt.current.gamma - prevTilt.current.gamma) * 1; // Smooth multiplier
-      const deltaY = (tilt.current.beta - prevTilt.current.beta) * 1;  // Smooth multiplier
+      const deltaX = (tilt.current.gamma - prevTilt.current.gamma) * 0.5; // Smooth multiplier
+      const deltaY = (tilt.current.beta - prevTilt.current.beta) * 0.5;  // Smooth multiplier
 
       // Update background position with smoothness factor
       bgPosition.current.x += deltaX;
@@ -57,13 +57,13 @@ function PixelBg() {
   }, []);
 
   return (
-    <div className=" fixed top-0 z-[0]  pointer-events-none">
+    <div className=" fixed top-0 z-[0]   pointer-events-none">
       <div
-        id="bg-elementdd"
-        className="flex  "
+        id="bg-element"
+        className="flex h-[120vh] w-[120vw] "
         style={{ transition: 'transform 0.1s ease-out' }} // Smooth transition
       >
-        <img className=' h-screen w-screen object-cover' src={beach} alt="" />
+        <img className=' h-[110vh] w-[120vw] -translate-x-[10vw] -translate-y-[5vh] object-cover' src={beach} alt="" />
       </div>
     </div>
   );

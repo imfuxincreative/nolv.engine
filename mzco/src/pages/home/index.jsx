@@ -29,7 +29,7 @@ function Index() {
   useEffect(() => {
     const tl = gsap.timeline();
     layerRefs.current.forEach(el => {
-      tl.set(el, { opacity: 1 }, '+=0.1');
+      tl.set(el, { opacity: 1}, '+=0.1');
     });
     timelineRef.current = tl;
   }, []);
