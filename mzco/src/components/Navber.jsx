@@ -10,6 +10,8 @@ import { GoArrowUpRight } from "react-icons/go";
 import { MenuBgContext } from '../context/MenuBgContext';
 import { MdHomeFilled } from "react-icons/md";
 import { IoIosArrowBack } from "react-icons/io";
+import { IsAboutContext } from '../context/IsAbout';
+import { BlurContext } from '../context/BlurContext';
 gsap.registerPlugin(ScrollTrigger);
 
 function Navber() {
@@ -18,7 +20,9 @@ function Navber() {
   const location = useLocation();
 
   const { menuOpen, setMenuOpen } = useContext(MenuBgContext);
-
+  const {isAbout , setIsAbout} = useContext(IsAboutContext)
+  const {blurValue}  = useContext(BlurContext)
+console.log(blurValue)
   const menuItems = [
     { name: 'Home', path: '/' },
     { name: 'Playground', path: '/infinitegrid' },
@@ -28,9 +32,24 @@ function Navber() {
 
   ];
 const didMountRef  = useRef(false)
+useEffect(() => {
+  gsap.to('.menu-control', {
+    y: 5 * blurValue,
+    duration: 0.2,
+    ease: 'power1.out',
+  });
+
+  gsap.to('.main', {
+    y: 5 * blurValue,
+    duration: 0.2,
+    ease: 'power1.out',
+  });
+}, [blurValue]);
+
   useEffect(() => {
     const tl = gsap.timeline();
 
+    
     if (menuOpen === 'open') {
       tl.to(menuRef.current, {
         height: '50vw',
@@ -48,6 +67,7 @@ const didMountRef  = useRef(false)
         ease: 'power1.inOut',
       }, '1');
     } else if (menuOpen === 'close') {
+     
       tl.to('.items', {
         y: '6vw',
         stagger: 0.059,
@@ -77,7 +97,9 @@ const didMountRef  = useRef(false)
       }, '1');
 
     }
-  }, [menuOpen]);
+
+
+  }, [menuOpen ]);
 
 const handleMenuItemClick = (path) => {
   if (path === '/') {
@@ -112,8 +134,9 @@ const handleMenuItemClick = (path) => {
   return (
     <>
     <div
+    
       ref={menuRef}
-      className="bg-white/75 w-screen pt-2 h-[10vw] flex-col flex fixed z-[50]  bottom-0 justify-between"
+      className="main bg-white/75 w-screen pt-2 h-[10vw] flex-col flex fixed z-[50]  bottom-0 justify-between"
     >
       <div className="flex absolute bottom-[5vh] w-screen items-center justify-center flex-col">
         {menuItems.map((el, i) => (
@@ -133,7 +156,7 @@ const handleMenuItemClick = (path) => {
      
     </div>
      <div className='w-screen fixed z-[999] overflow-hidden bottom-3 h-[25px]'>
-        <div className='menu-control'>
+        <div  className='menu-control '>
            
           {/* middle Row */}
           <div className="pr-3 w-screen mt-[1.5px] flex items-center justify-between px-2">

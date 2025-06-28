@@ -14,12 +14,14 @@ import Layer7 from './Layer7.jsx';
 import Layer8 from './Layer8.jsx';
 import Layer9 from './Layer9.jsx';
 import Layer10 from './Layer10.jsx';
-import DynamicBlur from '../../components/DynamicBlur.jsx';
-
+import DynamicBlur from '../../components/DynamicOpacity.jsx';
+import { BlurContext } from '../../context/BlurContext.jsx';
 // const layers = [ Layer3,Layer4,  Layer8];
 const layers = [ Layer4 , Layer7 , Layer8]
 
 function Index() {
+  const {blurValue , setBlurValue }  = useContext(BlurContext)
+  console.log(blurValue)
   const { reverseAnime, setReverseAnime } = useContext(ReverseAnimeContext);
   const layerRefs = useRef([]);
   const timelineRef = useRef(null); // Store GSAP timeline here
@@ -39,7 +41,10 @@ function Index() {
   }, [reverseAnime]);
   
   return (
-    <div className="h-screen w-screen overflow-hidden relative">
+    <div>
+
+      
+    <div style={{opacity : 1-blurValue}} className="h-[108vh] w-screen overflow-hidden relative">
       <div className="absolute inset-0 z-10">
         {layers.map((Layer, i) => (
           <div
@@ -55,7 +60,10 @@ function Index() {
   
       </div>
      
+    </div> <div>
+      <DynamicBlur/>
     </div>
+        </div>
   );
 }
 

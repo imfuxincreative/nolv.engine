@@ -80,7 +80,7 @@ const navigate = useNavigate()
       </div> */}
 
       {/* <button className='absolute bottom-[10vw] left-[42vw]'>Say Hii !</button> */}
-      <button className='absolute bg-white/50  z-[888] top-[5vw] right-[5vw]' onClick={()=>{navigate('/')}}>What if ?</button>
+      <button className='absolute bg-white z-[888] top-[5vw] right-[5vw]' onClick={()=>{navigate('/')}}>What if ?</button>
     </div>
   );
 }

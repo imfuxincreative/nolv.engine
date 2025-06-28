@@ -13,7 +13,7 @@ import { BlurProvider } from "./context/BlurContext.jsx";
 import { ReverseAnimeProvider } from './context/ReverseAnime.jsx';
 import { LoadProvider } from "./context/LoadingContext.jsx";
 
-import DynamicBlur from "./components/DynamicBlur.jsx";
+import DynamicBlur from "./components/DynamicOpacity.jsx";
 import ControlBar from "./components/ControlBar.jsx";
 import PixelBg from "./components/pixelbg.jsx";
 import Loader from "./components/loading.jsx";
@@ -25,6 +25,7 @@ import Resources from "./pages/Resources/Resources.jsx";
 import { MenuBgContext, MenuBgProvider } from "./context/MenuBgContext.jsx";
 import Projects from "./pages/Projects/Projects.jsx";
 import InfiniteGrid from "./pages/InfiniteGrid/InfiniteGrid.jsx";
+import { IsAboutProvider } from "./context/IsAbout.jsx";
 
 // Page animation settings
 const pageVariants = {
@@ -271,6 +272,7 @@ function App() {
 
   return (
     <LoadProvider>
+      <IsAboutProvider>
       <MenuBgProvider>
       <BlurProvider>
         <ReverseAnimeProvider>
@@ -280,6 +282,7 @@ function App() {
         </ReverseAnimeProvider>
       </BlurProvider>
     </MenuBgProvider>
+    </IsAboutProvider>
     </LoadProvider>
   );
 }

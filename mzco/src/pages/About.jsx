@@ -35,19 +35,25 @@ const handleDownload = () => {
 
   return (
     <div className='content-center absolute top-0  pointer-events-none h-screen w-screen'>
-      <div className='flex gap-2 absolute top-1/2 left-[28vw] '>
+      <div className='col items-center justify-center gap-3 absolute flex  flex-col top-1/2 left-[24vw] '>
+
+      <div className='flex gap-2 '>
         {
           introduction.map((el, i) => (
             <h2
-              key={i}
-              ref={(elRef) => (textRefs.current[i] = elRef)}
-              className='text-black '
+            key={i}
+            ref={(elRef) => (textRefs.current[i] = elRef)}
+            className='text-black '
             >
               {el}
             </h2>
           ))
         }
       </div>
+      <h4>
+Designer | Frontend developer
+      </h4>
+        </div>
 <div className='footer absolute z-[800] bottom-20 left-[10vw] flex gap-7 flex-col items-center justify-center'>
   <button onClick={handleDownload} className=' rounded-full border border-[#b3b3b3] pointer-events-auto bg-[#f0f0f0]'>CV.pdf</button>
   <div className='flex gap-4 flex-col items-center justify-center' >
