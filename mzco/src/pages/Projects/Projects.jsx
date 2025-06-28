@@ -12,7 +12,7 @@ function Projects() {
     { name: 'flexyourshots ( Gallary app )', path: 'https://flexyourshots.netlify.app' },
     { name: 'mzverse ( e-commerce, MERN )', path: 'https://mzverse.netlify.app' },
     { name: 'Portfolio-2024', path: 'https://meeza.netlify.app' },
-    { name: 'kushalphotograph', path: 'https://kushalphotograph.netlify.app/' },
+    { name: 'kushalphotograph', path: 'https://postyourphotography.netlify.app/' },
     { name: 'stoicphotography', path: 'https://stoicphotograph.netlify.app' },
     { name: 'mznote (Note app , MERN )', path: 'https://mznote.netlify.app/' },
     { name: 'Architecture (UI/UX Design )', route: '/arcitecture' },
