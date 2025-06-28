@@ -44,7 +44,7 @@ function Index() {
     <div>
 
       
-    <div style={{opacity : 1-blurValue}} className="h-[108vh] w-screen overflow-hidden relative">
+    <div style={{opacity : 1-blurValue*.4}} className="h-[108vh] w-screen overflow-hidden relative">
       <div className="absolute inset-0 z-10">
         {layers.map((Layer, i) => (
           <div

@@ -32,7 +32,7 @@ function Home() {
         {/* <InfiniteImageCanvas/> */}
         <Index/>
       </div>
-      <div className='top' style={{opacity : blurValue}}>
+      <div className='top' style={{opacity : blurValue*.2}}>
   <About/>
 
       </div>
