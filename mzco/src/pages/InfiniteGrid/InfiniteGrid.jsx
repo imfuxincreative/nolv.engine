@@ -1,8 +1,8 @@
 'use client';
 
-import { useMotionValue, animate } from 'framer-motion';
+import { useMotionValue, animate, AnimatePresence } from 'framer-motion';
 import { useDrag } from '@use-gesture/react';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
 import ImageCard from '../../components/ImageCard';
 
 import abundance from '../../assets/images/InfiniteImages/abundance.webp';
@@ -34,6 +34,8 @@ import obito from '../../assets/images/InfiniteImages/obito.jpg';
 import rain from '../../assets/images/InfiniteImages/rain.jpg';
 import rain1 from '../../assets/images/InfiniteImages/rain1.jpg';
 import serenity from '../../assets/images/InfiniteImages/serenity.jpg';
+import Loading from '../../components/loading';
+import { LoadingContext } from '../../context/LoadingContext';
 
 const TILE_SIZE = 195;
 const GRID_SIZE = 6;
@@ -80,6 +82,14 @@ export default function InfiniteImageCanvas() {
     { name: 'Rain 1', image: rain1 , isFull: true },
     { name: 'Serenity', image: serenity, isFull : true },
   ];
+
+  const {isLoading , setIsLoading} = useContext(LoadingContext)
+  useEffect(()=>{
+    const timer = setTimeout(()=>{
+      setIsLoading(false)
+    },300)
+    return ()=> clearTimeout(timer)
+  },[])
 
   const bind = useDrag(
     ({ delta: [dx, dy], velocity: [vx, vy], direction: [dirX, dirY], first, last }) => {
@@ -140,12 +150,13 @@ export default function InfiniteImageCanvas() {
   }, []);
 
   return (
-    <div className=''>
+    <div>
+{isLoading ?<AnimatePresence> <Loading/></AnimatePresence>:     <div className=''>
       
     <div
       {...bind()}
       className={` ${scaleDown ? 'scale-90 ' :'scale-100'} duration-300 -translate-x-[10vw] -translate-y-[10vh] fixed w-[120vw] h-[120vh] overflow-hidden bg-transpatent touch-none`}
-    >
+      >
       {Array.from({ length: GRID_SIZE }).map((_, row) =>
         Array.from({ length: GRID_SIZE }).map((_, col) => {
           const index = (row * GRID_SIZE + col) % imageDeta.length;
@@ -164,6 +175,8 @@ export default function InfiniteImageCanvas() {
         })
       )}
     </div>
+      </div>}
+
       </div>
   );
 }

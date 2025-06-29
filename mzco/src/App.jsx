@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import Architecture from "./pages/design/Architecture.jsx";
@@ -11,7 +11,7 @@ import Design from './pages/design/Design.jsx';
 
 import { BlurProvider } from "./context/BlurContext.jsx";
 import { ReverseAnimeProvider } from './context/ReverseAnime.jsx';
-import { LoadProvider } from "./context/LoadingContext.jsx";
+import { LoadingContext, LoadProvider } from "./context/LoadingContext.jsx";
 
 import DynamicBlur from "./components/DynamicOpacity.jsx";
 import ControlBar from "./components/ControlBar.jsx";
@@ -244,31 +244,28 @@ const AnimatedRoutes = () => {
 };
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
+  
 
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const AppWithBlur = () => (
-    <div>{window.innerWidth < 640 ? <div>
-      {/* <About/> */}
-      <Navber/>
-
-      <PixelBg />
-      <div className="sticky z-[999] top-0">
-        {/* <ControlBar /> */}
-      </div>
-      {/* {isLoading && <AnimatePresence>
-        <Loader />
-      </AnimatePresence> } */}
-      {!isLoading && <AnimatedRoutes />}
-    </div>: <div className="h-screen w-screen flex items-center justify-center bg-white">
-      
-      <h5 className="text-[20px] tracking-tight">Please, Switch to mobile.</h5></div>}
+function AppWithBlur() {
+  return (
+    <div>
+      {window.innerWidth < 640 ? (
+        <div>
+          <Navber />
+          <PixelBg />
+          <div className="sticky z-[999] top-0">
+            {/* <ControlBar /> */}
+          </div>
+          <AnimatedRoutes />
+        </div>
+      ) : (
+        <div className="h-screen w-screen flex items-center justify-center bg-white">
+          <h5 className="text-[20px] tracking-tight">Please, Switch to mobile.</h5>
+        </div>
+      )}
     </div>
   );
+}
 
   return (
     <LoadProvider>

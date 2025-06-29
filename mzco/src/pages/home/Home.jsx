@@ -1,4 +1,4 @@
-import React,{useState , useContext} from 'react'
+import React,{useState , useContext , useEffect} from 'react'
 import Index from '../home/index.jsx';
 import ParallaxImageAlgo from '../../components/parallaxImageAlgo.jsx'
 import DynamicBlur   from '../../components/DynamicOpacity.jsx'
@@ -11,12 +11,23 @@ import InfiniteImageCanvas from '../InfiniteGrid/InfiniteGrid.jsx';
 import Layer10 from './Layer10.jsx';
 import About from '../About.jsx';
 import { BlurContext } from '../../context/BlurContext.jsx';
+import { LoadingContext } from '../../context/LoadingContext.jsx';
+import Loading from '../../components/loading.jsx';
+import { AnimatePresence } from 'framer-motion';
 
 
 function Home() {
   const {blurValue , setBlurValue}  = useContext(BlurContext)
+    const {isLoading , setIsLoading} = useContext(LoadingContext)
+    console.log(isLoading)
+useEffect(()=>{
+ const  timer = setTimeout(()=>{
+setIsLoading(false)
+  } , 1400)
+  return ()=> clearTimeout(timer)
+},[isLoading])
     return (
-    <div className='h-screen w-screen'>
+      <div>{isLoading ?<AnimatePresence><Loading/></AnimatePresence> : <div className='h-screen w-screen'>
 
 {/* <Navber/> */}
          <div className="">
@@ -40,7 +51,10 @@ function Home() {
 </div>: <div className="h-screen w-screen items-center justify-center  flex"><h5 className="text-[20px] tracking-tight">Switch to Mobile</h5></div>}
 
   </div>
-    </div>
+    </div>}
+
+   
+      </div>
   )
 }
 

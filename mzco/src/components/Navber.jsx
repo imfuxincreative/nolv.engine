@@ -12,6 +12,7 @@ import { MdHomeFilled } from "react-icons/md";
 import { IoIosArrowBack } from "react-icons/io";
 import { IsAboutContext } from '../context/IsAbout';
 import { BlurContext } from '../context/BlurContext';
+import { LoadingContext } from '../context/LoadingContext';
 gsap.registerPlugin(ScrollTrigger);
 
 function Navber() {
@@ -21,14 +22,15 @@ function Navber() {
 
   const { menuOpen, setMenuOpen } = useContext(MenuBgContext);
   const {isAbout , setIsAbout} = useContext(IsAboutContext)
+  const {setIsLoading} = useContext(LoadingContext)
   const {blurValue}  = useContext(BlurContext)
 console.log(blurValue)
   const menuItems = [
-    { name: 'Home', path: '/' },
-    { name: 'Playground', path: '/infinitegrid' },
-    { name: 'Projects', path: '/projects' },
-    { name: 'Resources', path: '/resources' },
-    { name: 'About', path: '/about' },
+    { name: 'Home', path: '/', load : false },
+    { name: 'Playground', path: '/infinitegrid' , load : true},
+    { name: 'Projects', path: '/projects', load : false },
+    { name: 'Resources', path: '/resources', load : false },
+    { name: 'About', path: '/about', load : false },
 
   ];
 const didMountRef  = useRef(false)
@@ -142,7 +144,9 @@ const handleMenuItemClick = (path) => {
         {menuItems.map((el, i) => (
           <div key={i} className="overflow-hidden py-1">
             <h1
-              onClick={() => handleMenuItemClick(el.path)}
+              onClick={() => {
+                setIsLoading(true)
+                handleMenuItemClick(el.path)}}
               className={`items -translate-y-[-6vw] opacity-50 cursor-pointer ${
                 location.pathname === el.path ? 'opacity-100 ' : ''
               }`}
