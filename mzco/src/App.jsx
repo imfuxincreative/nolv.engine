@@ -26,6 +26,7 @@ import { MenuBgContext, MenuBgProvider } from "./context/MenuBgContext.jsx";
 import Projects from "./pages/Projects/Projects.jsx";
 import InfiniteGrid from "./pages/InfiniteGrid/InfiniteGrid.jsx";
 import { IsAboutProvider } from "./context/IsAbout.jsx";
+import SwitchToMobile from "./components/SwitchToMobile.jsx";
 
 // Page animation settings
 const pageVariants = {
@@ -259,9 +260,7 @@ function AppWithBlur() {
           <AnimatedRoutes />
         </div>
       ) : (
-        <div className="h-screen w-screen flex items-center justify-center bg-white">
-          <h5 className="text-[20px] tracking-tight">Please, Switch to mobile.</h5>
-        </div>
+       <SwitchToMobile/>
       )}
     </div>
   );
