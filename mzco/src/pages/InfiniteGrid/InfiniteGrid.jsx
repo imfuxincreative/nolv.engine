@@ -151,7 +151,7 @@ export default function InfiniteImageCanvas() {
 
   return (
     <div>
-{isLoading ?<AnimatePresence> <Loading/></AnimatePresence>:     <div className=''>
+     <div className=''>
       
     <div
       {...bind()}
@@ -175,7 +175,7 @@ export default function InfiniteImageCanvas() {
         })
       )}
     </div>
-      </div>}
+      </div>
 
       </div>
   );

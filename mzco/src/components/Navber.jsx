@@ -27,7 +27,7 @@ function Navber() {
 console.log(blurValue)
   const menuItems = [
     { name: 'Home', path: '/', load : false },
-    { name: 'Playground', path: '/infinitegrid' , load : true},
+    { name: 'Playground', path: '/infinitegrid' , load : false},
     { name: 'Projects', path: '/projects', load : false },
     { name: 'Resources', path: '/resources', load : false },
     { name: 'About', path: '/about', load : false },

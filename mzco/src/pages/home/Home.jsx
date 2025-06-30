@@ -23,9 +23,9 @@ function Home() {
 useEffect(()=>{
  const  timer = setTimeout(()=>{
 setIsLoading(false)
-  } , 1400)
+  } , 500)
   return ()=> clearTimeout(timer)
-},[isLoading])
+},[])
     return (
       <div>{isLoading ?<AnimatePresence><Loading/></AnimatePresence> : <div className='h-screen w-screen'>
 
