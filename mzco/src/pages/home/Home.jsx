@@ -27,7 +27,7 @@ setIsLoading(false)
   return ()=> clearTimeout(timer)
 },[])
     return (
-      <div>{isLoading ?<AnimatePresence><Loading/></AnimatePresence> : <div className='h-screen w-screen'>
+   <div className='h-screen w-screen'>
 
 {/* <Navber/> */}
          <div className="">
@@ -51,7 +51,7 @@ setIsLoading(false)
 </div>: <div className="h-screen w-screen items-center justify-center  flex"><h5 className="text-[20px] tracking-tight">Switch to Mobile</h5></div>}
 
   </div>
-    </div>}
+
 
    
       </div>
