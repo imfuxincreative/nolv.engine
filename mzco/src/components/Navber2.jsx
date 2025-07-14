@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { LoadingContext } from '../context/LoadingContext';
 
 function Navber2() {
-  const { setIsLoading } = useContext(LoadingContext);
+  const { setIsLoading  , setShowMessage} = useContext(LoadingContext);
   const navigate = useNavigate();
   const menuSliderRef = useRef();
 
@@ -36,9 +36,9 @@ function Navber2() {
     <div className="fixed z-[999]">
       {/* Bottom Navigation */}
       <div className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center justify-center gap-10 lg:gap-20 w-[270px] lg:w-[370px] h-[35px] lg:h-[37px] min-h-[30px] max-h-[45px] bg-black/20 backdrop-blur-xl rounded-full overflow-hidden z-[999]">
-        <h4 className="relative z-10 text-white cursor-pointer" onClick={() => handleNavigate('/', 8, 0)}>Home</h4>
-        <h4 className="relative z-10 text-white cursor-pointer" onClick={() => handleNavigate('/about', 90, 125)}>About</h4>
-        <h4 className="relative z-10 text-white cursor-pointer" onClick={() => handleNavigate('/projects', 180, 270)}>Projects</h4>
+        <h4 className="relative z-10 text-white cursor-pointer" onClick={() =>{ handleNavigate('/', 8, 0), setShowMessage(false)}}>Home</h4>
+        <h4 className="relative z-10 text-white cursor-pointer" onClick={() =>{ handleNavigate('/about', 90, 125), setShowMessage(false)}}>About</h4>
+        <h4 className="relative z-10 text-white cursor-pointer" onClick={() => {handleNavigate('/projects', 180, 270), setShowMessage(false)}}>Projects</h4>
 
         {/* Slider Indicator */}
         <div

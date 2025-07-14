@@ -2,8 +2,7 @@ import React, { useEffect, useRef , useState  , useContext} from 'react';
 import {LoadingContext} from '../context/LoadingContext'
 function ScrollProgressBar() {
   const progressRef = useRef();
-  const [showMessage , setShowMessage ] = useState(false)
-const {isLoading , setIsLoding } = useContext(LoadingContext)
+const {isLoading , setIsLoding , showMessage , setShowMessage} = useContext(LoadingContext)
  useEffect(() => {
     if (!progressRef.current) return;
     const bar = progressRef.current;
@@ -57,7 +56,7 @@ const {isLoading , setIsLoding } = useContext(LoadingContext)
 
   return (
     <div className='pointer-events-none'>
-<div style={{opacity : showMessage ? 1 : 0}} className='h-screen fixed flex items-center justify-center z-[100] duration-1000 w-screen bg-white'>
+<div style={{opacity : showMessage ? 1 : 0}} className='h-screen fixed flex items-center justify-center z-[10] duration-1000 w-screen bg-white'>
 <h2>you made a mess here.</h2>
 </div>
     <div
