@@ -4,7 +4,7 @@ import BlurText from './BlurText'
 import {useRef} from 'react'
 function LoopingTexts({count = 80, zRange = 160}) {
   const textRefs = useRef([])
-  const textOptions = ['hi', 'meeza', 'code', 'love', 'blend', 'craft', ':)', 'UX', 'UI', 'JS']
+  const textOptions = ['hi', 'meeza™','hello','flow()', 'code','inovation', 'function()','404','GSAP','<motion/>' ,'love', 'blend','creative', 'Design',';)', 'craft','visual', ':)', 'UX', 'UI', 'JS','figma']
 
   const positions = useMemo(() => {
     return Array.from({ length: count }).map(() => ({
