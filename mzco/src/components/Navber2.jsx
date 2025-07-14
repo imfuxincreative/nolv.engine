@@ -9,12 +9,12 @@ const navigate = useNavigate();
 const menuSliderRef  = useRef();
 const handleHome = ()=>{
   navigate('/')
-menuSliderRef.current.style.transform = 'translate(6px)'
+menuSliderRef.current.style.transform = 'translate(8px)'
 }
 const handleAbout = ()=>{
   
   navigate('/about')
-  menuSliderRef.current.style.transform = 'translate(90px)'
+  menuSliderRef.current.style.transform = 'translate(94px)'
 }
 const handleResource= ()=>{
   navigate('/projects')
@@ -30,7 +30,7 @@ const handleWhatIf = ()=>{
   return (
     <div className='fixed z-[999] '>
 
-    <div className='lg:w-[300px] flex items-center  justify-center gap-12 w-[270px] min-w-[200px] max-w-[360px] lg:gap-14 rounded-full left-1/2 -translate-x-1/2   fixed z-[999] overflow-hidden bottom-8 bg-black/20 backdrop-blur-xl min-h-[30px] max-h-[45px] h-[35px]  lg:h-[37px] '>
+    <div className='lg:w-[400px] flex items-center  justify-center gap-12 w-[270px]  lg:gap-20 rounded-full left-1/2 -translate-x-1/2   fixed z-[999] overflow-hidden bottom-8 bg-black/20 backdrop-blur-xl min-h-[30px] max-h-[45px] h-[35px]  lg:h-[37px] '>
      <h4 className='relative z-10 text-white' onClick = {handleHome}>Home</h4> 
       <h4 className='relative z-10 text-white' onClick = {handleAbout}>About</h4>
       <h4 className='relative z-10 text-white' onClick = {handleResource}>Projects</h4>

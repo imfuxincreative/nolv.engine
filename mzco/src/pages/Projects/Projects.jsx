@@ -43,7 +43,7 @@ function Projects() {
   };
 
   return (
-    <div className="content-center absolute top-0 pointer-events-none h-screen w-screen">
+    <div className="content-center bg-white absolute top-0 pointer-events-none h-screen w-screen">
       <div className="text-center w-screen">
         {allProjects.map((el, i) => (
           <div key={i} className="overflow-hidden py-1">
@@ -58,7 +58,7 @@ function Projects() {
         ))}
       </div>
 
-      <div className="footer absolute z-[800] bottom-20 left-[10vw] lg:left-[41vw] flex gap-7 flex-col items-center justify-center">
+      <div className="footer absolute  z-[800] bottom-20 left-[10vw] lg:left-[41vw] flex gap-7 flex-col items-center justify-center">
         <div className="flex gap-4 flex-col items-center justify-center">
           <h2>mzco.creative@gmail.com</h2>
           <div className="flex gap-3">
