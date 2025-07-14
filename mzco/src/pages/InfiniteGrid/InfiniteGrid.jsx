@@ -91,7 +91,7 @@ const layoutRef  = useRef ()
   useEffect(()=>{
     const timer = setTimeout(()=>{
       setIsLoading(false)
-    },300)
+    },1000)
     return ()=> clearTimeout(timer)
   },[])
 

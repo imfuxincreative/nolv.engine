@@ -44,9 +44,7 @@ useEffect(() => {
     const handleScroll = () => {
       scrollRef.current = window.scrollY / window.innerHeight
 
-      if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 10) {
-        window.scrollTo(0, 0)
-      }
+
     }
 
     window.addEventListener('scroll', handleScroll)
