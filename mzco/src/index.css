@@ -34,17 +34,18 @@
     color: black;
   }
 
-  h4 {
-    font-family: 'inter-regular';
-    font-size: 4vw;
-    letter-spacing: 0;
-    line-height: 1.5vh;
-    color: black;
-  }
+ 
+ h4 {
+      color : white ;
+      font-family : 'inter-light';
+      font-size: 3.9vw;
+      line-height: 2.2vh;
+  
+    }
 
   h5 {
     font-family: 'inter-regular';
-    font-size: 3vw;
+    font-size: 3.3vw;
     letter-spacing: 0;
     line-height: 1.5vh;
     color: black;
@@ -67,7 +68,7 @@
   }
 
   button {
-    font-family: 'inter-medium';
+    font-family: 'inter-light';
     border-radius: 20px;
     padding: 6px 10px 5px 10px;
     font-size: 3.8vw;
@@ -80,26 +81,31 @@
 @layer base {
   @media (min-width: 768px) {
     h1 {
-      font-size: 2.5vw;
-      letter-spacing: -0.1vw;
-      line-height: 4vh;
+      font-family:'inter-light';
+      font-size: 1.6vw;
+      letter-spacing: -0.050vw;
+      line-height: 3.2vh;
     }
 
     h2 {
-      font-size: 3.5vw;
-      letter-spacing: -0.1vw;
-      line-height: 3vh;
+      font-size: 1.7vw;
+      letter-spacing: -0.050vw;
+      line-height: 4vh; 
+      
     }
 
     h4 {
-      font-size: 2vw;
-      line-height: 2.5vh;
+      color : white ;
+      font-family : 'inter-light';
+      font-size: .9vw;
+      line-height: 2.2vh;
+  
     }
 
     h5 {
-      font-size: 18px;
+      font-size: 14px;
       font-family : 'inter-regular' ; 
-      line-height: 2.5vh;
+      line-height: 1;
     }
 
     h6 {
@@ -108,7 +114,7 @@
     }
 
     a {
-      font-size: 2vw;
+      font-size: 14px;
     }
 
     button {

@@ -27,6 +27,9 @@ import Projects from "./pages/Projects/Projects.jsx";
 import InfiniteGrid from "./pages/InfiniteGrid/InfiniteGrid.jsx";
 import { IsAboutProvider } from "./context/IsAbout.jsx";
 import SwitchToMobile from "./components/SwitchToMobile.jsx";
+import { IsMobileContext, IsMobileProvider } from "./context/IsMobile.jsx";
+import InfiniteInfo from "./pages/InfiniteInfo/InfiniteInfo.jsx";
+import Navber2 from './components/navber2.jsx';
 
 // Page animation settings
 const pageVariants = {
@@ -34,7 +37,6 @@ const pageVariants = {
   animate: { opacity: 1,  },
   exit: { opacity: 0,  },
 };
-
 const pageTransition = {
   type: "tween",
   ease: "easeInOut",
@@ -43,8 +45,15 @@ const pageTransition = {
 
 // Wrap routes with AnimatePresence and motion.div
 const AnimatedRoutes = () => {
+  const [isMobile , setIsMobile] = useState(false)
   const location = useLocation();
-
+useEffect(()=>{
+  if(window.innerWidth >= 640){
+    setIsMobile(false)
+  }else{
+    setIsMobile(true)
+  }
+},[])
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
@@ -58,7 +67,7 @@ const AnimatedRoutes = () => {
               exit="exit"
               transition={pageTransition}
             >
-              <Home />
+             <InfiniteInfo/>
             </motion.div>
           }
         />
@@ -239,6 +248,21 @@ const AnimatedRoutes = () => {
             </motion.div>
           }
         />
+         <Route
+          path="/InfiniteInfo"
+          className = ""
+          element={
+            <motion.div
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <InfiniteInfo />
+            </motion.div>
+          }
+        />
       </Routes>
     </AnimatePresence>
   );
@@ -250,24 +274,27 @@ function App() {
 function AppWithBlur() {
   return (
     <div>
-      {window.innerWidth < 640 ? (
+      {/* {window.innerWidth < 640 ? ( */}
         <div>
-          <Navber />
-          <PixelBg />
+          <Navber2/>
+          {/* <Navber /> */}
+          {/* <PixelBg /> */}
           <div className="sticky z-[999] top-0">
             {/* <ControlBar /> */}
           </div>
           <AnimatedRoutes />
         </div>
-      ) : (
+      {/* ) : (
        <SwitchToMobile/>
-      )}
+      )} */}
     </div>
   );
 }
 
   return (
     <LoadProvider>
+      <IsMobileProvider>
+
       <IsAboutProvider>
       <MenuBgProvider>
       <BlurProvider>
@@ -279,6 +306,7 @@ function AppWithBlur() {
       </BlurProvider>
     </MenuBgProvider>
     </IsAboutProvider>
+      </IsMobileProvider>
     </LoadProvider>
   );
 }

@@ -31,7 +31,6 @@ setIsLoading(false)
 
 {/* <Navber/> */}
          <div className="">
-     { window.innerWidth < 640?<div>
 
       
  
@@ -48,13 +47,13 @@ setIsLoading(false)
 
       </div>
      
-</div>: <div className="h-screen w-screen items-center justify-center  flex"><h5 className="text-[20px] tracking-tight">Switch to Mobile</h5></div>}
+</div>
 
   </div>
 
 
    
-      </div>
+    
   )
 }
 

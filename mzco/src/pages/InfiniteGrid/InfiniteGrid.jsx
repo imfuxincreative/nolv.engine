@@ -36,21 +36,24 @@ import rain1 from '../../assets/images/InfiniteImages/rain1.jpg';
 import serenity from '../../assets/images/InfiniteImages/serenity.jpg';
 import Loading from '../../components/loading';
 import { LoadingContext } from '../../context/LoadingContext';
-
-const TILE_SIZE = 195;
-const GRID_SIZE = 6;
-const GRID_WIDTH = TILE_SIZE * GRID_SIZE;
-
-const wrap = (value, max) => ((value % max) + max) % max;
+import { IsMobileContext } from '../../context/IsMobile';
 
 export default function InfiniteImageCanvas() {
+  const {isMobile} = useContext(IsMobileContext)
+  console.log(isMobile)
+const TILE_SIZE = isMobile ? 195 : 250;
+const GRID_SIZE = isMobile ? 6 : 12;
+
+  const GRID_WIDTH = TILE_SIZE * GRID_SIZE;
+  
+  const wrap = (value, max) => ((value % max) + max) % max;
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const xAnim = useRef(null);
   const yAnim = useRef(null);
   const [scaleDown, setScaleDown] = useState(false);
   const tilesRef = useRef([]);
-
+const layoutRef  = useRef ()
   const imageDeta = [
     { name: 'Abundance', image: abundance, isFull : false },
     { name: 'Architecture', image: architecture , isFull : false},
@@ -81,6 +84,7 @@ export default function InfiniteImageCanvas() {
     { name: 'Rain', image: rain , isFull: true },
     { name: 'Rain 1', image: rain1 , isFull: true },
     { name: 'Serenity', image: serenity, isFull : true },
+    
   ];
 
   const {isLoading , setIsLoading} = useContext(LoadingContext)
@@ -153,9 +157,9 @@ export default function InfiniteImageCanvas() {
     <div>
      <div className=''>
       
-    <div
+    <div  ref={layoutRef}
       {...bind()}
-      className={` ${scaleDown ? 'scale-90 ' :'scale-100'} duration-300 -translate-x-[10vw] -translate-y-[10vh] fixed w-[120vw] h-[120vh] overflow-hidden bg-transpatent touch-none`}
+      className={` ${scaleDown ? 'scale-90 ' :'scale-100'} duration-300 -translate-x-[10vw] -translate-y-[10vh] bg-white  fixed w-[120vw] h-[120vh] overflow-hidden bg-transpatent touch-none`}
       >
       {Array.from({ length: GRID_SIZE }).map((_, row) =>
         Array.from({ length: GRID_SIZE }).map((_, col) => {

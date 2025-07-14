@@ -21,7 +21,7 @@ const layers = [ Layer4 , Layer7 , Layer8]
 
 function Index() {
   const {blurValue , setBlurValue }  = useContext(BlurContext)
-  console.log(blurValue)
+
   const { reverseAnime, setReverseAnime } = useContext(ReverseAnimeContext);
   const layerRefs = useRef([]);
   const timelineRef = useRef(null); // Store GSAP timeline here
