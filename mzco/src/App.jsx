@@ -29,7 +29,7 @@ import { IsAboutProvider } from "./context/IsAbout.jsx";
 import SwitchToMobile from "./components/SwitchToMobile.jsx";
 import { IsMobileContext, IsMobileProvider } from "./context/IsMobile.jsx";
 import InfiniteInfo from "./pages/InfiniteInfo/InfiniteInfo.jsx";
-import Navber2 from './components/navber2.jsx';
+import Navber from './components/Navber2.jsx';
 
 // Page animation settings
 const pageVariants = {
