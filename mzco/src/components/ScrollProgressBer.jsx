@@ -54,11 +54,11 @@ const {isLoading , setIsLoding } = useContext(LoadingContext)
   return (
     <div className='pointer-events-none'>
 <div style={{opacity : showMessage ? 1 : 0}} className='h-screen fixed flex items-center justify-center z-[100] duration-1000 w-screen bg-white'>
-<h2>I'm fuckin' creative.</h2>
+<h2>You made a mess.</h2>
 </div>
     <div
       ref={progressRef}
-      className=" fixed z-[100] top-0 duration-1000 left-0 bg-black  h-[5px] w-0"
+      className=" fixed z-[100] top-0 duration-1000 left-0  bg-black  h-[5px] w-0"
       />
       </div>
   );
