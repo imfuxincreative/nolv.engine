@@ -276,7 +276,7 @@ function AppWithBlur() {
     <div>
       {/* {window.innerWidth < 640 ? ( */}
         <div>
-          <Navber2/>
+          <Navber/>
           {/* <Navber /> */}
           {/* <PixelBg /> */}
           <div className="sticky z-[999] top-0">
