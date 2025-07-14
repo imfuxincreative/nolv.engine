@@ -18,7 +18,7 @@ import ControlBar from "./components/ControlBar.jsx";
 import PixelBg from "./components/pixelbg.jsx";
 import Loader from "./components/loading.jsx";
 import Visuals from "./pages/visuals/Visuals.jsx";
-import Navber from "./components/Navber.jsx";
+// import Navber from "./components/Navber.jsx";
 import About from "./pages/About.jsx";
 import Templates from "./pages/templates/Templates.jsx";
 import Resources from "./pages/Resources/Resources.jsx";
