@@ -4,13 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import ScrollProgressBar from './ScrollProgressBer';
 import { LoadingContext } from '../context/LoadingContext';
 function Navber2() {
-const {setIsLoading , isLoading} = useContext(LoadingContext)
+const {setIsLoading} = useContext(LoadingContext)
 const navigate = useNavigate();
 const menuSliderRef  = useRef();
 const handleHome = ()=>{
-  setIsLoading(false)
   navigate('/')
-menuSliderRef.current.style.transform = 'translate(-0px)'
+menuSliderRef.current.style.transform = 'translate(6px)'
 }
 const handleAbout = ()=>{
   
@@ -18,11 +17,11 @@ const handleAbout = ()=>{
   menuSliderRef.current.style.transform = 'translate(90px)'
 }
 const handleResource= ()=>{
-  navigate('/resources')
-  menuSliderRef.current.style.transform = 'translate(200px)'
+  navigate('/projects')
+  menuSliderRef.current.style.transform = 'translate(190px)'
 }
 const handleWhatIf = ()=>{
-  setIsLoading(!isLoading)
+  setIsLoading(true)
   setTimeout(()=>{
     navigate('/infiniteGrid')
 
@@ -30,12 +29,12 @@ const handleWhatIf = ()=>{
 }
   return (
     <div className='fixed z-[999] '>
-<ScrollProgressBar/>
-    <div className='lg:w-[300px] flex items-center  justify-center gap-[13vw] px-[4vw] lg:gap-14 rounded-full left-1/2 -translate-x-1/2   fixed z-[999] overflow-hidden bottom-8 bg-black/20 backdrop-blur-xl h-[8.4vw] lg:h-[37px] '>
+
+    <div className='lg:w-[300px] flex items-center  justify-center gap-12 w-[270px] min-w-[200px] max-w-[360px] lg:gap-14 rounded-full left-1/2 -translate-x-1/2   fixed z-[999] overflow-hidden bottom-8 bg-black/20 backdrop-blur-xl min-h-[30px] max-h-[45px] h-[35px]  lg:h-[37px] '>
      <h4 className='relative z-10 text-white' onClick = {handleHome}>Home</h4> 
       <h4 className='relative z-10 text-white' onClick = {handleAbout}>About</h4>
-      <h4 className='relative z-10 text-white' onClick = {handleResource}>Resource</h4>
-      <div ref={menuSliderRef} className='h-full duration-500 max-w-[100px] w-[23vw] absolute rounded-full -translate-x-[100px]  z-[0] bg-black'></div>
+      <h4 className='relative z-10 text-white' onClick = {handleResource}>Projects</h4>
+      <div ref={menuSliderRef} className='h-full duration-500 min-w-[100px] max-w- w-[100px] absolute rounded-full -translate-x-[100px]  z-[0] bg-black'></div>
 
     </div>
 

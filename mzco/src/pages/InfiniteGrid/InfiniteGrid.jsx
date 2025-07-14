@@ -155,7 +155,7 @@ const layoutRef  = useRef ()
 
   return (
     <div>
-     <div className=''>
+     <div className={`${isLoading ? 'opacity-0' : 'opacity-100'} duration-500`}>
       
     <div  ref={layoutRef}
       {...bind()}

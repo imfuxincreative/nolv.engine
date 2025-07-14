@@ -4,26 +4,33 @@ function ScrollProgressBar() {
   const progressRef = useRef();
   const [showMessage , setShowMessage ] = useState(false)
 const {isLoading , setIsLoding } = useContext(LoadingContext)
-useEffect(() => {
-  if (!progressRef.current) return;
+ useEffect(() => {
+    if (!progressRef.current) return;
+    const bar = progressRef.current;
 
-  if (isLoading) {
+    // Reset styles
+    bar.classList.remove('ml-auto');
+    bar.classList.remove('right-0');
 
-    progressRef.current.style.width = '100%';
-    progressRef.current.style.transform = 'translateX(0%)';
+    if (isLoading) {
+      // Step 1: grow from left
+      bar.style.width = '100%';
 
-
-    setTimeout(() => {
-      if (progressRef.current) {
-        progressRef.current.style.transform = 'translateX(100%)';
-      }
-    }, 1000); 
-  } else {
-   
-    progressRef.current.style.width = '0%';
-    progressRef.current.style.transform = 'translateX(0%)';
-  }
-}, [isLoading]);
+      // Step 2: after full width, shrink from right
+      setTimeout(() => {
+        if (bar) {
+          bar.classList.add('ml-auto');     // Push it to the right
+          bar.classList.add('right-0');     // Anchor it to the right
+          bar.style.width = '0%';           // Shrink from right
+        }
+      }, 1000); // Wait until grow finishes
+    } else {
+      // reset
+      bar.style.width = '0%';
+      bar.classList.remove('ml-auto');
+      bar.classList.remove('right-0');
+    }
+  }, [isLoading]);
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
@@ -31,7 +38,7 @@ useEffect(() => {
       const docHeight = document.documentElement.scrollHeight
       console.log(docHeight)
       const scrollPercent = (scrollTop / docHeight) * 100;
-      if(scrollPercent > 97){
+      if(scrollPercent > 99){
           progressRef.current.style.opacity = 0
         setShowMessage(true)
       }

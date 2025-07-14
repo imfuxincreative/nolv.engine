@@ -30,6 +30,7 @@ import SwitchToMobile from "./components/SwitchToMobile.jsx";
 import { IsMobileContext, IsMobileProvider } from "./context/IsMobile.jsx";
 import InfiniteInfo from "./pages/InfiniteInfo/InfiniteInfo.jsx";
 import Navber from './components/Navber2.jsx';
+import ScrollProgressBar from "./components/ScrollProgressBer.jsx";
 
 // Page animation settings
 const pageVariants = {
@@ -276,6 +277,7 @@ function AppWithBlur() {
     <div>
       {/* {window.innerWidth < 640 ? ( */}
         <div>
+          <ScrollProgressBar/>
           <Navber/>
           {/* <Navber /> */}
           {/* <PixelBg /> */}
