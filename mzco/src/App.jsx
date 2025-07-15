@@ -31,6 +31,8 @@ import { IsMobileContext, IsMobileProvider } from "./context/IsMobile.jsx";
 import InfiniteInfo from "./pages/InfiniteInfo/InfiniteInfo.jsx";
 import Navber from './components/Navber2.jsx';
 import ScrollProgressBar from "./components/ScrollProgressBer.jsx";
+import CustomCursor from "./components/CustomCursor.jsx";
+import { CursorProvider } from "./context/CursorContext.jsx";
 
 // Page animation settings
 const pageVariants = {
@@ -277,6 +279,7 @@ function AppWithBlur() {
     <div>
       {/* {window.innerWidth < 640 ? ( */}
         <div>
+          <CustomCursor/>
           <ScrollProgressBar/>
           <Navber/>
           {/* <Navber /> */}
@@ -295,6 +298,8 @@ function AppWithBlur() {
 
   return (
     <LoadProvider>
+      <CursorProvider>
+
       <IsMobileProvider>
 
       <IsAboutProvider>
@@ -309,6 +314,7 @@ function AppWithBlur() {
     </MenuBgProvider>
     </IsAboutProvider>
       </IsMobileProvider>
+      </CursorProvider>
     </LoadProvider>
   );
 }

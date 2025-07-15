@@ -37,10 +37,11 @@ import serenity from '../../assets/images/InfiniteImages/serenity.jpg';
 import Loading from '../../components/loading';
 import { LoadingContext } from '../../context/LoadingContext';
 import { IsMobileContext } from '../../context/IsMobile';
+import { useCursor } from '../../context/CursorContext';
 
 export default function InfiniteImageCanvas() {
   const {isMobile} = useContext(IsMobileContext)
-  console.log(isMobile)
+  const {setCursorAnimation} = useCursor()
 const TILE_SIZE = isMobile ? 195 : 250;
 const GRID_SIZE = isMobile ? 6 : 12;
 
@@ -157,9 +158,11 @@ const layoutRef  = useRef ()
     <div>
      <div className={`${isLoading ? 'opacity-0' : 'opacity-100'} duration-500`}>
       
-    <div  ref={layoutRef}
+    <div onMouseEnter={()=>setCursorAnimation('playground-animation')} 
+     onMouseLeave={()=>setCursorAnimation('onhome-animation')} 
+    ref={layoutRef}
       {...bind()}
-      className={` ${scaleDown ? 'scale-90 ' :'scale-100'} duration-300 -translate-x-[10vw] -translate-y-[10vh] bg-white  fixed w-[120vw] h-[120vh] overflow-hidden bg-transpatent touch-none`}
+      className={` ${scaleDown ? 'scale-90 ' :'scale-100'} duration-300  lg:translate-x-[2vw] -translate-x-[10vw] -translate-y-[10vh] -lg:translate-y-[5vw]  bg-white  fixed w-[120vw] h-[120vh]  bg-transpatent touch-none`}
       >
       {Array.from({ length: GRID_SIZE }).map((_, row) =>
         Array.from({ length: GRID_SIZE }).map((_, col) => {

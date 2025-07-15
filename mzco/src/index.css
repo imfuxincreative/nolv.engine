@@ -82,20 +82,20 @@
   @media (min-width: 768px) {
     h1 {
       font-family:'inter-light';
-      font-size: 1.6vw;
+      font-size: 29px;
       letter-spacing: -0.050vw;
-      line-height: 3.2vh;
+      line-height: 3.1vh;
     }
 
     h2 {
-      font-size: 1.7vw;
+      font-size:32px;
       letter-spacing: -0.050vw;
-      line-height: 4vh; 
+      line-height: 3vh; 
       
     }
 
     h4 {
-      color : white ;
+    
       font-family : 'inter-light';
       font-size: .9vw;
       line-height: 2.2vh;

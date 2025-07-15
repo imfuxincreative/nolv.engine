@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { GoArrowUpRight } from "react-icons/go";
 import { MenuBgContext } from '../../context/MenuBgContext';
+import { useCursor } from '../../context/CursorContext';
 
 function Projects() {
   const navigate = useNavigate();
   const { menuOpen, setMenuOpen } = useContext(MenuBgContext);
-
+const {setCursorAnimation } = useCursor()
   const allProjects = [
     { name: 'flexyourshots ( Gallary app )', path: 'https://flexyourshots.netlify.app' },
     { name: 'mzverse ( e-commerce, MERN )', path: 'https://mzverse.netlify.app' },
@@ -17,6 +18,13 @@ function Projects() {
     { name: 'mznote (Note app , MERN )', path: 'https://mznote.netlify.app/' },
     { name: 'Architecture (UI/UX Design )', route: '/arcitecture' },
   ];
+  const socials = [
+    {name : 'Instagram' , src : 'https://www.instagram.com/mzco.creative/'},
+    {name : 'Behance' , src : 'https://www.behance.net/skmeejanur1'},
+    {name : 'linkedIn' , src : 'https://www.linkedin.com/in/meeza-from-mzco-aa985b332/'},
+    {name : 'Github' , src : 'https://github.com/MEEZA453'},
+
+  ]
 
   const projectRefs = useRef([]);
 
@@ -43,11 +51,12 @@ function Projects() {
   };
 
   return (
-    <div className="content-center bg-white absolute top-0 pointer-events-none h-screen w-screen">
+    <div className="content-center bg-white absolute top-0  h-screen w-screen">
       <div className="text-center w-screen">
         {allProjects.map((el, i) => (
           <div key={i} className="overflow-hidden py-1">
-            <h1
+            <h1 onMouseEnter={()=>{setCursorAnimation('projectlink-animation')}}
+            onMouseLeave= {()=> setCursorAnimation('onhome-animation')}
               ref={(elem) => (projectRefs.current[i] = elem)}
               onClick={() => handleMenuItemClick(el)}
               className="items pointer-events-auto cursor-pointer"
@@ -62,10 +71,11 @@ function Projects() {
         <div className="flex gap-4 flex-col items-center justify-center">
           <h2>mzco.creative@gmail.com</h2>
           <div className="flex gap-3">
-            <a href="">instagram</a>
-            <a href="">Behance</a>
-            <a href="">LinkedIn</a>
-            <a href="">Github</a>
+{socials.map((el , i)=>{
+  return <a onMouseEnter={()=>{setCursorAnimation('sociallink-animation')}}
+  onMouseLeave={()=>setCursorAnimation('onhome-animation')}
+  key={i} href={el.src}>{el.name}</a>
+})}
           </div>
         </div>
       </div>
