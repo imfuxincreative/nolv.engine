@@ -5,6 +5,9 @@ import { MdArrowOutward } from 'react-icons/md';
 import { LuMenu } from 'react-icons/lu';
 import { IoEyeOutline, IoSendSharp } from 'react-icons/io5';
 import { IoIosLink } from "react-icons/io";
+import { GoHome } from "react-icons/go";
+import { TbArrowRoundaboutRight } from "react-icons/tb";
+import { GrProjects } from "react-icons/gr";
 function CustomCursor() {
   const cursorRef = useRef(null);
   const { cursorAnimation } = useCursor();
@@ -28,23 +31,51 @@ function CustomCursor() {
       window.addEventListener('mousemove', onMouseMove);
 
       // Cursor animation switch
-      if (cursorAnimation === 'onmenu-animation') {
+      if (cursorAnimation === 'onmenuhome-animation') {
         console.log('menu animation applied');
-        gsap.to(cursorRef.current, {
-          backgroundColor: 'white',
-          scale: 0.3,
-        });
+        gsap.to('.home', { opacity: 1 });
+gsap.to('.about' , {opacity : 0})
+gsap.to('.projects' , {opacity : 0});
         gsap.to('.link', { opacity: 0 });
         gsap.to('.arrow', { opacity: 0 });
         gsap.to('.eye', { opacity: 0 });
         gsap.to('.barger', { opacity: 0 });
         gsap.to('.send', { opacity: 0 });
 
-      } else if (cursorAnimation === 'sociallink-animation') {
+      }
+      
+     else  if (cursorAnimation === 'onmenuabout-animation') {
+        console.log('menu animation applied');
+        gsap.to('.home', { opacity: 0 });
+gsap.to('.about' , {opacity : 1})
+gsap.to('.projects' , {opacity : 0});
+        gsap.to('.link', { opacity: 0 });
+        gsap.to('.arrow', { opacity: 0 });
+        gsap.to('.eye', { opacity: 0 });
+        gsap.to('.barger', { opacity: 0 });
+        gsap.to('.send', { opacity: 0 });
+
+      }
+           else  if (cursorAnimation === 'onmenuprojects-animation') {
+        console.log('menu animation applied');
+        gsap.to('.home', { opacity: 0 });
+gsap.to('.about' , {opacity : 0})
+gsap.to('.projects' , {opacity : 1});
+        gsap.to('.link', { opacity: 0 });
+        gsap.to('.arrow', { opacity: 0 });
+        gsap.to('.eye', { opacity: 0 });
+        gsap.to('.barger', { opacity: 0 });
+        gsap.to('.send', { opacity: 0 });
+
+      }
+      else if (cursorAnimation === 'sociallink-animation') {
         gsap.to(cursorRef.current, {
           scale: 0.8,
           backgroundColor: 'black',
         });
+                  gsap.to('.home', { opacity: 0 });
+gsap.to('.about' , {opacity : 0})
+gsap.to('.projects' , {opacity : 0});
         gsap.to('.link', {
           opacity: 1,
           color: 'white',
@@ -69,7 +100,9 @@ function CustomCursor() {
           color: 'black',
         });
         gsap.to('.link', { opacity: 0 });
-
+          gsap.to('.home', { opacity: 0 });
+gsap.to('.about' , {opacity : 0})
+gsap.to('.projects' , {opacity : 0});
         gsap.to('.eye', { opacity: 0 });
         gsap.to('.barger', { opacity: 0 });
         gsap.to('.send', { opacity: 0 });
@@ -79,6 +112,9 @@ function CustomCursor() {
           scale: 0.3,
           backgroundColor: 'black',
         });
+                  gsap.to('.home', { opacity: 0 });
+gsap.to('.about' , {opacity : 0})
+gsap.to('.projects' , {opacity : 0});
         gsap.to('.arrow', { opacity: 0 });
         gsap.to('.eye', { opacity: 0 });
         gsap.to('.barger', { opacity: 0 });
@@ -93,8 +129,13 @@ function CustomCursor() {
           opacity: 1,
           color: 'white',
         });
+         gsap.to('.home', {
+          opacity: 0,
+          color: 'white',
+        });
         gsap.to('.link', { opacity: 0 });
-
+gsap.to('.about' , {opacity : 0})
+gsap.to('.projects' , {opacity : 0});
         gsap.to('.eye', { opacity: 0 });
         gsap.to('.barger', { opacity: 0 });
         gsap.to('.send', { opacity: 0 });
@@ -108,7 +149,9 @@ function CustomCursor() {
           color: 'white',
         });
         gsap.to('.link', { opacity: 0 });
-
+        gsap.to('.home', { opacity: 0 });
+gsap.to('.about' , {opacity : 0})
+gsap.to('.projects' , {opacity : 0});
         gsap.to('.eye', { opacity: 0 });
         gsap.to('.barger', { opacity: 1 });
         gsap.to('.send', { opacity: 0 });
@@ -135,6 +178,9 @@ function CustomCursor() {
           opacity: 0,
           color: 'white',
         });
+                gsap.to('.home', { opacity: 0 });
+gsap.to('.about' , {opacity : 0})
+gsap.to('.projects' , {opacity : 0});
         gsap.to('.eye', { opacity: 1 });
         gsap.to('.barger', { opacity: 0 });
         gsap.to('.send', { opacity: 0 });
@@ -161,6 +207,8 @@ function CustomCursor() {
     className="arrow opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
     size={25}
   />
+  <GoHome className="home opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
+    size={22}/>
   <LuMenu
     className="barger opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
     size={25}
@@ -172,6 +220,14 @@ function CustomCursor() {
   <IoSendSharp
     className="send opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
     size={25}
+  />
+    <TbArrowRoundaboutRight   
+    className="about opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
+    size={20}
+  />
+      <GrProjects   
+    className="projects opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white"
+    size={18}
   />
 </div>
 

@@ -38,9 +38,9 @@ function Navber2() {
     <div className="fixed z-[999]">
       {/* Bottom Navigation */}
       <div onMouseLeave={()=> setCursorAnimation('onhome-animation')} onMouseEnter={()=> setCursorAnimation('menubutton-animation')} className="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center justify-center gap-10 lg:gap-20 w-[270px] lg:w-[370px] h-[35px] lg:h-[37px] min-h-[30px] max-h-[45px] bg-black/20  backdrop-blur-xl rounded-full overflow-hidden z-[999]">
-        <h4 typeof='button' className="relative z-10 text-white cursor-pointer" onClick={() =>{ handleNavigate('/', 8, 0), setShowMessage(false)}}>Home</h4>
-        <h4 typeof='button' className="relative z-10 text-white cursor-pointer" onClick={() =>{ handleNavigate('/about', 90, 125), setShowMessage(false)}}>About</h4>
-        <h4 typeof='button' className="relative z-10 text-white cursor-pointer" onClick={() => {handleNavigate('/projects', 180, 270), setShowMessage(false)}}>Projects</h4>
+        <h4 onMouseLeave={setCursorAnimation('home-animation')} typeof='button' className="relative z-10 text-white cursor-pointer" onMouseEnter={()=>setCursorAnimation('onmenuhome-animation')} onClick={() =>{ handleNavigate('/', 8, 0), setShowMessage(false)}}>Home</h4>
+        <h4 onMouseLeave={setCursorAnimation('home-animation')} onMouseEnter={()=>setCursorAnimation('onmenuabout-animation')} typeof='button' className="relative z-10 text-white cursor-pointer" onClick={() =>{ handleNavigate('/about', 90, 125), setShowMessage(false)}}>About</h4>
+        <h4 onMouseLeave={setCursorAnimation('home-animation')} onMouseEnter={()=>setCursorAnimation('onmenuprojects-animation')} typeof='button' className="relative z-10 text-white cursor-pointer" onClick={() => {handleNavigate('/projects', 180, 270), setShowMessage(false)}}>Projects</h4>
 
         {/* Slider Indicator */}
         <div

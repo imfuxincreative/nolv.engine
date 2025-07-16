@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import cv from '../../public/CV.pdf'
+import Footer from '../components/Footer';
 function About() {
   const introduction = ['hii,', "I'm", 'meeza™ '];
   const textRefs = useRef([]);
@@ -22,19 +23,10 @@ function About() {
   }, []);
 
 const handleDownload = () => {
-  console.log('clo')
-  const link = document.createElement('a');
-  link.href = '/CV.pdf';  // Path in public folder
-  link.download = 'CV'; // Filename for download
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  window.open('/Resume.pdf', '_blank');
 };
-
-
-
   return (
-    <div className='content-center absolute top-0  pointer-events-none h-screen bg-white w-screen'>
+    <div className='content-center absolute top-0  h-screen bg-white w-screen'>
       <div className='col items-center justify-center gap-3 lg:gap-1 absolute flex  flex-col top-1/2 left-[24vw] lg:left-[44vw] '>
 
       <div className='flex gap-2 '>
@@ -54,19 +46,8 @@ const handleDownload = () => {
 Designer | Frontend developer
       </h4>
         </div>
-<div className='footer absolute z-[800] bottom-20 left-[10vw] lg:left-[40.5vw] flex gap-7 flex-col items-center justify-center'>
-  <button onClick={handleDownload} className=' rounded-full border border-[#b3b3b3] pointer-events-auto bg-[#f0f0f0]'>CV.pdf</button>
-  <div className='flex gap-4 flex-col items-center justify-center' >
-<h2 className=''>mzco.creative@gmail.com</h2>
-<div className='flex gap-3'>
-  <a href="">instagram</a>
-  <a href="">Behance</a>
-  <a href="">LinkedIn</a>
-  <a href="">Github</a>
-
-</div>
-  </div>
-</div>
+  <button onClick={handleDownload} className=' rounded-full border fixed bottom-[200px] left-1/2 -translate-x-1/2 - border-[#b3b3b3] pointer-events-auto bg-[#f0f0f0]'>CV.pdf</button>
+<Footer/>
 
     </div>
   );
