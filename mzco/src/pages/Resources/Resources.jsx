@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-// import cv from '../../public/CV.pdf'
+// import cv from '../public/CV.pdf'
 function Resources() {
   const introduction = ['Page', "is", 'under ', "development"];
   const textRefs = useRef([]);

@@ -33,7 +33,9 @@ import Navber from './components/Navber2.jsx';
 import ScrollProgressBar from "./components/ScrollProgressBer.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
 import { CursorProvider } from "./context/CursorContext.jsx";
-
+import ImageViewer from './components/ImageViewer.jsx'
+import { ImageProvider } from "./context/ImageContext.jsx";
+import Gallary from './pages/Gallary/Gallary.jsx'
 // Page animation settings
 const pageVariants = {
   initial: { opacity: 0,  },
@@ -89,6 +91,7 @@ useEffect(()=>{
             </motion.div>
           }
         />
+        
            <Route
           path="/infinitegrid"
           element={
@@ -97,10 +100,36 @@ useEffect(()=>{
               variants={pageVariants}
               initial="initial"
               animate="animate"
-              exit="exit"
+          
               transition={pageTransition}
             >
           <InfiniteGrid/>
+            </motion.div>
+          }
+        />
+          <Route
+          path="/gallary"
+          element={
+            <motion.div
+            className = 'relative z-[100]'
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+          
+              transition={pageTransition}
+            >
+          <Gallary/>
+            </motion.div>
+          }
+        />
+                   <Route
+          path="/viewer"
+          element={
+            <motion.div
+            className = 'relative z-[100]'
+           
+            >
+          <ImageViewer/>
             </motion.div>
           }
         />
@@ -299,6 +328,7 @@ function AppWithBlur() {
   return (
     <LoadProvider>
       <CursorProvider>
+<ImageProvider>
 
       <IsMobileProvider>
 
@@ -314,6 +344,7 @@ function AppWithBlur() {
     </MenuBgProvider>
     </IsAboutProvider>
       </IsMobileProvider>
+</ImageProvider>
       </CursorProvider>
     </LoadProvider>
   );

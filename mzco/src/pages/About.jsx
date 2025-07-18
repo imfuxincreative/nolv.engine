@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import cv from '../../public/CV.pdf'
+
 import Footer from '../components/Footer';
 function About() {
   const introduction = ['hii,', "I'm", 'meeza™ '];

@@ -35,10 +35,11 @@ import rain from '../../assets/images/InfiniteImages/rain.jpg';
 import rain1 from '../../assets/images/InfiniteImages/rain1.jpg';
 import serenity from '../../assets/images/InfiniteImages/serenity.jpg';
 import Loading from '../../components/loading';
+import {useImage } from '../../context/ImageContext.jsx'
 import { LoadingContext } from '../../context/LoadingContext';
 import { IsMobileContext } from '../../context/IsMobile';
 import { useCursor } from '../../context/CursorContext';
-
+import ImageOpener from '../../components/ImageOpener.jsx'
 export default function InfiniteImageCanvas() {
   const {isMobile} = useContext(IsMobileContext)
   const {setCursorAnimation} = useCursor()
@@ -55,38 +56,7 @@ const GRID_SIZE = isMobile ? 6 : 12;
   const [scaleDown, setScaleDown] = useState(false);
   const tilesRef = useRef([]);
 const layoutRef  = useRef ()
-  const imageDeta = [
-    { name: 'Abundance', image: abundance, isFull : false },
-    { name: 'Architecture', image: architecture , isFull : false},
-    { name: 'Black', image: black , isFull : false},
-    { name: 'Coded Eye', image: codedeye , isFull : false},
-    { name: 'Freedom', image: freedom , isFull : false},
-    { name: 'Founder', image: founder , isFull : false},
-    { name: 'Monster', image: monster , isFull : false},
-    { name: 'Glory', image: glory , isFull : false},
-    { name: 'Kimpachi', image: kimpachi, isFull : false },
-    { name: 'Nostalgia', image: nostalogia , isFull : false},
-    { name: 'Wanted', image: wanted , isFull : false},
-    { name: 'Valentine', image: valentine , isFull : false},
-    { name: 'Travis', image: travis , isFull : false},
-    { name: 'Timeless', image: timeless , isFull : false},
-    { name: 'Hypnotic', image: hypnotic, isFull : false },
-    { name: 'Starlight', image: starlight, isFull : true },
-    { name: 'Outdoor', image: outdoor , isFull : false},
-    { name: 'Starboy', image: starboy, isFull : false },
-    { name: 'Beach', image: beach1, isFull : false },
-    { name: 'Building', image: building, isFull : false },
-    { name: 'Flower', image: flower, isFull : false },
-    { name: 'Hard', image: hard, isFull : true },
-    { name: 'Lake', image: lake, isFull : false },
-    { name: 'Losted', image: losted , isFull : true},
-    { name: 'Mountain', image: mountain , isFull : true},
-    { name: 'Obito', image: obito, isFull : false },
-    { name: 'Rain', image: rain , isFull: true },
-    { name: 'Rain 1', image: rain1 , isFull: true },
-    { name: 'Serenity', image: serenity, isFull : true },
-    
-  ];
+const {imageDeta } = useImage()
 
   const {isLoading , setIsLoading} = useContext(LoadingContext)
   useEffect(()=>{
@@ -176,7 +146,8 @@ const layoutRef  = useRef ()
             ref={(el) => (tilesRef.current[tileIndex] = el)}
             className="absolute will-change-transform"
             >
-              <ImageCard scaleDown={scaleDown} image={image} name={name} isFull={isFull} />
+              {/* <ImageOpener src = {image}/> */}
+              <ImageCard scaleDown={scaleDown} index = {index } src={image} name={name} isFull={isFull} />
             </div>
           );
         })

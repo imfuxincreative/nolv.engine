@@ -2,16 +2,36 @@ import React from 'react'
 import abundance from '../assets/images/InfiniteImages/abundance.webp'
 import black from '../assets/images/InfiniteImages/black.webp'
 import ImageOpener from '../components/ImageOpener.jsx'
-import {useState , useEffect} from 'react'
+import {useState , useRef ,  useEffect} from 'react'
+import {useNavigate} from  'react-router-dom'
+function ImageCard({src , index ,  scaleDown, isFull , to = '/gallary'}) {
+const navigate = useNavigate()
+const imageRef = useRef()
+const handleImageClick = () => {
+  const rect = imageRef.current.getBoundingClientRect()
+  const scrollX = window.scrollX || window.pageXOffset
+  const scrollY = window.scrollY || window.pageYOffset
+console.log(index)
+  const data = {
+    index , 
+    rect: {
+      top: rect.top + scrollY,
+      left: rect.left + scrollX,
+      width: rect.width,
+      height: rect.height,
+    },
+  }
 
-function ImageCard({image , scaleDown, isFull}) {
-const [isImageOpen , setIsImageOpen ] = useState(false)
+  sessionStorage.setItem('zoom-image', JSON.stringify(data))
+  navigate(to)
+}
+
   return (
     <div className='border-r-[1px] border-b-[1px] flex flex-col items-center justify-center border-[#d1d1d1] lg:h-[250px] lg:w-[250px] h-[200px] w-[200px]'>
 <div>
 
 </div>
-<img  src={image} className={` overflow-hidden   ${isFull ? 'w-[130px] lg:[150px] ':'w-[110px] lg:w-[130px]'} duration-200`} alt="" />
+<img ref={imageRef}  onClick={handleImageClick}  src={src} className={` overflow-hidden   ${isFull ? 'w-[130px] lg:[150px] ':'w-[110px] lg:w-[130px]'} duration-200`} alt="" />
 <div className='flex gap-3'>
 {/* <button >Graphic</button> */}
 </div>
