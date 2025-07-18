@@ -2,9 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useImage } from '../../context/ImageContext.jsx';
 import { motion, useMotionValue } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext.jsx';
 
 function Gallary() {
   const { imageDeta } = useImage();
+  const {isDarkMode} = useTheme()
   const [data , setData]  = useState(null)
   const [selectedIndex, setSelectedIndex] = useState(0);
   const sliderRef = useRef();
@@ -75,10 +77,7 @@ const { index, rect } = data; // ✅ Safe here
 
   return (
 <motion.div
-  initial={{ backgroundColor: 'rgba(255, 255, 255, 0)' }}
-    exit={{ backgroundColor: 'rgba(255, 255, 255, 0)' }}
-  animate={{ backgroundColor: 'rgba(255, 255, 255, 1)' }}
-  transition={{ duration: .5   ,ease : 'easeInOut'}}
+
   className="h-screen w-screen overflow-hidden"
 >
       {/* Main Image */}
@@ -101,7 +100,7 @@ position : 'fixed' ,
            scale : 1,
         }}
     animate = {{top: '40%' , left : '50%' , x : '-50%' , y : '-50%' ,  scale : 3 , }}
-      transition = {{duration : .5 , ease : 'easeInOut'}}
+      transition = {{duration : .3 , ease : 'easeInOut'}}
       
         src={imageDeta[selectedIndex].image}
         className=" w-[80%] lg:w-[20vw] object-cover"
@@ -109,8 +108,8 @@ position : 'fixed' ,
 
       {/* Slider Section */}
       <div className="absolute bottom-[15%] left-1/2 -translate-x-1/2 w-screen lg:w-[30vw] overflow-hidden">
-        <div className="bg-gradient-to-l from-white to-transparent h-12 w-32 absolute right-0 z-10 pointer-events-none" />
-        <div className="bg-gradient-to-r from-white to-transparent h-12 w-32 absolute left-0 z-10 pointer-events-none" />
+        <div className= {`bg-gradient-to-l ${isDarkMode ? 'from-black':'from-white'} to-transparent h-12 w-32 absolute right-0 z-10 pointer-events-none`} />
+        <div className= {`bg-gradient-to-r  ${isDarkMode ? 'from-black':'from-white'} to-transparent h-12 w-32 absolute left-0 z-10 pointer-events-none`} />
 
         <motion.div
           className="flex gap-2 cursor-grab active:cursor-grabbing"

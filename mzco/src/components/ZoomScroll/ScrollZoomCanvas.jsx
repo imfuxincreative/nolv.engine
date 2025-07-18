@@ -53,7 +53,7 @@ useEffect(() => {
 
 
   return (
-    <div className='relative w-full h-[100000px] bg-white'>
+    <div className='relative w-full h-[100000px] bg-transparent'>
         <Canvas camera={{position : [0 , 0 , 10] , fov :50}}
         className='!fixed  top-0 left-0 w-full h-screen'>
             <ambientLight  intensity = {1} />

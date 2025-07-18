@@ -36,6 +36,8 @@ import { CursorProvider } from "./context/CursorContext.jsx";
 import ImageViewer from './components/ImageViewer.jsx'
 import { ImageProvider } from "./context/ImageContext.jsx";
 import Gallary from './pages/Gallary/Gallary.jsx'
+import Bg from './components/Bg.jsx'
+import {ThemeProvider} from './context/ThemeContext.jsx'
 // Page animation settings
 const pageVariants = {
   initial: { opacity: 0,  },
@@ -312,7 +314,7 @@ function AppWithBlur() {
           <ScrollProgressBar/>
           <Navber/>
           {/* <Navber /> */}
-          {/* <PixelBg /> */}
+          <Bg/>
           <div className="sticky z-[999] top-0">
             {/* <ControlBar /> */}
           </div>
@@ -326,6 +328,8 @@ function AppWithBlur() {
 }
 
   return (
+    <ThemeProvider>
+
     <LoadProvider>
       <CursorProvider>
 <ImageProvider>
@@ -347,6 +351,7 @@ function AppWithBlur() {
 </ImageProvider>
       </CursorProvider>
     </LoadProvider>
+    </ThemeProvider>
   );
 }
 

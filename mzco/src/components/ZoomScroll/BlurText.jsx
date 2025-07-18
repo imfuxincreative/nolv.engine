@@ -3,14 +3,16 @@
 import { Text } from '@react-three/drei'
 import { useThree, useFrame } from '@react-three/fiber'
 import { useRef, forwardRef } from 'react'
+import {useTheme} from '../../context/ThemeContext.jsx';
+
 
 const BlurText = forwardRef(function BlurText(
-  { position, text, color = '#000000', fontSize = 0.35 },
+  { position, text, fontSize = 0.35 },
   externalRef
 ) {
   const ref = useRef()
+  const {isDarkMode} = useTheme()
   const { camera } = useThree()
-
   useFrame(() => {
     if (!ref.current) return
 
@@ -36,12 +38,18 @@ const BlurText = forwardRef(function BlurText(
         if (typeof externalRef === 'function') externalRef(el)
         else if (externalRef) externalRef.current = el
       }}
+        onSync={(textMesh) => {
+    // Set the blend mode here
+    textMesh.material.transparent = false;
+    textMesh.material.blending = THREE.DifferenceBlending;
+  }}
       position={position}
       fontSize={fontSize}
       anchorX="center"
       anchorY="middle"
       font="/inter.ttf"
-      color={color}
+      color={isDarkMode ? '#ffffff' :'#000000'}
+  
     >
       {text}
     </Text>

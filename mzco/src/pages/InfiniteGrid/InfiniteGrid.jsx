@@ -132,7 +132,7 @@ const {imageDeta } = useImage()
      onMouseLeave={()=>setCursorAnimation('onhome-animation')} 
     ref={layoutRef}
       {...bind()}
-      className={` ${scaleDown ? 'scale-90 ' :'scale-100'} duration-300  lg:translate-x-[2vw] -translate-x-[10vw] -translate-y-[10vh] -lg:translate-y-[5vw]  bg-white  fixed w-[120vw] h-[120vh]  bg-transpatent touch-none`}
+      className={` ${scaleDown ? 'scale-90 ' :'scale-100'} duration-300  lg:translate-x-[2vw] -translate-x-[10vw] -translate-y-[10vh] -lg:translate-y-[5vw]    fixed w-[120vw] h-[120vh]  bg-transpatent touch-none`}
       >
       {Array.from({ length: GRID_SIZE }).map((_, row) =>
         Array.from({ length: GRID_SIZE }).map((_, col) => {
@@ -148,7 +148,7 @@ const {imageDeta } = useImage()
             >
               {/* <ImageOpener src = {image}/> */}
               <ImageCard scaleDown={scaleDown} index = {index } src={image} name={name} isFull={isFull} />
-            </div>
+            </div> 
           );
         })
       )}

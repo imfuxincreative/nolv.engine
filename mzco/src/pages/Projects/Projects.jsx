@@ -5,9 +5,11 @@ import { GoArrowUpRight } from "react-icons/go";
 import { MenuBgContext } from '../../context/MenuBgContext';
 import { useCursor } from '../../context/CursorContext';
 import Footer from '../../components/Footer.jsx'
+import { useTheme } from '../../context/ThemeContext.jsx';
 
 function Projects() {
   const navigate = useNavigate();
+const {isDarkMode} = useTheme()
   const { menuOpen, setMenuOpen } = useContext(MenuBgContext);
 const {setCursorAnimation } = useCursor()
   const allProjects = [
@@ -52,8 +54,8 @@ const {setCursorAnimation } = useCursor()
   };
 
   return (
-    <div className="content-center bg-white absolute top-0  h-screen w-screen">
-      <div className="text-center w-screen">
+    <div className="content-center absolute top-0  h-screen w-screen">
+      <div className={`text-center ${isDarkMode ? 'text-white' : 'text-black' } duration-500 w-screen`}>
         {allProjects.map((el, i) => (
           <div key={i} className="overflow-hidden py-1">
             <h1 onMouseEnter={()=>{setCursorAnimation('projectlink-animation')}}

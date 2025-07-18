@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { useTheme } from '../context/ThemeContext';
 
 import Footer from '../components/Footer';
 function About() {
   const introduction = ['hii,', "I'm", 'meeza™ '];
   const textRefs = useRef([]);
-
+const {isDarkMode} = useTheme()
   useEffect(() => {
     textRefs.current.forEach((el, i) => {
       gsap.fromTo(
@@ -26,8 +27,8 @@ const handleDownload = () => {
   window.open('/Resume.pdf', '_blank');
 };
   return (
-    <div className='content-center absolute top-0  h-screen bg-white w-screen'>
-      <div className='col items-center justify-center gap-3 lg:gap-1 absolute flex  flex-col top-1/2 left-[24vw] lg:left-[44vw] '>
+    <div className='content-center absolute top-0  h-screen w-screen'>
+      <div className={`col ${isDarkMode ? 'text-white' : 'text-black' } duration-500 items-center justify-center gap-3 lg:gap-1 absolute flex  flex-col top-1/2 left-[24vw] lg:left-[44vw] `}>
 
       <div className='flex gap-2 '>
         {
@@ -35,7 +36,7 @@ const handleDownload = () => {
             <h2
             key={i}
             ref={(elRef) => (textRefs.current[i] = elRef)}
-            className='text-black '
+            className=' '
             >
               {el}
             </h2>

@@ -27,7 +27,7 @@ console.log(index)
 }
 
   return (
-    <div className='border-r-[1px] border-b-[1px] flex flex-col items-center justify-center border-[#d1d1d1] lg:h-[250px] lg:w-[250px] h-[200px] w-[200px]'>
+    <div className='border-r-[1px] border-b-[1px] flex flex-col items-center justify-center border-[#919191] lg:h-[250px] lg:w-[250px] h-[200px] w-[200px]'>
 <div>
 
 </div>
