@@ -79,13 +79,13 @@ const { index, rect } = data; // ✅ Safe here
     exit={{ backgroundColor: 'rgba(255, 255, 255, 0)' }}
   animate={{ backgroundColor: 'rgba(255, 255, 255, 1)' }}
   transition={{ duration: .5   ,ease : 'easeInOut'}}
-  className="h-screen w-screen"
+  className="h-screen w-screen overflow-hidden"
 >
       {/* Main Image */}
       <motion.img
- onClick={() => navigate(-1)}
+
     initial  ={{
-position : 'absolute' , 
+position : 'fixed' , 
       top : rect.top,
       left :rect.left,
       width : rect.width ,
@@ -93,7 +93,7 @@ position : 'absolute' ,
 
     }}
       exit={{
-               position: 'absolute',
+               position: 'fixed',
           top: rect.top+80 ,
           left: rect.left+80, 
           width: rect.width,
@@ -108,7 +108,7 @@ position : 'absolute' ,
       />
 
       {/* Slider Section */}
-      <div className="absolute bottom-[15%] left-1/2 -translate-x-1/2 lg:w-[30vw] overflow-hidden">
+      <div className="absolute bottom-[15%] left-1/2 -translate-x-1/2 w-screen lg:w-[30vw] overflow-hidden">
         <div className="bg-gradient-to-l from-white to-transparent h-12 w-32 absolute right-0 z-10 pointer-events-none" />
         <div className="bg-gradient-to-r from-white to-transparent h-12 w-32 absolute left-0 z-10 pointer-events-none" />
 

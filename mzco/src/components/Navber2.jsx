@@ -3,6 +3,7 @@ import { useNavigate , useLocation } from 'react-router-dom';
 import { LoadingContext } from '../context/LoadingContext';
 import { useCursor } from '../context/CursorContext';
 import { CiLight } from "react-icons/ci";
+import { RxCross1 } from "react-icons/rx";
 import { PiImagesSquareLight } from "react-icons/pi";
 function Navber2() {
   const { setIsLoading  , setShowMessage} = useContext(LoadingContext);
@@ -13,14 +14,20 @@ function Navber2() {
 // Track screen size
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
   const location = useLocation();
+const [openGallary , setOpenGallary] = useState (false)
+useEffect(() => {
+  if (!playgroundBtnRef.current) return;
 
-  useEffect(() => {
-    if (location.pathname === '/infiniteGrid' || '/gallary' && playgroundBtnRef.current) {
-      playgroundBtnRef.current.textContent = 'Instagram';
-    }else{
-      playgroundBtnRef.current.textContent = 'What If ?'
-    }
-  }, [location.pathname]);
+  if (location.pathname === '/infiniteGrid') {
+
+    playgroundBtnRef.current.textContent = 'Instagram';
+  } else if (location.pathname === '/gallary') {
+    setOpenGallary(true);
+  }
+   else {
+    playgroundBtnRef.current.textContent = 'What If ?';
+  }
+}, [location.pathname]);
 
 
   useEffect(() => {                           
@@ -69,17 +76,17 @@ function Navber2() {
 {/* <button  onClick={()=>navigate('/gallary')} className=" h-[35px] lg:h-[34px] w-[35px] flex items-center justify-center lg:w-[34px] px-2 rounded-full bg-black text-white " ><PiImagesSquareLight     size={23} className='text-white '/></button> */}
 
           </div>
-<div className='flex fixed top-10 right-10 gap-1 z-[999]'>
+{!openGallary ? <div className='flex fixed top-10 right-10 gap-1 z-[999]'>
 {/* <button   className=" h-[7vw] lg:h-[34px] w-[7vw] flex items-center justify-center lg:w-[34px] px-2 rounded-full bg-black text-white " ><CiLight size={23} className='text-white '/></button> */}
       {/* Top Right Button */}
       <button ref={playgroundBtnRef}
         onClick={handleWhatIf}
         onMouseLeave={()=> setCursorAnimation('onhome-animation')} onMouseEnter={()=> setCursorAnimation('whatif-animation')} 
-        className="h-[7vw] lg:h-[34px] w-[22vw] lg:w-[100px] px-2 rounded-full bg-black text-white "
+        className="h-[7vw] lg:h-[34px]  w-fit lg:px-4 px-4 rounded-full bg-black text-white "
         >
-        What if?
+what If ? 
       </button>
-        </div>
+        </div> : <button onClick={()=>{ navigate(-1) ,setOpenGallary(false)}} className="h-[35px] lg:h-[40px] lg:w-[40px] w-[35px] flex justify-center items-center px-2 rounded-full bg-black text-white  fixed top-10 right-10 gap-1 z-[999] "><RxCross1/></button>}
     </div>
   );
 }
