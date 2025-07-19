@@ -5,6 +5,7 @@ import { useCursor } from '../context/CursorContext';
 import { CiLight } from "react-icons/ci";
 import { RxCross1 } from "react-icons/rx";
 import {useTheme} from '../context/ThemeContext.jsx'
+import { TfiInfinite } from "react-icons/tfi";
 import { PiImagesSquareLight } from "react-icons/pi";
 function Navber2() {
   const {setIsDarkMode , isDarkMode} = useTheme()
@@ -72,7 +73,7 @@ useEffect(() => {
       <div onMouseLeave={()=> setCursorAnimation('onhome-animation')} onMouseEnter={()=> setCursorAnimation('menubutton-animation')} className={ ` flex items-center justify-center gap-10 lg:gap-20 w-[270px] ${isDarkMode ? 'bg-white/20 text-black' : 'bg-black/20 text-white'} duration-500 lg:w-[370px] h-[35px] lg:h-[37px] min-h-[30px] max-h-[45px] backdrop-blur-sm rounded-full overflow-hidden z-[999]`}>
         <h4 onMouseLeave={()=>setCursorAnimation('home-animation')} typeof='button' className="relative  z-10  cursor-pointer" onMouseEnter={()=>setCursorAnimation('onmenuhome-animation')} onClick={() =>{ handleNavigate('/', 8, 0), setShowMessage(false)}}>Home</h4>
         <h4 onMouseLeave={()=>setCursorAnimation('home-animation')} onMouseEnter={()=>setCursorAnimation('onmenuabout-animation')} typeof='button' className="relative z-10  cursor-pointer" onClick={() =>{ handleNavigate('/about', 90, 125), setShowMessage(false)}}>About</h4>
-        <h4 onMouseLeave={()=>setCursorAnimation('home-animation')} onMouseEnter={()=>setCursorAnimation('onmenuprojects-animation')} typeof='button' className="relative z-10  cursor-pointer" onClick={() => {handleNavigate('/projects', 180, 270), setShowMessage(false)}}>Projects</h4>
+        <h4 onMouseLeave={()=>setCursorAnimation('home-animation')} onMouseEnter={()=>setCursorAnimation('onmenuprojects-animation')} typeof='button' className="relative z-10  cursor-pointer" onClick={() => {handleNavigate('/projects', 180, 268), setShowMessage(false)}}>Projects</h4>
 
         {/* Slider Indicator */}
         <div
@@ -91,7 +92,7 @@ useEffect(() => {
         onMouseLeave={()=> setCursorAnimation('onhome-animation')} onMouseEnter={()=> setCursorAnimation('whatif-animation')} 
         className={` ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} duration-500 h-[7vw] lg:h-[34px]  w-fit lg:px-4 px-4 rounded-full `}
         >
-what If ? 
+Design
       </button>
         </div> : <button onClick={()=>{ navigate(-1) ,setOpenGallary(false)}} className={`h-[35px] lg:h-[40px] lg:w-[40px] w-[35px] flex justify-center items-center px-2 rounded-full ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'}  fixed top-10 right-10 gap-1 z-[999] `}><RxCross1/></button>}
     </div>

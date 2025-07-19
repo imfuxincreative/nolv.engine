@@ -113,6 +113,7 @@ gsap.to('.projects' , {opacity : 0});
           scale: 0.3,
       
         });
+        gsap.to('.question', {opacity : 0})
         gsap.to('.link' , {opacity : 0})
                   gsap.to('.home', { opacity: 0 });
 gsap.to('.about' , {opacity : 0})
