@@ -2,9 +2,14 @@ import React from 'react'
 import abundance from '../assets/images/InfiniteImages/abundance.webp'
 import black from '../assets/images/InfiniteImages/black.webp'
 import ImageOpener from '../components/ImageOpener.jsx'
+
 import {useState , useRef ,  useEffect} from 'react'
+import {useTheme} from '../context/ThemeContext.jsx'
+
 import {useNavigate} from  'react-router-dom'
 function ImageCard({src , index ,  scaleDown, isFull , to = '/gallary'}) {
+  const {isDarkMode} = useTheme()
+  
 const navigate = useNavigate()
 const imageRef = useRef()
 const handleImageClick = () => {
@@ -27,7 +32,7 @@ console.log(index)
 }
 
   return (
-    <div className='border-r-[1px] border-b-[1px] flex flex-col items-center justify-center border-[#919191] lg:h-[250px] lg:w-[250px] h-[200px] w-[200px]'>
+    <div className={`border-r-[1px] border-b-[1px] flex flex-col duration-500 items-center justify-center ${isDarkMode ? 'border-[#363636]':'border-[#dfdfdf]'} lg:h-[250px] lg:w-[250px] h-[200px] w-[200px]`}>
 <div>
 
 </div>

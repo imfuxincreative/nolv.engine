@@ -2,9 +2,11 @@ import React from 'react'
 import {Canvas, useFrame, useThree} from '@react-three/fiber'
 import {useRef ,useEffect} from 'react'
 import LoopingTexts from './LoopingTexts';
+import {useTheme} from '../../context/ThemeContext.jsx'
 
 
 function InfiniteCamera ({scrollRef}){
+const {isDarkMode} = useTheme()
   const {camera} = useThree();
 useFrame(()=>{
   const targetZ = 10 + scrollRef.current * 10
