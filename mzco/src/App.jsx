@@ -8,11 +8,9 @@ import Portfolio24 from "./pages/design/Portfolio24.jsx";
 import Home from "./pages/home/Home.jsx";
 import AllWorks from "./pages/Works/AllWorks.jsx";
 import Design from './pages/design/Design.jsx';
-
 import { BlurProvider } from "./context/BlurContext.jsx";
 import { ReverseAnimeProvider } from './context/ReverseAnime.jsx';
 import { LoadingContext, LoadProvider } from "./context/LoadingContext.jsx";
-
 import DynamicBlur from "./components/DynamicOpacity.jsx";
 import ControlBar from "./components/ControlBar.jsx";
 import PixelBg from "./components/pixelbg.jsx";
@@ -38,6 +36,7 @@ import { ImageProvider } from "./context/ImageContext.jsx";
 import Gallary from './pages/Gallary/Gallary.jsx'
 import Bg from './components/Bg.jsx'
 import {ThemeProvider} from './context/ThemeContext.jsx'
+import {useSmoothScroll , LenisProvider} from './context/LenisContext.jsx';
 // Page animation settings
 const pageVariants = {
   initial: { opacity: 0,  },
@@ -328,6 +327,8 @@ function AppWithBlur() {
 }
 
   return (
+    <LenisProvider  >
+
     <ThemeProvider>
 
     <LoadProvider>
@@ -352,6 +353,7 @@ function AppWithBlur() {
       </CursorProvider>
     </LoadProvider>
     </ThemeProvider>
+    </LenisProvider>
   );
 }
 
