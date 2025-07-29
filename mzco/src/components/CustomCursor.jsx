@@ -33,7 +33,7 @@ function CustomCursor() {
 
       // Cursor animation switch
       if (cursorAnimation === 'onmenuhome-animation') {
-        console.log('menu animation applied');
+  
         gsap.to('.home', { opacity: 1 });
 gsap.to('.about' , {opacity : 0})
 gsap.to('.projects' , {opacity : 0});
@@ -130,11 +130,11 @@ gsap.to('.projects' , {opacity : 0});
         });
         gsap.to('.arrow', {
           opacity: 1,
+          color : isDarkMode ? 'black':'white'
     
         });
          gsap.to('.home', {
           opacity: 0,
-          color: 'white',
         });
         gsap.to('.question' , {opacity : 0})
         gsap.to('.link', { opacity: 0 });
@@ -206,7 +206,7 @@ gsap.to('.projects' , {opacity : 0});
   ref={cursorRef}
   className={`fixed top-0 z-[9999] left-0 w-10 h-10 scale-30 ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'}  rounded-full pointer-events-none transform -translate-x-1/2 -translate-y-1/2 pt-2 pl-2`}
 >
-  <IoIosLink   className="link opacity-0 lg:text-[25px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+  <IoIosLink   className="link opacity-0 text-white lg:text-[25px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
   <h1  className="question opacity-0 lg:text-[25px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">?</h1>
   <MdArrowOutward
     className="arrow opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"

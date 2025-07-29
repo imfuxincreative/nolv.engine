@@ -14,10 +14,10 @@ const {isDarkMode} = useTheme()
 const {setCursorAnimation } = useCursor()
   const allProjects = [
     { name: 'Omnitrix 10.7( Beta )', path: 'https://omitrix107.vercel.app/' },
+    { name: 'mzverse ( NextJS, typescript )', path: 'https://mzverse.vercel.app' },
     { name: 'flexyourshots ( Gallary app )', path: 'https://flexyourshots.netlify.app' },
-    { name: 'mzverse ( e-commerce, MERN )', path: 'https://mzverse.netlify.app' },
-    { name: 'Portfolio-2024', path: 'https://meeza.netlify.app' },
-    { name: 'stoicphotography', path: 'https://stoicphotograph.netlify.app' },
+    { name: 'Portfolio-2024 ( React )', path: 'https://meeza.netlify.app' },
+    // { name: 'stoicphotography', path: 'https://stoicphotograph.netlify.app' },
     { name: 'mznote (Note app , MERN )', path: 'https://mznote.netlify.app/' },
     { name: 'Architecture (UI/UX Design )', route: '/arcitecture' },
   ];
