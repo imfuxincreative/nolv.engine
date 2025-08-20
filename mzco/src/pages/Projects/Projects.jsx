@@ -13,13 +13,13 @@ const {isDarkMode} = useTheme()
   const { menuOpen, setMenuOpen } = useContext(MenuBgContext);
 const {setCursorAnimation } = useCursor()
   const allProjects = [
-    { name: 'Omnitrix 10.7( Beta )', path: 'https://omitrix107.vercel.app/' },
-    { name: 'mzverse ( NextJS, typescript )', path: 'https://mzverse.vercel.app' },
+    // { name: 'Omnitrix 10.7( Beta )', path: 'https://omitrix107.vercel.app/' },
+    { name: 'mzverse( NextJS, typescript, UI/UX )', path: 'https://mzverse.vercel.app' },
     { name: 'flexyourshots ( Gallary app )', path: 'https://flexyourshots.netlify.app' },
     { name: 'Portfolio-2024 ( React )', path: 'https://meeza.netlify.app' },
     // { name: 'stoicphotography', path: 'https://stoicphotograph.netlify.app' },
-    { name: 'mznote (Note app , MERN )', path: 'https://mznote.netlify.app/' },
-    { name: 'Architecture (UI/UX Design )', route: '/arcitecture' },
+    // { name: 'mznote (Note app , MERN )', path: 'https://mznote.netlify.app/' },
+    // { name: 'Architecture (UI/UX Design )', route: '/arcitecture' },
   ];
   const socials = [
     {name : 'Instagram' , src : 'https://www.instagram.com/mzco.creative/'},
