@@ -64,7 +64,7 @@ function ParallaxImageSet({ images, scrollY }) {
 
   return (
     <div ref={ref} className="px-3 bg-transparent z-[999] translate-y-[20vh]">
-      <div className="h-[80vh] w-full relative">
+      <div className="h-[80vh] md:h-[120vh] w-full relative">
         {/* Static positioned images */}
         <div className="random-images-1">
           {images.slice(0, 3).map((src, i) => (
@@ -72,9 +72,9 @@ function ParallaxImageSet({ images, scrollY }) {
               key={i}
               ref={(el) => (imageRefs.current[i] = el)}
               className={`absolute object-cover object-top opacity-0 ${
-                i === 0 ? 'top-5 left-[6vw] w-[40vw] h-[50vw]' :
-                i === 1 ? 'top-7 right-[5vw] w-[50vw] h-[60vw]' :
-                          'bottom-[17vh] right-0 w-[70vw] h-[50vw] z-[1]'
+                i === 0 ? 'top-5 md:top-22 left-[6vw] w-[40vw] md:w-[30vw] md:h-[40vw] h-[50vw]' :
+                i === 1 ? 'top-7 right-[5vw] md:right-[14vw] w-[50vw] h-[60vw] md:w-[30vw] md:h-[30vw]' :
+                          'bottom-[17vh] right-0 w-[70vw] md:w-[30vw] md:h-[40vw] h-[50vw] z-[1]'
               }`}
               src={src}
               alt=""
@@ -89,9 +89,9 @@ function ParallaxImageSet({ images, scrollY }) {
               key={i + 3}
               ref={(el) => (imageRefs.current[i + 3] = el)}
               className={`absolute object-cover object-top opacity-0 ${
-                i === 0 ? 'top-[30vh] w-[60vw] h-[40vw]' :
-                i === 1 ? 'top-[25vh] right-0 w-[40vw] h-[50vw]' :
-                          'bottom-[0vh] left-0 w-[40vw] h-[50vw] z-[2]'
+                i === 0 ? 'top-[30vh] w-[60vw] md:w-[30vw] md:h-[20vw] h-[40vw]' :
+                i === 1 ? 'top-[25vh] right-0 w-[40vw] md:h-[25vw] md:w-[30vw] md:right-[20vw] h-[50vw]' :
+                          'bottom-[0vh] left-0 w-[40vw] md:w-[30vw] md:h-[40vw] h-[50vw] z-[2]'
               }`}
               src={src}
               alt=""

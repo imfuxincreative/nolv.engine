@@ -31,15 +31,15 @@
   h2 {
     font-family: 'inter-light';
     font-size: 30px;
-    
+    letter-spacing:  -1px;
   
   }
 
  
  h4 {
    
-      font-family : 'inter-light';
-      font-size: 17px ;
+      font-family : 'inter-regular';
+      font-size: 15px ;
 
   
     }
@@ -95,13 +95,9 @@
       
     }
 
-    h4 {
-    
-      font-family : 'inter-light';
-      font-size: 15px;
-    
+
   
-    }
+    
 
     h5 {
       font-size: 14px;

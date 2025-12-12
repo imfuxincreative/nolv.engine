@@ -3,8 +3,9 @@ import gsap from 'gsap';
 import { useTheme } from '../context/ThemeContext';
 
 import Footer from '../components/Footer';
+import ParallaxImageAlgo from '../components/parallaxImageAlgo';
 function About() {
-  const introduction = ['hii,', "I'm", 'meeza™ '];
+  const introduction = ['', "I'm", 'Creative'];
   const textRefs = useRef([]);
 const {isDarkMode} = useTheme()
   useEffect(() => {
@@ -27,9 +28,10 @@ const handleDownload = () => {
   window.open('/Resume.pdf', '_blank');
 };
   return (
-    <div className='content-center absolute top-0  h-screen w-screen'>
-      <div className={`col ${isDarkMode ? 'text-white' : 'text-black' } duration-500 items-center justify-center gap-1 absolute flex  flex-col top-1/2 -translate-x-1/2 left-1/2 `}>
+    <div className='content-center  w-screen'>
+<ParallaxImageAlgo/>
 
+      <div className={`col ${isDarkMode ? 'text-white' : 'text-black' } duration-500 items-center justify-center  fixed z-[9999] flex  flex-col top-1/2 -translate-x-1/2 left-1/2 `}>
       <div className='flex gap-2 '>
         {
           introduction.map((el, i) => (
@@ -43,9 +45,9 @@ const handleDownload = () => {
           ))
         }
       </div>
-      <h4>
-Designer | Frontend developer
-      </h4>
+<h4 className="flex-wrap whitespace-nowrap">
+  Designer | Frontend developer
+</h4>
         </div>
   <button onClick={handleDownload} className=' rounded-full border fixed bottom-[200px] left-1/2 -translate-x-1/2 px-2 py-1 - border-[#b3b3b3] pointer-events-auto bg-[#f0f0f0]'>CV.pdf</button>
 <Footer/>
