@@ -84,8 +84,8 @@ useEffect(() => {
 {/* <button  onClick={()=>navigate('/gallary')} className=" h-[35px] lg:h-[34px] w-[35px] flex items-center justify-center lg:w-[34px] px-2 rounded-full bg-black text-white " ><PiImagesSquareLight     size={23} className='text-white '/></button> */}
 
           </div>
-{!openGallary ? <div className='flex fixed top-10 right-10 gap-1 z-[999]'>
-<button  onClick={handleThemeClick}  className={` h-[30px]  w-[30px] flex items-center justify-center  px-2 rounded-full ${isDarkMode ?'bg-white text-black' : 'bg-black text-white'} duration-500 `} ><CiLight size={23} className=''/></button>
+{!openGallary ? <div className='flex fixed items-center top-10 right-10 gap-1 z-[999]'>
+<button  onClick={handleThemeClick}  className={` h-[28px]  w-[28px] flex items-center justify-center  px-2 rounded-full ${isDarkMode ?'bg-white text-black' : 'bg-black text-white'} duration-500 `} ><CiLight size={23} className=''/></button>
       {/* Top Right Button */}
       <button ref={playgroundBtnRef}
         onClick={handleWhatIf}
