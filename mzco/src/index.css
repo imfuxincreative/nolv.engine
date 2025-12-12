@@ -31,6 +31,7 @@
   h2 {
     font-family: 'inter-light';
     font-size: 30px;
+    line-height: 40px;
     letter-spacing:  -1px;
   
   }
@@ -38,12 +39,19 @@
  
  h4 {
    
-      font-family : 'inter-regular';
+      font-family : 'inter-light';
       font-size: 15px ;
 
   
     }
+ p {
+   
+      font-family : 'inter-regular';
+      font-size: 18px ;
+    letter-spacing: 0.1px;
 
+  
+    }
   h5 {
     font-family: 'inter-regular';
     font-size: 3.3vw;

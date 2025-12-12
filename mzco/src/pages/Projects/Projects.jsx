@@ -1,75 +1,107 @@
-import React, { useEffect,useContext ,  useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
-import { GoArrowUpRight } from "react-icons/go";
-import { MenuBgContext } from '../../context/MenuBgContext';
-import { useCursor } from '../../context/CursorContext';
-import Footer from '../../components/Footer.jsx'
-import { useTheme } from '../../context/ThemeContext.jsx';
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import img3 from '../../assets/images/InfiniteImages/beach1.jpg';
+
+gsap.registerPlugin(ScrollTrigger);
 
 function Projects() {
-  const navigate = useNavigate();
-const {isDarkMode} = useTheme()
-  const { menuOpen, setMenuOpen } = useContext(MenuBgContext);
-const {setCursorAnimation } = useCursor()
-  const allProjects = [
-    // { name: 'Omnitrix 10.7( Beta )', path: 'https://omitrix107.vercel.app/' },
-    { name: 'mzverse( NextJS, typescript, UI/UX )', path: 'https://mzverse.vercel.app' },
-    { name: 'flexyourshots ( Gallary app )', path: 'https://flexyourshots.netlify.app' },
-    { name: 'Portfolio-2024 ( React )', path: 'https://meeza.netlify.app' },
-    // { name: 'stoicphotography', path: 'https://stoicphotograph.netlify.app' },
-    // { name: 'mznote (Note app , MERN )', path: 'https://mznote.netlify.app/' },
-    // { name: 'Architecture (UI/UX Design )', route: '/arcitecture' },
+  const textRefs = useRef([]);
+  const introduction = ['Introduding', "the", 'Grido', ];
+
+  // 🔥 All extra lines here (you can add unlimited lines)
+  const lines = [
+    { className: "second-line", content: <p className="line mt-10">There is a lot I wanna say</p> },
+    { className: "third-line", content: <p className="and mt-1">It been almost 4 month</p> },
+    { className: "fourth-line", content: <h4 style={{fontSize : '28px'}} className="custom mt-1">I guess</h4> },
+    { className: "d-line", content: <p className="and mt-1">See this first</p> },
+
+    { className: "fifth-line", content: <div className="custom mt-1"><img src={img3} className='object-cover w-100 h-60 rounded-lg'/></div> },
+    { className: "sixeh-line", content: <div className="custom mt-1">I'm fuckin' creative</div> },
   ];
-  const socials = [
-    {name : 'Instagram' , src : 'https://www.instagram.com/mzco.creative/'},
-    {name : 'Behance' , src : 'https://www.behance.net/skmeejanur1'},
-    {name : 'linkedIn' , src : 'https://www.linkedin.com/in/meeza-from-mzco-aa985b332/'},
-    {name : 'Github' , src : 'https://github.com/MEEZA453'},
-
-  ]
-
-  const projectRefs = useRef([]);
 
   useEffect(() => {
-    gsap.fromTo(
-      projectRefs.current,
-      { y: '6vw' },
-      {
-        y: '0vw',
-        duration: 0.5,
-        ease: 'power1',
-        stagger: 0.072,
+    // FIRST RENDER FADE-IN
+    textRefs.current.forEach((el, i) => {
+      gsap.fromTo(
+        el,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 0.8,
+          delay: i * 0.5,
+          ease: 'power2.out',
+        }
+      );
+    });
+
+    // 🔹 Hide all scroll-animated lines initially
+    lines.forEach(line => {
+      gsap.set(`.${line.className}`, { opacity: 0 });
+    });
+
+    // SCROLL ANIMATIONS (dynamic)
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".intro-line",
+        start: "top 20%",
+        end: "+=2000",
+        scrub: true,
       }
-    );
+    });
+
+    // 🔥 Loop: reveal each line + move parent up
+    lines.forEach((line, index) => {
+      // Reveal the line
+      tl.fromTo(
+        `.${line.className}`,
+        { opacity: 0, y: 60 + index * 20 },
+        { opacity: 1, y: 0, ease: "power2.out", duration: 1 }
+      );
+
+      // Move container only for lines after the first one
+      if (index >= 1) {
+        tl.to(
+          ".fixed-container",
+          {
+            y: -index * 40, // tweak movement amount
+            ease: "power2.out",
+            duration: 1,
+          },
+          "<" // sync with line reveal
+        );
+      }
+    });
   }, []);
 
-  const handleMenuItemClick = (item) => {
-    if (item.route) {
-      navigate(item.route);
-      setMenuOpen('open-full') // internal navigation
-    } else if (item.path) {
-      window.open(item.path, '_blank'); // open external link in new tab
-    }
-  };
-
   return (
-    <div className="content-center absolute top-0  flex items-center justify-center h-screen w-screen">
-      <div className={`text-center ${isDarkMode ? 'text-white' : 'text-black' } duration-500 w-screen`}>
-        {allProjects.map((el, i) => (
-          <div key={i} className="overflow-hidden py-1">
-            <h1 onMouseEnter={()=>{setCursorAnimation('projectlink-animation')}}
-            onMouseLeave= {()=> setCursorAnimation('onhome-animation')}
-              ref={(elem) => (projectRefs.current[i] = elem)}
-              onClick={() => handleMenuItemClick(el)}
-              className="items pointer-events-auto cursor-pointer"
-            >
-              {el.name}
-            </h1>
+    <div className="h-[500vh] w-screen">
+      {/* Wrapper handles centering */}
+      <div className="fixed top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2">
+        <div style={{ y: 0 }} className="fixed-container">
+          {/* FIRST LINE */}
+          <div>
+            <div className='flex gap-2 intro-line'>
+              {introduction.map((el, i) => (
+                <h2
+                  key={i}
+                  ref={(elRef) => (textRefs.current[i] = elRef)}
+                >
+                  {el}
+                </h2>
+              ))}
+            </div>
+            <h3>a platform for degital creatives</h3>
           </div>
-        ))}
+
+          {/* AUTO-GENERATED LINES */}
+          {lines.map((item, i) => (
+            <div key={i} className={item.className}>
+              {item.content}
+            </div>
+          ))}
+        </div>
       </div>
-<Footer/>
     </div>
   );
 }
