@@ -54,7 +54,7 @@ const {setCursorAnimation } = useCursor()
   };
 
   return (
-    <div className="content-center absolute top-0  h-screen w-screen">
+    <div className="content-center absolute top-0  flex items-center justify-center h-screen w-screen">
       <div className={`text-center ${isDarkMode ? 'text-white' : 'text-black' } duration-500 w-screen`}>
         {allProjects.map((el, i) => (
           <div key={i} className="overflow-hidden py-1">

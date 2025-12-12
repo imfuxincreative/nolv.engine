@@ -32,7 +32,7 @@ console.log(index)
 }
 
   return (
-    <div className={`border-r-[1px] border-b-[1px] flex flex-col duration-500 items-center justify-center ${isDarkMode ? 'border-[#363636]':'border-[#dfdfdf]'} lg:h-[250px] lg:w-[250px] h-[200px] w-[200px]`}>
+    <div className={`border-r-[1px] border-b-[1px] flex flex-col duration-500 items-center justify-center ${isDarkMode ? 'border-[#363636]':'border-[#dfdfdf]'} lg:h-[250px] lg:w-[250px] max-sm:h-[200px] max-sm:w-[200px]  md:h-[260px] md:w-[260px]`}>
 <div>
 
 </div>

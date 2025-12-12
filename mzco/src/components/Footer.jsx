@@ -15,8 +15,8 @@ const {isDarkMode} = useTheme()
 
   return (
   
-      <div className="footer absolute  z-[800] bottom-20 left-[10vw] lg:left-[41vw] flex gap-7 flex-col items-center justify-center">
-        <div className={`flex gap-4 ${isDarkMode ? 'text-white' : 'text-black' } duration-500 flex-col items-center justify-center`}>
+      <div className="footer absolute  z-[800] bottom-20 left-1/2 -translate-x-1/2 flex gap-7 flex-col items-center justify-center">
+        <div className={`flex gap-3 ${isDarkMode ? 'text-white' : 'text-black' } duration-500 flex-col items-center justify-center`}>
           <h2>mzco.creative@gmail.com</h2>
           <div className="flex gap-3">
 {socials.map((el , i)=>{

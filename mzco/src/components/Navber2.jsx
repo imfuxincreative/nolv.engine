@@ -71,9 +71,9 @@ useEffect(() => {
       <div className=' flex fixed gap-1 bottom-8 left-1/2 -translate-x-1/2'>
  
       <div onMouseLeave={()=> setCursorAnimation('onhome-animation')} onMouseEnter={()=> setCursorAnimation('menubutton-animation')} className={ ` flex items-center justify-center gap-10 lg:gap-20 w-[270px] ${isDarkMode ? 'bg-white/20 text-black' : 'bg-black/20 text-white'} duration-500 lg:w-[370px] h-[35px] lg:h-[37px] min-h-[30px] max-h-[45px] backdrop-blur-sm rounded-full overflow-hidden z-[999]`}>
-        <h4 onMouseLeave={()=>setCursorAnimation('home-animation')} typeof='button' className="relative  z-10  cursor-pointer" onMouseEnter={()=>setCursorAnimation('onmenuhome-animation')} onClick={() =>{ handleNavigate('/', 8, 0), setShowMessage(false)}}>Home</h4>
+        <h4 onMouseLeave={()=>setCursorAnimation('home-animation')} typeof='button' className="relative  z-10 lg:-translate-x-3 cursor-pointer" onMouseEnter={()=>setCursorAnimation('onmenuhome-animation')} onClick={() =>{ handleNavigate('/', 8, 0), setShowMessage(false)}}>Home</h4>
         <h4 onMouseLeave={()=>setCursorAnimation('home-animation')} onMouseEnter={()=>setCursorAnimation('onmenuabout-animation')} typeof='button' className="relative z-10  cursor-pointer" onClick={() =>{ handleNavigate('/about', 90, 125), setShowMessage(false)}}>About</h4>
-        <h4 onMouseLeave={()=>setCursorAnimation('home-animation')} onMouseEnter={()=>setCursorAnimation('onmenuprojects-animation')} typeof='button' className="relative z-10  cursor-pointer" onClick={() => {handleNavigate('/projects', 180, 268), setShowMessage(false)}}>Projects</h4>
+        <h4 onMouseLeave={()=>setCursorAnimation('home-animation')} onMouseEnter={()=>setCursorAnimation('onmenuprojects-animation')} typeof='button' className="relative z-10 lg:translate-x-3 cursor-pointer" onClick={() => {handleNavigate('/projects', 180, 268), setShowMessage(false)}}>Projects</h4>
 
         {/* Slider Indicator */}
         <div
@@ -85,12 +85,12 @@ useEffect(() => {
 
           </div>
 {!openGallary ? <div className='flex fixed top-10 right-10 gap-1 z-[999]'>
-<button  onClick={handleThemeClick}  className={` h-[7vw] lg:h-[34px] w-[7vw] flex items-center justify-center lg:w-[34px] px-2 rounded-full ${isDarkMode ?'bg-white text-black' : 'bg-black text-white'} duration-500 `} ><CiLight size={23} className=''/></button>
+<button  onClick={handleThemeClick}  className={` h-[30px]  w-[30px] flex items-center justify-center  px-2 rounded-full ${isDarkMode ?'bg-white text-black' : 'bg-black text-white'} duration-500 `} ><CiLight size={23} className=''/></button>
       {/* Top Right Button */}
       <button ref={playgroundBtnRef}
         onClick={handleWhatIf}
         onMouseLeave={()=> setCursorAnimation('onhome-animation')} onMouseEnter={()=> setCursorAnimation('whatif-animation')} 
-        className={` ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} duration-500 h-[7vw] lg:h-[34px]  w-fit lg:px-4 px-4 rounded-full `}
+        className={` ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} duration-500 h-fit py-2  w-fit px-3 rounded-full `}
         >
 Design
       </button>

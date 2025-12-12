@@ -28,7 +28,7 @@ const handleDownload = () => {
 };
   return (
     <div className='content-center absolute top-0  h-screen w-screen'>
-      <div className={`col ${isDarkMode ? 'text-white' : 'text-black' } duration-500 items-center justify-center gap-3 lg:gap-1 absolute flex  flex-col top-1/2 left-[24vw] lg:left-[44vw] `}>
+      <div className={`col ${isDarkMode ? 'text-white' : 'text-black' } duration-500 items-center justify-center gap-1 absolute flex  flex-col top-1/2 -translate-x-1/2 left-1/2 `}>
 
       <div className='flex gap-2 '>
         {
@@ -47,7 +47,7 @@ const handleDownload = () => {
 Designer | Frontend developer
       </h4>
         </div>
-  <button onClick={handleDownload} className=' rounded-full border fixed bottom-[200px] left-1/2 -translate-x-1/2 - border-[#b3b3b3] pointer-events-auto bg-[#f0f0f0]'>CV.pdf</button>
+  <button onClick={handleDownload} className=' rounded-full border fixed bottom-[200px] left-1/2 -translate-x-1/2 px-2 py-1 - border-[#b3b3b3] pointer-events-auto bg-[#f0f0f0]'>CV.pdf</button>
 <Footer/>
 
     </div>
