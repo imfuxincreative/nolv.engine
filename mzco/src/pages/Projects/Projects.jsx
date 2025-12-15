@@ -320,7 +320,7 @@ const visibleItems = timeline.filter((item, index) =>
           start: "top 60%",
           end: `+=${BASE_SCROLL_END}`, // we'll adjust end below
           scrub: true,
-          markers: true,
+          // markers: true,
         },
       });
 
@@ -520,11 +520,11 @@ function shouldRenderItem(item, index) {
   return (
     <div className="scroll-spacer w-screen">
       <div className="fixed w-full top-[30vh]">
-        <div className="fixed-container flex px-4">
-          <div className="flex w-screen gap-1">
-            <img className="h-7 w-7 rounded-full" src={img3} alt="avatar" />
+        <div className="fixed-container  flex px-4">
+          <div className="flex w-screen translate-y-50 gap-1">
+            <img className="h-6 w-6 rounded-full" src={img3} alt="avatar" />
 
-            <div className="w-[85vw] mt-2">
+            <div className="w-[85vw]  mt-2">
               {timeline.map((item, i) =>
                 shouldRenderItem(item, i) ? renderMessage(item, i) : null
               )}
