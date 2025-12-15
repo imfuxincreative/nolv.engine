@@ -13,7 +13,8 @@ function Projects() {
   const [isTyping, setIsTyping] = useState(false);
 
   const [timeline, setTimeline] = useState([
-    { id: "l1", sender: "bot", animated: true, content: <p>Hey</p> },
+{ id: "l1", sender: "bot", animated: true, static: true, content: <p>Hello</p> },
+
     { id: "l2", sender: "bot", animated: true, content: <p>yeah!</p> },
     { id: "l3", sender: "bot", animated: true, content: <p>You made it</p> },
     { id: "l4", sender: "bot", animated: true, content: <p>Stay for a bit</p> },
@@ -45,7 +46,12 @@ function Projects() {
 
   const PRECHAT_COUNT = 4;
   const BASE_SCROLL_END = 8000;
-
+useEffect(() => {
+  const el = msgRefs.current["l1"];
+  if (el) {
+    gsap.set(el, { opacity: 1, y: -10, marginBottom : 16 });
+  }
+}, []);
   /* ================= SCRIPTED FLOWS ================= */
   const scriptedFlows = {
     // key matches the decision item's id "l5"
@@ -61,7 +67,7 @@ function Projects() {
       "Show me the live link": ["Alright, here you go 👇", "https://your-live-link.com"],
     },
     l7: {
-      "Huh!": [
+      "huh!": [
         "Of course — I was hoping you'd say that.",
         "Let me show you what I've been building.",
       ],
@@ -95,23 +101,30 @@ function Projects() {
       const extraCount = Math.max(0, total - PRECHAT_COUNT);
       const endValue = BASE_SCROLL_END + extraPerItem * extraCount;
 
-      // create fromTo animations for every item in timeline (indexed)
-      for (let i = 0; i < total; i++) {
-        tl.fromTo(
-          `.line-${i}`,
-          { opacity: 0, y: 0 },
-          { opacity: 1, y: -20, duration: 1 },
-          i * 0.6
-        );
+gsap.set(".scroll-spacer", {
+  height: endValue + window.innerHeight,
+});   // create fromTo animations for every item in timeline (indexed)
+   for (let i = 0; i < total; i++) {
+  const item = timeline[i];
 
-        if (i >= 1) {
-          tl.to(
-            ".fixed-container",
-            { y: -i * 40, duration: 1, ease: "power2.out" },
-            "<"
-          );
-        }
-      }
+  // 🔥 Skip animation for Hello
+  if (!item.static) {
+    tl.fromTo(
+      `.line-${i}`,
+      { opacity: 0, y: 0 },
+      { opacity: 1, y: -20, duration: 1 },
+      i * 0.6
+    );
+  }
+
+  if (i >= 1) {
+    tl.to(
+      ".fixed-container",
+      { y: -i * 40, duration: 1, ease: "power2.out" },
+      "<"
+    );
+  }
+}
 
       // adjust scroll end
       const st = tl.scrollTrigger;
@@ -268,7 +281,7 @@ function shouldRenderItem(item, index) {
 
   /* ================= JSX ================= */
   return (
-    <div className="h-[3000vh] w-screen">
+    <div className="scroll-spacer w-screen">
       <div className="fixed w-full top-[30vh]">
         <div className="fixed-container flex px-4">
           <div className="flex w-screen gap-1">
@@ -287,7 +300,7 @@ function shouldRenderItem(item, index) {
       </div>
 
       <div className="fixed -translate-x-1/2 left-1/2 bottom-20">
-        <form onSubmit={handleSend} className="flex gap-2">
+        {/* <form onSubmit={handleSend} className="flex gap-2">
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -296,7 +309,7 @@ function shouldRenderItem(item, index) {
           <button className="h-8 w-8 rounded-full bg-black text-white flex items-center justify-center">
             <IoIosSend size={18} />
           </button>
-        </form>
+        </form> */}
       </div>
     </div>
   );
