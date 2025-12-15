@@ -35,9 +35,9 @@ const {isLoading , setIsLoding , showMessage , setShowMessage} = useContext(Load
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
-      console.log(scrollTop)
+
       const docHeight = document.documentElement.scrollHeight
-      console.log(docHeight)
+  
       const scrollPercent = (scrollTop / docHeight) * 100;
       if(scrollPercent > 99){
         setShowMessage(true)

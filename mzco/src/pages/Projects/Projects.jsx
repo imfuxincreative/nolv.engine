@@ -1,225 +1,302 @@
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import React, { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import img3 from '../../assets/images/InfiniteImages/beach1.jpg';
-
+import img3 from "../../assets/images/InfiniteImages/beach1.jpg";
+import { sendMessageToBot } from "../../api/chat.js";
+import { IoIosSend } from "react-icons/io";
 gsap.registerPlugin(ScrollTrigger);
 
 function Projects() {
-  const textRefs = useRef([]);
-  const introduction = ['Introduding', "the", 'Grido', ];
+  const msgRefs = useRef({});
+  const scrollTl = useRef(null);
+  const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
 
-  // 🔥 All extra lines here (you can add unlimited lines)
-const lines = [
-  { className: "line-2", content: <p className="">Hey</p> },
-  { className: "line-3", content: <p className="">yeah!</p> },
-  { className: "line-4", content: <p className="">You made it</p> },
-  { className: "line-5", content: <p className="">Stay for a bit</p> },
+  const [timeline, setTimeline] = useState([
+    { id: "l1", sender: "bot", animated: true, content: <p>Hey</p> },
+    { id: "l2", sender: "bot", animated: true, content: <p>yeah!</p> },
+    { id: "l3", sender: "bot", animated: true, content: <p>You made it</p> },
+    { id: "l4", sender: "bot", animated: true, content: <p>Stay for a bit</p> },
 
-  { className: "line-6", content: <p className="">I build late</p> },
-  { className: "line-7", content: <p className="">When it’s quiet</p> },
-  { className: "line-8", content: <p className="">When ideas get honest</p> },
-  { className: "line-9", content: <p className="">No noise</p> },
-  { className: "line-10", content: <p className="">Just focus</p> },
-  { className: "line-16", content: <img  src={img3} className='h-40 w-60 rounded-lg object-cover'/> },
+    // Decision is now part of the timeline (id matches scriptedFlows below)
+    {
+      id: "l5",
+      sender: "bot",
+      type: "decision",
+      animated: true,
+      content: <p>Will I show you ?</p>,
+      options: ["Nice!", "Hello", "cool"],
+      answered: false,
+    },
 
-  { className: "line-11", content: <p className="">I’m a frontend dev</p> },
-  { className: "line-12", content: <p className="">Designer too</p> },
-  { className: "line-13", content: <p className="">I move pixels like emotions</p> },
-  { className: "line-14", content: <p className="">Slow</p> },
-  { className: "line-15", content: <p className="">Intentional</p> },
+    // This should appear after the decision + its replies
+    { id: "l6", sender: "bot", animated: true, content: <p>It been over 4 month</p> },
+    {
+      id: "l7",
+      sender: "bot",
+      type: "decision",
+      animated: true,
+      content: <p>I'm fuckin' creative is'nt it ?</p>,
+      options: ["Huh!", "I ain't", "never"],
+      answered: false,
+    },
+    { id: "l8", sender: "bot", animated: true, content: <p>I don't care</p> },
+  ]);
 
+  const PRECHAT_COUNT = 4;
+  const BASE_SCROLL_END = 8000;
 
-  // { className: "line-16", content: <p className="line mt-6">I saw something missing.</p> },
-  // { className: "line-17", content: <p className="line mt-1">Too much talent.</p> },
-  // { className: "line-18", content: <p className="line mt-1">Too little recognition.</p> },
-  // { className: "line-19", content: <p className="line mt-1">Everything felt disposable.</p> },
+  /* ================= SCRIPTED FLOWS ================= */
+  const scriptedFlows = {
+    // key matches the decision item's id "l5"
+    l5: {
+      Yeah: [
+        "Of course — I was hoping you'd say that.",
+        "Let me show you what I've been building.",
+      ],
+      "Maybe later": [
+        "No rush at all.",
+        "You can explore whenever you feel ready.",
+      ],
+      "Show me the live link": ["Alright, here you go 👇", "https://your-live-link.com"],
+    },
+    l7: {
+      "Huh!": [
+        "Of course — I was hoping you'd say that.",
+        "Let me show you what I've been building.",
+      ],
+      "I don't know": [
+        "No rush at all.",
+        "You can explore whenever you feel ready.",
+      ],
+      "noo fuck!": ["Alright, here you go 👇", "https://your-live-link.com"],
+    },
+  };
 
-  // { className: "line-20", content: <p className="line mt-6">So I didn’t talk about it.</p> },
-  // { className: "line-21", content: <p className="line mt-1">I built instead.</p> },
-  // { className: "line-22", content: <p className="line mt-1">A platform.</p> },
-  // { className: "line-23", content: <p className="line mt-1">For creatives who feel deeply.</p> },
-
-  // { className: "line-24", content: <p className="line mt-6">Work gets submitted.</p> },
-  // { className: "line-25", content: <p className="line mt-1">Watched.</p> },
-  // { className: "line-26", content: <p className="line mt-1">Felt.</p> },
-  // { className: "line-27", content: <p className="line mt-1">Judged beyond numbers.</p> },
-
-  // { className: "line-28", content: <p className="line mt-1">Creativity.</p> },
-  // { className: "line-29", content: <p className="line mt-1">Aesthetics.</p> },
-  // { className: "line-30", content: <p className="line mt-1">Emotion.</p> },
-
-  // { className: "line-31", content: <p className="line mt-1">The real ones stand out.</p> },
-  // { className: "line-32", content: <p className="line mt-1">Night after night.</p> },
-
-  // { className: "line-33", content: <p className="line mt-6">Great work needs light.</p> },
-  // { className: "line-34", content: <p className="line mt-1">So I built a spotlight.</p> },
-  // { className: "line-35", content: <p className="line mt-1">Clean.</p> },
-  // { className: "line-36", content: <p className="line mt-1">Focused.</p> },
-  // { className: "line-37", content: <p className="line mt-1">Nothing extra.</p> },
-
-  // { className: "line-38", content: <p className="line mt-6">You explore.</p> },
-  // { className: "line-39", content: <p className="line mt-1">You discover.</p> },
-  // { className: "line-40", content: <p className="line mt-1">Awarded work.</p> },
-  // { className: "line-41", content: <p className="line mt-1">Hidden gems.</p> },
-  // { className: "line-42", content: <p className="line mt-1">Creative supplies.</p> },
-  // { className: "line-43", content: <p className="line mt-1">Visual stories.</p> },
-
-  // { className: "line-44", content: <p className="line mt-6">Creatives can own their work.</p> },
-  // { className: "line-45", content: <p className="line mt-1">Sell it.</p> },
-  // { className: "line-46", content: <p className="line mt-1">Document it.</p> },
-  // { className: "line-47", content: <p className="line mt-1">Keep control.</p> },
-
-  // { className: "line-48", content: <p className="line mt-6">Nobody builds alone.</p> },
-  // { className: "line-49", content: <p className="line mt-1">Brands exist here.</p> },
-  // { className: "line-50", content: <p className="line mt-1">Studios too.</p> },
-  // { className: "line-51", content: <p className="line mt-1">Different voices.</p> },
-  // { className: "line-52", content: <p className="line mt-1">One vision.</p> },
-
-  // { className: "line-53", content: <p className="line mt-6">Next.js.</p> },
-  // { className: "line-54", content: <p className="line mt-1">TypeScript.</p> },
-  // { className: "line-55", content: <p className="line mt-1">Redux.</p> },
-  // { className: "line-56", content: <p className="line mt-1">Express.</p> },
-  // { className: "line-57", content: <p className="line mt-1">MongoDB.</p> },
-  // { className: "line-58", content: <p className="line mt-1">AWS S3.</p> },
-  // { className: "line-59", content: <p className="line mt-1">Framer Motion.</p> },
-  // { className: "line-60", content: <p className="line mt-1">Tailwind.</p> },
-  // { className: "line-61", content: <p className="line mt-1">Everything intentional.</p> },
-
-  // { className: "line-62", content: <p className="line mt-6">Motion tells the story.</p> },
-  // { className: "line-63", content: <p className="line mt-1">Silence does the rest.</p> },
-
-  // { className: "line-64", content: <p className="line mt-6">This is pre-beta.</p> },
-  // { className: "line-65", content: <p className="line mt-1">Private.</p> },
-  // { className: "line-66", content: <p className="line mt-1">Still evolving.</p> },
-  // { className: "line-67", content: <p className="line mt-1">But it breathes.</p> },
-
-  // { className: "line-68", content: <p className="line mt-6">I’m getting ready to launch.</p> },
-  // { className: "line-69", content: <p className="line mt-1">But for now…</p> },
-  // { className: "line-70", content: <p className="line mt-1">I’m looking to build.</p> },
-  // { className: "line-71", content: <p className="line mt-1">With the right team.</p> },
-
-  // { className: "line-72", content: <p className="line mt-6">This isn’t just a project.</p> },
-  // { className: "line-73", content: <p className="line mt-1">It’s my mindset.</p> },
-  // { className: "line-74", content: <p className="line mt-1">My taste.</p> },
-  // { className: "line-75", content: <p className="line mt-1">My late nights.</p> },
-
-  // { className: "line-76", content: <p className="line mt-6">Thanks for staying.</p> },
-  // { className: "line-77", content: <p className="line mt-1">— Meezan</p> },
-
-  // { className: "line-78", content: <p className="line mt-6">Some things stay in the shadows.</p> },
-  // { className: "line-79", content: <p className="line mt-1">Pre-beta rules.</p> },
-];
-;
-
+  /* ================= SCROLL TIMELINE (rebuild on timeline change) ================= */
   useEffect(() => {
-    // FIRST RENDER FADE-IN
-    textRefs.current.forEach((el, i) => {
-      gsap.fromTo(
-        el,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.8,
-          delay: i * 0.5,
-          ease: 'power2.out',
-        }
-      );
-    });
+    // build (or rebuild) a fresh GSAP timeline for the current timeline array
+    function buildScrollTimeline() {
+      scrollTl.current?.kill();
+      ScrollTrigger.getAll().forEach((st) => st.kill()); // clear any old triggers
 
-    // 🔹 Hide all scroll-animated lines initially
-    lines.forEach(line => {
-      gsap.set(`.${line.className}`, { opacity: 0 });
-    });
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".fixed-container",
+          start: "top 20%",
+          end: `+=${BASE_SCROLL_END}`, // we'll adjust end below
+          scrub: true,
+          // markers: true,
+        },
+      });
 
-    // SCROLL ANIMATIONS (dynamic)
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: ".intro-line",
-        start: "top 20%",
-        end: "+=2000",
-        scrub: true,
-      }
-    });
+      const total = timeline.length;
+      const extraPerItem = 800;
+      const extraCount = Math.max(0, total - PRECHAT_COUNT);
+      const endValue = BASE_SCROLL_END + extraPerItem * extraCount;
 
-    // 🔥 Loop: reveal each line + move parent up
-    lines.forEach((line, index) => {
-      // Reveal the line
-      tl.fromTo(
-        `.${line.className}`,
-        { opacity: 0, y: 60 + index * 20 },
-        { opacity: 1, y: 0, ease: "power2.out", duration: 1 }
-      );
-
-      // Move container only for lines after the first one
-      if (index >= 1) {
-        tl.to(
-          ".fixed-container",
-          {
-            y: -index * 40, // tweak movement amount
-            ease: "power2.out",
-            duration: 1,
-          },
-          "<" // sync with line reveal
+      // create fromTo animations for every item in timeline (indexed)
+      for (let i = 0; i < total; i++) {
+        tl.fromTo(
+          `.line-${i}`,
+          { opacity: 0, y: 0 },
+          { opacity: 1, y: -20, duration: 1 },
+          i * 0.6
         );
+
+        if (i >= 1) {
+          tl.to(
+            ".fixed-container",
+            { y: -i * 40, duration: 1, ease: "power2.out" },
+            "<"
+          );
+        }
       }
+
+      // adjust scroll end
+      const st = tl.scrollTrigger;
+      if (st) {
+        st.vars.end = `+=${endValue}`;
+        st.end = st.vars.end;
+      }
+
+      scrollTl.current = tl;
+      ScrollTrigger.refresh();
+    }
+
+    buildScrollTimeline();
+
+    return () => {
+      scrollTl.current?.kill();
+    };
+    // Rebuild whenever timeline changes so .line-{index} matches rendered order
+  }, [timeline]);
+
+  /* ================= FALLBACK APPEAR ================= */
+  useEffect(() => {
+    timeline.forEach((item) => {
+      if (item.animated) return;
+      const el = msgRefs.current[item.id];
+      if (!el || el.dataset.animated) return;
+
+      el.dataset.animated = "true";
+
+      gsap.fromTo(el, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45 });
     });
-  }, []);
+  }, [timeline.length, isTyping]);
 
-  return (
-    <div className="h-[2000vh] w-screen">
-      {/* Wrapper handles centering */}
-      <div className="fixed top-[30vh] translate-y-[20vh]  left-10">
-        <div style={{ y: 0 }} className="fixed-container">
-          {/* FIRST LINE */}
-          {/* <div>
-            <div className='flex gap-2 intro-line'>
-              {introduction.map((el, i) => (
-                <h2
-                  key={i}
-                  ref={(elRef) => (textRefs.current[i] = elRef)}
-                >
-                  {el}
-                </h2>
-              ))}
-            </div>
-            <h3>a platform for degital creatives</h3>
-          </div> */}
+  /* ================= DECISION HANDLER ================= */
+  function handleDecision(id, choice) {
+    // insert user reply and scripted bot replies right after the decision item (preserving subsequent timeline items)
+    setTimeline((prev) => {
+      const idx = prev.findIndex((it) => it.id === id);
+      if (idx === -1) return prev;
 
-          {/* AUTO-GENERATED LINES */}
-          <div className='flex  gap-2'>
+      // if already answered, ignore
+      if (prev[idx].answered) return prev;
 
-          <img className='h-7 w-7 rounded-full object-cover' src={img3}/>
-          <div>
+      // build user message
+      const userMsg = {
+        id: `u-${Date.now()}`,
+        sender: "user",
+        animated: false,
+        content: <p>{choice}</p>,
+      };
 
-{lines.map((item, i) => {
-  const isEven = i % 2 === 0;
-  const isParagraph = item.content.type === "p";
-  
-  const bubbleRadius = isEven
-  ? "18px 18px 17px 18px"
-  : "18px 18px 18px 4px";
-  
-  return (
-    <div
-    key={i}
-    className={`
-      ${item.className}
-      w-fit
-      mb-1
-      ${isParagraph ? "bg-black text-white px-3 py-1.5" : ""}
-      `}
-      style={isParagraph ? { borderRadius: bubbleRadius } : {}}
+      const scripted = (scriptedFlows[id] && scriptedFlows[id][choice]) || [];
+      const botReplies = scripted.map((text, i) => ({
+        id: `b-${Date.now()}-${i}`,
+        sender: "bot",
+        animated: false,
+        content: <p className="mt-1">{text}</p>,
+      }));
+
+      // produce new decision item with answered flag true (so buttons hide)
+      const decisionUpdated = { ...prev[idx], answered: true };
+
+      // assemble new timeline:
+      // - items before decision (0..idx-1)
+      // - updated decision item
+      // - user message
+      // - bot replies (scripted)
+      // - remaining original items after decision (idx+1 .. end)
+      const before = prev.slice(0, idx);
+      const after = prev.slice(idx + 1);
+
+      return [...before, decisionUpdated, userMsg, ...botReplies, ...after];
+    });
+  }
+
+  /* ================= HELPER: control rendering after a decision ================= */
+function shouldRenderItem(item, index) {
+  // Find the closest decision BEFORE this item
+  for (let i = index - 1; i >= 0; i--) {
+    const prev = timeline[i];
+    if (prev.type === "decision") {
+      // if that decision is not answered → block render
+      return prev.answered;
+    }
+  }
+  return true; // no decision before → render
+}
+  /* ================= RENDER ================= */
+  function renderMessage(item, index) {
+    const isUser = item.sender === "user";
+    const isParagraph =
+      React.isValidElement(item.content) && item.content.type === "p";
+
+    const bubbleRadius = isUser ? "18px 18px 4px 18px" : "18px 18px 18px 4px";
+
+    const bgClass = isUser ? "bg-[#dadada] text-black" : isParagraph ? "bg-black text-white" : "";
+
+    return (
+      <div
+        key={item.id}
+        ref={(el) => (msgRefs.current[item.id] = el)}
+        className={`line-${index} mb-1 w-fit max-w-[40vw] ${isUser ? "ml-auto" : ""}`}
       >
-      {item.content}
-    </div>
-  );
-})}
-</div>
-</div>
-
-
+        <div className={`${bgClass} px-3 py-1.5`} style={{ borderRadius: bubbleRadius }}>
+          {item.content}
         </div>
+
+        {item.type === "decision" && (
+          <div className="mt-2 flex fixed  bottom gap-2 w-screen overflow-x-scroll">
+            {/* show buttons only if not answered */}
+            {!item.answered &&
+              item.options.map((opt) => (
+                <button
+                  key={opt}
+                  onClick={() => handleDecision(item.id, opt)}
+                  className="px-2 py-1 rounded-full  h-fit  bg-[#dadada] text-sm"
+                >
+                <p>
+                  {opt}
+                  
+                  </p>  
+                </button>
+              ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  /* ================= SEND (LLM) ================= */
+  async function handleSend(e) {
+    e.preventDefault();
+    const text = input.trim();
+    if (!text) return;
+
+    setTimeline((prev) => [
+      ...prev,
+      { id: `u-${Date.now()}`, sender: "user", animated: false, content: <p>{text}</p> },
+    ]);
+
+    setInput("");
+    setIsTyping(true);
+
+    try {
+      const reply = await sendMessageToBot(text);
+      setTimeline((prev) => [
+        ...prev,
+        { id: `b-${Date.now()}`, sender: "bot", animated: false, content: <p>{reply}</p> },
+      ]);
+    } finally {
+      setIsTyping(false);
+    }
+  }
+
+  /* ================= JSX ================= */
+  return (
+    <div className="h-[3000vh] w-screen">
+      <div className="fixed w-full top-[30vh]">
+        <div className="fixed-container flex px-4">
+          <div className="flex w-screen gap-1">
+            <img className="h-7 w-7 rounded-full" src={img3} alt="avatar" />
+
+            <div className="w-[85vw] mt-2">
+              {timeline.map((item, i) =>
+                shouldRenderItem(item, i) ? renderMessage(item, i) : null
+              )}
+              {isTyping && (
+                <p className="bg-black text-white px-3 py-1.5 rounded-full">typing…</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="fixed -translate-x-1/2 left-1/2 bottom-20">
+        <form onSubmit={handleSend} className="flex gap-2">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="px-2 py-1 border rounded-full"
+          />
+          <button className="h-8 w-8 rounded-full bg-black text-white flex items-center justify-center">
+            <IoIosSend size={18} />
+          </button>
+        </form>
       </div>
     </div>
   );
