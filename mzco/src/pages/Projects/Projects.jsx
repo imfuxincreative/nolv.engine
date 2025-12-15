@@ -12,37 +12,135 @@ function Projects() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
-  const [timeline, setTimeline] = useState([
-{ id: "l1", sender: "bot", animated: true, static: true, content: <p>Hello</p> },
+const [timeline, setTimeline] = useState([
+  // INTRO
+  { id: "l1", sender: "bot", animated: true, static: true, content: <p>Hey.</p> },
+  { id: "l2", sender: "bot", animated: true, content: <p>Yeah.</p> },
+  { id: "l3", sender: "bot", animated: true, content: <p>You’re here.</p> },
+  { id: "l4", sender: "bot", animated: true, content: <p>Take your time.</p> },
 
-    { id: "l2", sender: "bot", animated: true, content: <p>yeah!</p> },
-    { id: "l3", sender: "bot", animated: true, content: <p>You made it</p> },
-    { id: "l4", sender: "bot", animated: true, content: <p>Stay for a bit</p> },
+  { id: "l5", sender: "bot", animated: true, content: <p>This is a project I’ve been building quietly.</p> },
+  {
+    id: "l6",
+    sender: "bot",
+    animated: true,
+    content: <p>For creatives who care about their work<br />more than the noise around it.</p>,
+  },
 
-    // Decision is now part of the timeline (id matches scriptedFlows below)
-    {
-      id: "l5",
-      sender: "bot",
-      type: "decision",
-      animated: true,
-      content: <p>Will I show you ?</p>,
-      options: ["Nice!", "Hello", "cool"],
-      answered: false,
-    },
+  {
+    id: "l7",
+    sender: "bot",
+    animated: true,
+    content: (
+      <p>
+        Designers.<br />
+        Photographers.<br />
+        Visual creators.
+      </p>
+    ),
+  },
 
-    // This should appear after the decision + its replies
-    { id: "l6", sender: "bot", animated: true, content: <p>It been over 4 month</p> },
-    {
-      id: "l7",
-      sender: "bot",
-      type: "decision",
-      animated: true,
-      content: <p>I'm fuckin' creative is'nt it ?</p>,
-      options: ["Huh!", "I ain't", "never"],
-      answered: false,
-    },
-    { id: "l8", sender: "bot", animated: true, content: <p>I don't care</p> },
-  ]);
+  {
+    id: "l8",
+    sender: "bot",
+    animated: true,
+    content: (
+      <p>
+        People who want their work<br />
+        to be seen properly.
+      </p>
+    ),
+  },
+
+  { id: "l9", sender: "bot", animated: true, content: <p>Here, posts aren’t rushed past.</p> },
+  { id: "l10", sender: "bot", animated: true, content: <p>They’re evaluated.</p> },
+
+  {
+    id: "l11",
+    sender: "bot",
+    animated: true,
+    content: (
+      <p>
+        Creativity.<br />
+        Aesthetics.<br />
+        Emotion.
+      </p>
+    ),
+  },
+
+  { id: "l12", sender: "bot", animated: true, content: <p>Some work stands out.</p> },
+  { id: "l13", sender: "bot", animated: true, content: <p>It gets recognized.</p> },
+
+  {
+    id: "l14",
+    sender: "bot",
+    animated: true,
+    content: (
+      <p>
+        Day.<br />
+        Week.<br />
+        Month.
+      </p>
+    ),
+  },
+
+  { id: "l15", sender: "bot", animated: true, content: <p>Simple.</p> },
+
+  // IMAGE – Awarded post
+  {
+    id: "img-1",
+    sender: "bot",
+    animated: true,
+    content: (
+     <img src={img3} className="rounded-xl w-60 h-40 object-cover"/>
+    ),
+  },
+
+  { id: "l16", sender: "bot", animated: true, content: <p>Awarded work doesn’t disappear.</p> },
+  { id: "l17", sender: "bot", animated: true, content: <p>It stays visible.</p> },
+  { id: "l18", sender: "bot", animated: true, content: <p>In one focused space.</p> },
+
+  // DECISION 1
+  {
+    id: "d1",
+    sender: "bot",
+    type: "decision",
+    animated: true,
+    content: <p>Want me to continue?</p>,
+    options: ["Yeah, go on.", "What else?", "Later maybe."],
+    answered: false,
+  },
+
+  // DECISION 2
+  {
+    id: "d2",
+    sender: "bot",
+    type: "decision",
+    animated: true,
+    content: <p>Should I show you how profiles work?</p>,
+    options: ["Show me.", "Sounds good.", "Skip."],
+    answered: false,
+  },
+
+  // DECISION 3
+  {
+    id: "d3",
+    sender: "bot",
+    type: "decision",
+    animated: true,
+    content: <p>Want to see where this is heading?</p>,
+    options: ["Yeah.", "I’m interested.", "Just browsing."],
+    answered: false,
+  },
+
+  // OUTRO
+  { id: "l19", sender: "bot", animated: true, content: <p>If you’re still here…</p> },
+  { id: "l20", sender: "bot", animated: true, content: <p>Thanks for looking.</p> },
+  { id: "l21", sender: "bot", animated: true, content: <p>Feel free to scroll back.</p> },
+  { id: "l22", sender: "bot", animated: true, content: <p>Or stay a bit longer.</p> },
+]);
+
+
 
   const PRECHAT_COUNT = 4;
   const BASE_SCROLL_END = 8000;
@@ -53,31 +151,96 @@ useEffect(() => {
   }
 }, []);
   /* ================= SCRIPTED FLOWS ================= */
-  const scriptedFlows = {
-    // key matches the decision item's id "l5"
-    l5: {
-      Yeah: [
-        "Of course — I was hoping you'd say that.",
-        "Let me show you what I've been building.",
-      ],
-      "Maybe later": [
-        "No rush at all.",
-        "You can explore whenever you feel ready.",
-      ],
-      "Show me the live link": ["Alright, here you go 👇", "https://your-live-link.com"],
-    },
-    l7: {
-      "huh!": [
-        "Of course — I was hoping you'd say that.",
-        "Let me show you what I've been building.",
-      ],
-      "I don't know": [
-        "No rush at all.",
-        "You can explore whenever you feel ready.",
-      ],
-      "noo fuck!": ["Alright, here you go 👇", "https://your-live-link.com"],
-    },
-  };
+const scriptedFlows = {
+  d1: {
+    "Yeah, go on.": [
+      "Creators here can also sell.",
+      "Digital designs.",
+      "Visual assets.",
+      "Clean setup.",
+      "No unnecessary layers.",
+      "🖼️ Digital product / asset preview",
+      "Brands don’t overpower creators.",
+      "They collaborate instead.",
+    ],
+
+    "What else?": [
+      "People don’t always work solo.",
+      "Studios.",
+      "Teams.",
+      "Groups.",
+      "Built around shared vision.",
+      "🖼️ Group / studio UI",
+    ],
+
+    "Later maybe.": [
+      "That’s fine.",
+      "You can explore whenever you want.",
+      "Discovery here is intentional.",
+      "Not endless scrolling.",
+      "There’s a space for awarded work.",
+      "A space to explore everything.",
+      "And a space for digital supplies.",
+      "🖼️ Discovery / supplies page",
+      "You can save things.",
+      "Come back to them later.",
+      "Good work deserves that.",
+    ],
+  },
+
+  d2: {
+    "Show me.": [
+      "Profiles aren’t resumes.",
+      "They show direction.",
+      "What you create.",
+      "What you care about.",
+      "🖼️ Profile page UI",
+    ],
+
+    "Sounds good.": [
+      "They’re simple.",
+      "Focused.",
+      "Built around work — not numbers.",
+    ],
+
+    "Skip.": [
+      "No problem.",
+      "Let’s move on.",
+      "This project took time.",
+      "Planning.",
+      "Designing.",
+      "Building.",
+      "Late nights included.",
+      "🎵 After Hours / late-night track",
+      "It’s not finished.",
+      "It’s still evolving.",
+    ],
+  },
+
+  d3: {
+    "Yeah.": [
+      "This is planned as a platform.",
+      "Not just a concept.",
+      "A beta comes first.",
+      "🔗 Coming soon / private link",
+    ],
+
+    "I’m interested.": [
+      "That’s good.",
+      "Early interest matters.",
+    ],
+
+    "Just browsing.": [
+      "That’s okay too.",
+      "No pressure here.",
+      "For now, this lives in my portfolio.",
+      "As proof.",
+      "Of how I think.",
+      "And how I build.",
+      "🎬 UI motion / Framer Motion clip",
+    ],
+  },
+};
 
   /* ================= SCROLL TIMELINE (rebuild on timeline change) ================= */
   useEffect(() => {
@@ -89,7 +252,7 @@ useEffect(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: ".fixed-container",
-          start: "top 20%",
+          start: "top 50%",
           end: `+=${BASE_SCROLL_END}`, // we'll adjust end below
           scrub: true,
           // markers: true,
@@ -99,7 +262,7 @@ useEffect(() => {
       const total = timeline.length;
       const extraPerItem = 800;
       const extraCount = Math.max(0, total - PRECHAT_COUNT);
-      const endValue = BASE_SCROLL_END + extraPerItem * extraCount;
+      const endValue = BASE_SCROLL_END + extraPerItem * extraCount 
 
 gsap.set(".scroll-spacer", {
   height: endValue + window.innerHeight,
@@ -120,7 +283,7 @@ gsap.set(".scroll-spacer", {
   if (i >= 1) {
     tl.to(
       ".fixed-container",
-      { y: -i * 40, duration: 1, ease: "power2.out" },
+      { y: -i * 40 },
       "<"
     );
   }
@@ -146,18 +309,8 @@ gsap.set(".scroll-spacer", {
   }, [timeline]);
 
   /* ================= FALLBACK APPEAR ================= */
-  useEffect(() => {
-    timeline.forEach((item) => {
-      if (item.animated) return;
-      const el = msgRefs.current[item.id];
-      if (!el || el.dataset.animated) return;
 
-      el.dataset.animated = "true";
-
-      gsap.fromTo(el, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.45 });
-    });
-  }, [timeline.length, isTyping]);
-
+  
   /* ================= DECISION HANDLER ================= */
   function handleDecision(id, choice) {
     // insert user reply and scripted bot replies right after the decision item (preserving subsequent timeline items)
@@ -181,7 +334,7 @@ gsap.set(".scroll-spacer", {
         id: `b-${Date.now()}-${i}`,
         sender: "bot",
         animated: false,
-        content: <p className="mt-1">{text}</p>,
+        content: <p className="mb-1">{text}</p>,
       }));
 
       // produce new decision item with answered flag true (so buttons hide)
