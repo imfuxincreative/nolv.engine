@@ -14,46 +14,67 @@ function Projects() {
 
 const [timeline, setTimeline] = useState([
   // INTRO
-  { id: "l1", sender: "bot", animated: true, static: true, content: <p>Hey.</p> },
-  { id: "l2", sender: "bot", animated: true, content: <p>Yeah.</p> },
-  { id: "l3", sender: "bot", animated: true, content: <p>You’re here.</p> },
-  { id: "l4", sender: "bot", animated: true, content: <p>Take your time.</p> },
+  { id: "l1", sender: "bot", animated: true, static: true, content: <p>Hii</p> },
+  // { id: "l2", sender: "bot", animated: true, content: <p>Yeah</p> },
+  { id: "l3", sender: "bot", animated: true, content: <p>you’re here</p> },
+  { id: "l4", sender: "bot", animated: true, content: <p>Take your time</p> },
 
-  { id: "l5", sender: "bot", animated: true, content: <p>This is a project I’ve been building quietly.</p> },
+  { id: "l5", sender: "bot", animated: true, content: <p>This is a project I’ve been building quietly</p> },
   {
     id: "l6",
     sender: "bot",
     animated: true,
-    content: <p>For creatives who care about their work<br />more than the noise around it.</p>,
+    content: <p>For creatives who care about their crafts more than the noise around it</p>,
   },
 
   {
-    id: "l7",
+    id: "sl7",
     sender: "bot",
     animated: true,
     content: (
       <p>
-        Designers.<br />
-        Photographers.<br />
-        Visual creators.
+        Designers
       </p>
     ),
   },
 
   {
-    id: "l8",
+    id: "dl7",
     sender: "bot",
     animated: true,
     content: (
       <p>
-        People who want their work<br />
-        to be seen properly.
+       
+        Photographers<br />
+  
+      </p>
+    ),
+  },
+  {
+    id: "el7",
+    sender: "bot",
+    animated: true,
+    content: (
+      <p>
+      
+        Visual creators
+      </p>
+    ),
+  },
+  {
+    id: "fl8",
+    sender: "bot",
+    animated: true,
+    content: (
+      <p>
+        People who want their crafts<br />
+        to be seen properly
       </p>
     ),
   },
 
-  { id: "l9", sender: "bot", animated: true, content: <p>Here, posts aren’t rushed past.</p> },
-  { id: "l10", sender: "bot", animated: true, content: <p>They’re evaluated.</p> },
+  { id: "l9", sender: "bot", animated: true, content: <p>Here, posts aren’t rushed past</p> },
+  { id: "l10", sender: "bot", animated: true, content: <p>They’re evaluated</p> },
 
   {
     id: "l11",
@@ -61,15 +82,35 @@ const [timeline, setTimeline] = useState([
     animated: true,
     content: (
       <p>
-        Creativity.<br />
-        Aesthetics.<br />
-        Emotion.
+        Creativity<br />
+      
       </p>
     ),
   },
-
-  { id: "l12", sender: "bot", animated: true, content: <p>Some work stands out.</p> },
-  { id: "l13", sender: "bot", animated: true, content: <p>It gets recognized.</p> },
+  {
+    id: "m11",
+    sender: "bot",
+    animated: true,
+    content: (
+      <p>
+  
+        Aesthetics
+      </p>
+    ),
+  },
+    {
+    id: "n11",
+    sender: "bot",
+    animated: true,
+    content: (
+      <p>
+   
+        Emotion
+      </p>
+    ),
+  },
+  { id: "l12", sender: "bot", animated: true, content: <p>Some visuals / designs / Fahion stands out</p> },
+  { id: "l13", sender: "bot", animated: true, content: <p>It gets recognized</p> },
 
   {
     id: "l14",
@@ -77,14 +118,36 @@ const [timeline, setTimeline] = useState([
     animated: true,
     content: (
       <p>
-        Day.<br />
-        Week.<br />
-        Month.
+        Day
+      
+    
+      </p>
+    ),
+  },
+  {
+    id: "t14",
+    sender: "bot",
+    animated: true,
+    content: (
+      <p>
+     
+        7 Days hits
       </p>
     ),
   },
 
-  { id: "l15", sender: "bot", animated: true, content: <p>Simple.</p> },
+   {
+    id: "u14",
+    sender: "bot",
+    animated: true,
+    content: (
+      <p>
+     
+        Month
+      </p>
+    ),
+  },
+  { id: "l15", sender: "bot", animated: true, content: <p>Simple</p> },
 
   // IMAGE – Awarded post
   {
@@ -96,9 +159,9 @@ const [timeline, setTimeline] = useState([
     ),
   },
 
-  { id: "l16", sender: "bot", animated: true, content: <p>Awarded work doesn’t disappear.</p> },
-  { id: "l17", sender: "bot", animated: true, content: <p>It stays visible.</p> },
-  { id: "l18", sender: "bot", animated: true, content: <p>In one focused space.</p> },
+  { id: "l16", sender: "bot", animated: true, content: <p>Awarded visual doesn’t disappear</p> },
+  { id: "l17", sender: "bot", animated: true, content: <p>It stays visible</p> },
+  { id: "l18", sender: "bot", animated: true, content: <p>In one focused space</p> },
 
   // DECISION 1
   {
@@ -107,7 +170,7 @@ const [timeline, setTimeline] = useState([
     type: "decision",
     animated: true,
     content: <p>Want me to continue?</p>,
-    options: ["Yeah, go on.", "What else?", "Later maybe."],
+    options: ["Yeah, go on", "What else?", "Later maybe"],
     answered: false,
   },
 
@@ -118,7 +181,7 @@ const [timeline, setTimeline] = useState([
     type: "decision",
     animated: true,
     content: <p>Should I show you how profiles work?</p>,
-    options: ["Show me.", "Sounds good.", "Skip."],
+    options: ["Show me", "Sounds good", "Skip"],
     answered: false,
   },
 
@@ -134,7 +197,7 @@ const [timeline, setTimeline] = useState([
   },
 
   // OUTRO
-  { id: "l19", sender: "bot", animated: true, content: <p>If you’re still here…</p> },
+  { id: "l19", sender: "bot", animated: true, content: <p>If you’re still here</p> },
   { id: "l20", sender: "bot", animated: true, content: <p>Thanks for looking.</p> },
   { id: "l21", sender: "bot", animated: true, content: <p>Feel free to scroll back.</p> },
   { id: "l22", sender: "bot", animated: true, content: <p>Or stay a bit longer.</p> },
@@ -154,94 +217,96 @@ useEffect(() => {
 const scriptedFlows = {
   d1: {
     "Yeah, go on.": [
-      "Creators here can also sell.",
-      "Digital designs.",
-      "Visual assets.",
-      "Clean setup.",
-      "No unnecessary layers.",
+      "Creators here can also sell",
+      "Digital designs",
+      "Visual assets",
+      "Clean setup",
+      "No unnecessary layers",
       "🖼️ Digital product / asset preview",
-      "Brands don’t overpower creators.",
-      "They collaborate instead.",
+      "Brands don’t overpower creators",
+      "They collaborate instead",
     ],
 
     "What else?": [
-      "People don’t always work solo.",
+      "People don’t always work solo",
       "Studios.",
       "Teams.",
       "Groups.",
-      "Built around shared vision.",
+      "Built around shared vision",
       "🖼️ Group / studio UI",
     ],
 
-    "Later maybe.": [
-      "That’s fine.",
-      "You can explore whenever you want.",
-      "Discovery here is intentional.",
-      "Not endless scrolling.",
-      "There’s a space for awarded work.",
-      "A space to explore everything.",
-      "And a space for digital supplies.",
+    "Later maybe": [
+      "That’s fine",
+      "You can explore whenever you want",
+      "Discovery here is intentional",
+      "Not endless scrolling",
+      "There’s a space for awarded work",
+      "A space to explore everything",
+      "And a space for digital supplies",
       "🖼️ Discovery / supplies page",
-      "You can save things.",
-      "Come back to them later.",
-      "Good work deserves that.",
+      "You can save things",
+      "Come back to them later",
+      "Good work deserves that",
     ],
   },
 
   d2: {
-    "Show me.": [
-      "Profiles aren’t resumes.",
-      "They show direction.",
-      "What you create.",
-      "What you care about.",
+    "Show me": [
+      "Profiles aren’t resumes",
+      "They show direction",
+      "What you create",
+      "What you care about",
       "🖼️ Profile page UI",
     ],
 
-    "Sounds good.": [
-      "They’re simple.",
-      "Focused.",
-      "Built around work — not numbers.",
+    "Sounds good": [
+      "They’re simple",
+      "Focused",
+      "Built around work — not numbers",
     ],
 
-    "Skip.": [
-      "No problem.",
-      "Let’s move on.",
-      "This project took time.",
-      "Planning.",
-      "Designing.",
-      "Building.",
-      "Late nights included.",
+    "Skip": [
+      "No problem",
+      "Let’s move on",
+      "This project took time",
+      "Planning",
+      "Designing",
+      "Building",
+      "Late nights included",
       "🎵 After Hours / late-night track",
-      "It’s not finished.",
-      "It’s still evolving.",
+      "It’s not finished",
+      "It’s still evolving",
     ],
   },
 
   d3: {
     "Yeah.": [
-      "This is planned as a platform.",
-      "Not just a concept.",
-      "A beta comes first.",
+      "This is planned as a platform",
+      "Not just a concept",
+      "A beta comes first",
       "🔗 Coming soon / private link",
     ],
 
-    "I’m interested.": [
-      "That’s good.",
-      "Early interest matters.",
+    "I’m interested": [
+      "That’s good",
+      "Early interest matters",
     ],
 
     "Just browsing.": [
-      "That’s okay too.",
-      "No pressure here.",
-      "For now, this lives in my portfolio.",
-      "As proof.",
-      "Of how I think.",
-      "And how I build.",
+      "That’s okay too",
+      "No pressure her.",
+      "For now, this lives in my portfolio",
+      "As proof",
+      "Of how I think",
+      "And how I build",
       "🎬 UI motion / Framer Motion clip",
     ],
   },
 };
-
+const visibleItems = timeline.filter((item, index) =>
+  shouldRenderItem(item, index)
+);
   /* ================= SCROLL TIMELINE (rebuild on timeline change) ================= */
   useEffect(() => {
     // build (or rebuild) a fresh GSAP timeline for the current timeline array
@@ -251,22 +316,31 @@ const scriptedFlows = {
 
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: ".fixed-container",
-          start: "top 50%",
+         trigger: ".scroll-spacer",
+          start: "top 60%",
           end: `+=${BASE_SCROLL_END}`, // we'll adjust end below
           scrub: true,
-          // markers: true,
+          markers: true,
         },
       });
 
-      const total = timeline.length;
-      const extraPerItem = 800;
-      const extraCount = Math.max(0, total - PRECHAT_COUNT);
-      const endValue = BASE_SCROLL_END + extraPerItem * extraCount 
+const total = visibleItems.length;
+
+// how much each message moves container
+const LINE_SHIFT = 40;
+
+// how much breathing room you want at end
+const END_PADDING = window.innerHeight * 20;
+
+// total vertical movement needed
+const contentShift = Math.max(0, total - 1) * LINE_SHIFT;
+
+// final scroll length
+const endValue = contentShift + END_PADDING;
 
 gsap.set(".scroll-spacer", {
-  height: endValue + window.innerHeight,
-});   // create fromTo animations for every item in timeline (indexed)
+  height: endValue,
+});
    for (let i = 0; i < total; i++) {
   const item = timeline[i];
 
@@ -310,7 +384,17 @@ gsap.set(".scroll-spacer", {
 
   /* ================= FALLBACK APPEAR ================= */
 
-  
+  // useEffect(() => {
+  //   timeline.forEach((item) => {
+  //     if (item.animated) return;
+  //     const el = msgRefs.current[item.id];
+  //     if (!el || el.dataset.animated) return;
+
+  //     el.dataset.animated = "true";
+
+  //     gsap.fromTo(el, { opacity: 0, y: 12 }, { opacity: 1, y: -20, duration: 0.45 , stagger : 0.7});
+  //   });
+  // }, [timeline.length, isTyping]);  
   /* ================= DECISION HANDLER ================= */
   function handleDecision(id, choice) {
     // insert user reply and scripted bot replies right after the decision item (preserving subsequent timeline items)
@@ -379,7 +463,7 @@ function shouldRenderItem(item, index) {
       <div
         key={item.id}
         ref={(el) => (msgRefs.current[item.id] = el)}
-        className={`line-${index} mb-1 w-fit max-w-[40vw] ${isUser ? "ml-auto" : ""}`}
+        className={`line-${index} mb-1 w-fit max-w-[50vw] ${isUser ? "ml-auto" : ""}`}
       >
         <div className={`${bgClass} px-3 py-1.5`} style={{ borderRadius: bubbleRadius }}>
           {item.content}
