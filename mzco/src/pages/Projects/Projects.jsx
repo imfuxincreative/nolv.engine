@@ -413,10 +413,10 @@ const scriptedFlows = {
         const tl = gsap.timeline({
           scrollTrigger: {
           trigger: ".scroll-spacer",
-            start: "top 100%",
+         start: "top bottom",
             end: `+=${BASE_SCROLL_END}`, // we'll adjust end below
             scrub: true,
-            markers: true,
+            // markers: true,
           },
         });
 
