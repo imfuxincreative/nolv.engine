@@ -277,16 +277,20 @@ const lastCountRef = useRef(0);
 //     ],
 //   },
 // };
-
 const scriptedFlows = {
   d1: {
     "go on": [
       "Creators here can also sell",
       "Digital designs",
       "Visual assets",
-      "Clean setup",
-      "No unnecessary layers",
-      "🖼️ Digital product / asset preview",
+      {
+        sender: "bot",
+        animated: true,
+        content: (
+               <img src={img3} className="rounded-xl w-60 h-40 object-cover"/>
+
+        ),
+      },
       "Brands don’t overpower creators",
       "They collaborate instead",
     ],
@@ -296,32 +300,46 @@ const scriptedFlows = {
       "Studios",
       "Teams",
       "Groups",
-      "Built around shared vision",
-      "🖼️ Group / studio UI",
+      {
+        sender: "bot",
+        animated: true,
+        content: (
+          <div >
+
+               <img src='/discover.png' className="rounded-[6px] w-100 h-30 object-cover border border-[#dadada]"/>
+
+          </div>
+        ),
+      },
     ],
 
     "Later maybe": [
       "That’s fine",
       "You can explore whenever you want",
-      "Discovery here is intentional",
-      "Not endless scrolling",
-      "There’s a space for awarded work",
-      "A space to explore everything",
-      "And a space for digital supplies",
-      "🖼️ Discovery / supplies page",
-      "You can save things",
-      "Come back to them later",
-      "Good work deserves that",
+      {
+        sender: "bot",
+        animated: true,
+        content: (
+          <div className="rounded-xl w-60 h-32 bg-neutral-800 flex items-center justify-center text-white text-sm">
+            Discovery / supplies page
+          </div>
+        ),
+      },
     ],
   },
 
   d2: {
     "Show me": [
       "Profiles aren’t resumes",
-      "They show direction",
-      "What you create",
-      "What you care about",
-      "🖼️ Profile page UI",
+      {
+        sender: "bot",
+        animated: true,
+        content: (
+          <div className="rounded-xl w-60 h-32 bg-neutral-800 flex items-center justify-center text-white text-sm">
+            Profile page UI
+          </div>
+        ),
+      },
     ],
 
     "Sounds good": [
@@ -333,23 +351,30 @@ const scriptedFlows = {
     "nope": [
       "No problem",
       "Let’s move on",
-      "This project took time",
-      "Planning",
-      "Designing",
-      "Building",
-      "Late nights included",
-      "🎵 After Hours / late-night track",
-      "It’s not finished",
-      "It’s still evolving",
+      {
+        sender: "bot",
+        animated: true,
+        content: (
+          <div className="rounded-xl w-60 h-32 bg-neutral-800 flex items-center justify-center text-white text-sm">
+            After Hours / late-night track
+          </div>
+        ),
+      },
     ],
   },
 
   d3: {
     "fine": [
       "This is planned as a platform",
-      "Not just a concept",
-      "A beta comes first",
-      "🔗 Coming soon / private link",
+      {
+        sender: "bot",
+        animated: true,
+        content: (
+          <div className="rounded-xl w-60 h-32 bg-neutral-800 flex items-center justify-center text-white text-sm">
+            Coming soon / private link
+          </div>
+        ),
+      },
     ],
 
     "I’m interested": [
@@ -359,15 +384,21 @@ const scriptedFlows = {
 
     "Just browsing": [
       "That’s okay too",
-      "No pressure her.",
       "For now, this lives in my portfolio",
-      "As proof",
-      "Of how I think",
-      "And how I build",
-      "🎬 UI motion / Framer Motion clip",
+      {
+        sender: "bot",
+        animated: true,
+        content: (
+          <div className="rounded-xl w-60 h-32 bg-neutral-800 flex items-center justify-center text-white text-sm">
+            UI motion / Framer Motion clip
+          </div>
+        ),
+      },
     ],
   },
 };
+
+
 
   const visibleItems = timeline.filter((item, index) =>
     shouldRenderItem(item, index)
@@ -382,10 +413,10 @@ const scriptedFlows = {
         const tl = gsap.timeline({
           scrollTrigger: {
           trigger: ".scroll-spacer",
-            start: "top 80%",
+            start: "top 100%",
             end: `+=${BASE_SCROLL_END}`, // we'll adjust end below
             scrub: true,
-            // markers: true,
+            markers: true,
           },
         });
 
@@ -446,14 +477,22 @@ const scriptedFlows = {
       };
       // Rebuild whenever timeline changes so .line-{index} matches rendered order
     }, [visibleItems.length]);
+
+const hasMountedRef = useRef(false);
+
 useEffect(() => {
   const currentCount = visibleItems.length;
 
+  // ⛔ skip first render completely
+  if (!hasMountedRef.current) {
+    hasMountedRef.current = true;
+    lastCountRef.current = currentCount;
+    return;
+  }
+
   if (currentCount > lastCountRef.current) {
     const delta = currentCount - lastCountRef.current;
-
-    // move more than 40 to avoid opacity stacking
-    const SHIFT_PER_LINE = 40; // 👈 increase spacing
+    const SHIFT_PER_LINE = 40;
     const moveBy = delta * SHIFT_PER_LINE;
 
     gsap.to(".fixed-container", {
@@ -633,24 +672,34 @@ async function handleDecision(id, choice) {
     ];
   });
 
-  // 2️⃣ SCRIPTED REPLIES (UNCHANGED)
+  // 2️⃣ SCRIPTED REPLIES (NOW SUPPORTS ANY ITEM)
   for (let i = 0; i < scripted.length; i++) {
-    const text = scripted[i];
+    const entry = scripted[i];
+    const isString = typeof entry === "string";
 
-    await sleep(getThinkingDelay());
+    const text =
+      isString
+        ? entry
+        : typeof entry?.content?.props?.children === "string"
+        ? entry.content.props.children
+        : "";
 
-    setIsTyping(true);
-    await sleep(getTypingDuration(text));
+    if (text) {
+      await sleep(getThinkingDelay());
 
-    const midPause = getMidPause(text);
-    if (midPause) {
-      setIsTyping(false);
-      await sleep(midPause);
       setIsTyping(true);
-      await sleep(120 + Math.random() * 180);
-    }
+      await sleep(getTypingDuration(text));
 
-    setIsTyping(false);
+      const midPause = getMidPause(text);
+      if (midPause) {
+        setIsTyping(false);
+        await sleep(midPause);
+        setIsTyping(true);
+        await sleep(120 + Math.random() * 180);
+      }
+
+      setIsTyping(false);
+    }
 
     setTimeline((prev) => [
       ...prev,
@@ -659,55 +708,43 @@ async function handleDecision(id, choice) {
         sender: "bot",
         animated: true,
         justAdded: true,
-        content: <p className="">{text}</p>,
+        ...(isString ? { content: <p>{entry}</p> } : entry),
       },
     ]);
   }
 
-  // 3️⃣ CONTINUATION (ONLY FIX IS HERE)
+  // 3️⃣ CONTINUATION (UNCHANGED)
   for (let i = 0; i < continuation.length; i++) {
     const item = continuation[i];
 
     if (item.type === "decision") {
       setIsTyping(false);
-
-      // ✅ 🔥 KEY FIX — break React batching
       await sleep(150);
 
       const rest = continuation.slice(i + 1);
 
       setTimeline((prev) => [
         ...prev,
-        {
-          ...item,
-          animated: true,
-          justAdded: true,
-        },
+        { ...item, animated: true, justAdded: true },
         ...rest.map((m) => ({ ...m, animated: false })),
       ]);
 
       break;
     }
 
-    // normal message (UNCHANGED)
     const text =
       typeof item.content?.props?.children === "string"
         ? item.content.props.children
         : "";
 
     await sleep(getThinkingDelay());
-
     setIsTyping(true);
     await sleep(getTypingDuration(text));
     setIsTyping(false);
 
     setTimeline((prev) => [
       ...prev,
-      {
-        ...item,
-        animated: true,
-        justAdded: true,
-      },
+      { ...item, animated: true, justAdded: true },
     ]);
   }
 }
