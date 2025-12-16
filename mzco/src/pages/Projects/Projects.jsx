@@ -825,9 +825,9 @@ useEffect(() => {
     /* ================= JSX ================= */
     return (
       <div className="scroll-spacer w-screen">
-        <div className="fixed w-full top-[40vh]">
+        <div className="fixed w-full top-[30vh]">
           <div className="fixed-container  flex px-4">
-            <div className="flex w-screen translate-y-50 gap-1">
+            <div className="flex w-screen  gap-1">
               <img className="h-6 w-6 rounded-full" src={img3} alt="avatar" />
 
               <div className="w-[85vw]  mt-2">
