@@ -506,6 +506,109 @@ function getMidPause(text) {
   return 150 + Math.random() * 250;
 }
 
+// async function handleDecision(id, choice) {
+//   const scripted = scriptedFlows[id]?.[choice] || [];
+//   let continuation = [];
+
+//   // 1️⃣ Insert user choice + REMOVE continuation from timeline
+//   setTimeline((prev) => {
+//     const idx = prev.findIndex((it) => it.id === id);
+//     if (idx === -1 || prev[idx].answered) return prev;
+
+//     continuation = prev.slice(idx + 1);
+
+//     return [
+//       ...prev.slice(0, idx),
+//       { ...prev[idx], answered: true },
+//       {
+//         id: `u-${Date.now()}`,
+//         sender: "user",
+//         animated: true,
+//         justAdded: true,
+//         content: <p>{choice}</p>,
+//       },
+//     ];
+//   });
+
+//   // 2️⃣ SCRIPTED REPLIES (typing + animation)
+//   for (let i = 0; i < scripted.length; i++) {
+//     const text = scripted[i];
+
+//     await sleep(getThinkingDelay());
+
+//     setIsTyping(true);
+//     await sleep(getTypingDuration(text));
+
+//     const midPause = getMidPause(text);
+//     if (midPause) {
+//       setIsTyping(false);
+//       await sleep(midPause);
+//       setIsTyping(true);
+//       await sleep(120 + Math.random() * 180);
+//     }
+
+//     setIsTyping(false);
+
+//     setTimeline((prev) => [
+//       ...prev,
+//       {
+//         id: `b-${Date.now()}-${i}`,
+//         sender: "bot",
+//         animated: true,
+//         justAdded: true,
+//         content: <p className="">{text}</p>,
+//       },
+//     ]);
+//   }
+
+//   // 3️⃣ CONTINUATION (l4, l5…) WITH SAME TYPING FLOW
+//   for (let i = 0; i < continuation.length; i++) {
+//     const item = continuation[i];
+
+//     // If the next item is a decision -> append that decision AND
+//     // reattach the rest of the continuation so later answering can continue it
+//     if (item.type === "decision") {
+//       setIsTyping(false);
+
+//       const rest = continuation.slice(i + 1);
+
+//       setTimeline((prev) => [
+//         ...prev,
+//         {
+//           ...item,
+//           animated: true,
+//           justAdded: true,
+//         },
+//         // re-attach remaining items so they exist in the timeline.
+//         // They will remain hidden by shouldRenderItem until this decision is answered.
+//         ...rest.map((m) => ({ ...m, animated: false })),
+//       ]);
+
+//       break;
+//     }
+
+//     // normal message -> simulate typing then append
+//     const text =
+//       typeof item.content?.props?.children === "string"
+//         ? item.content.props.children
+//         : "";
+
+//     await sleep(getThinkingDelay());
+
+//     setIsTyping(true);
+//     await sleep(getTypingDuration(text));
+//     setIsTyping(false);
+
+//     setTimeline((prev) => [
+//       ...prev,
+//       {
+//         ...item,
+//         animated: true,
+//         justAdded: true,
+//       },
+//     ]);
+//   }
+// }
 async function handleDecision(id, choice) {
   const scripted = scriptedFlows[id]?.[choice] || [];
   let continuation = [];
@@ -530,7 +633,7 @@ async function handleDecision(id, choice) {
     ];
   });
 
-  // 2️⃣ SCRIPTED REPLIES (typing + animation)
+  // 2️⃣ SCRIPTED REPLIES (UNCHANGED)
   for (let i = 0; i < scripted.length; i++) {
     const text = scripted[i];
 
@@ -561,14 +664,15 @@ async function handleDecision(id, choice) {
     ]);
   }
 
-  // 3️⃣ CONTINUATION (l4, l5…) WITH SAME TYPING FLOW
+  // 3️⃣ CONTINUATION (ONLY FIX IS HERE)
   for (let i = 0; i < continuation.length; i++) {
     const item = continuation[i];
 
-    // If the next item is a decision -> append that decision AND
-    // reattach the rest of the continuation so later answering can continue it
     if (item.type === "decision") {
       setIsTyping(false);
+
+      // ✅ 🔥 KEY FIX — break React batching
+      await sleep(150);
 
       const rest = continuation.slice(i + 1);
 
@@ -579,15 +683,13 @@ async function handleDecision(id, choice) {
           animated: true,
           justAdded: true,
         },
-        // re-attach remaining items so they exist in the timeline.
-        // They will remain hidden by shouldRenderItem until this decision is answered.
         ...rest.map((m) => ({ ...m, animated: false })),
       ]);
 
       break;
     }
 
-    // normal message -> simulate typing then append
+    // normal message (UNCHANGED)
     const text =
       typeof item.content?.props?.children === "string"
         ? item.content.props.children
@@ -627,7 +729,7 @@ useEffect(() => {
       {
         opacity: 1,
         y: 0,
-        duration: 0.1,
+        duration: 0,
         ease: "power2.out",
         onComplete: () => {
           setTimeline((prev) =>
@@ -723,7 +825,7 @@ useEffect(() => {
     /* ================= JSX ================= */
     return (
       <div className="scroll-spacer w-screen">
-        <div className="fixed w-full top-[30vh]">
+        <div className="fixed w-full top-[40vh]">
           <div className="fixed-container  flex px-4">
             <div className="flex w-screen translate-y-50 gap-1">
               <img className="h-6 w-6 rounded-full" src={img3} alt="avatar" />
