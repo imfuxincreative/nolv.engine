@@ -4,6 +4,7 @@
   import img3 from "../../assets/images/InfiniteImages/beach1.jpg";
   import { sendMessageToBot } from "../../api/chat.js";
   import { IoIosSend } from "react-icons/io";
+import VoiceChat from "../../components/VoiceChat.jsx";
   gsap.registerPlugin(ScrollTrigger);
 
   function Projects() {
@@ -217,7 +218,7 @@ const [timeline, setTimeline] = useState([
     sender: "bot",
     type: "decision",
     animated: true,
-    content: <p>Should I show you how profiles function ?</p>,
+    content: <p>Should I show you how profiles function?</p>,
     options: ["Show me", "Sounds good", "nope"],
     answered: false,
   },
@@ -978,8 +979,14 @@ useEffect(() => {
 
 <div className="more">
 
+     
+                  <div className="flex gap-3 fixed top-[40vh] right-20 ">
+              <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
 
-        <div className="flex gap-3 fixed top-[50vh] right-20 ">
+      <VoiceChat src="/blindingLight.mp3" />
+        </div>
+
+        <div className="flex gap-3 fixed top-[30vh] right-20 ">
               <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
 
           <p style={{borderRadius : "18px 18px 18px 4px"}} className="bg-black py-1.5 w-fit text-white px-3">Welcome</p>

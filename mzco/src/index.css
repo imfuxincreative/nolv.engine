@@ -18,6 +18,11 @@
   }
   
 
+audio {
+  width: 40vw;
+
+}
+
 
   /* ===== Mobile Styles (Default) ===== */
   h1 {
