@@ -514,10 +514,42 @@ useEffect(() => {
 
 const hasMountedRef = useRef(false);
 
+// useEffect(() => {
+//   const currentCount = visibleItems.length;
+
+//   if (!hasMountedRef.current) {
+//     hasMountedRef.current = true;
+//     lastCountRef.current = currentCount;
+//     return;
+//   }
+
+//   if (currentCount > lastCountRef.current) {
+//     const added = visibleItems.slice(0, currentCount); // take all visible items
+//     const totalHeight = added.reduce((acc, it) => {
+//       const el = msgRefs.current[it.id];
+//       if (!el) return acc;
+//       const rect = el.getBoundingClientRect();
+//       const style = getComputedStyle(el);
+//       const mb = parseFloat(style.marginBottom) || 0;
+//       return acc + rect.height + mb;
+//     }, 0);
+
+//     gsap.to(".fixed-container", {
+//       y: -totalHeight, // <-- absolute value, not relative
+//       duration: 0.45,
+//       ease: "power3.out",
+//       overwrite: "auto",
+//     });
+//   }
+
+//   lastCountRef.current = currentCount;
+// }, [visibleItems.length]);
+
+
+
 useEffect(() => {
   const currentCount = visibleItems.length;
 
-  // skip first render
   if (!hasMountedRef.current) {
     hasMountedRef.current = true;
     lastCountRef.current = currentCount;
@@ -525,26 +557,45 @@ useEffect(() => {
   }
 
   if (currentCount > lastCountRef.current) {
-    const added = visibleItems.slice(lastCountRef.current, currentCount);
-    const addedHeight = added.reduce((acc, it) => {
+    // compute only the newly added items (delta)
+    const newItems = visibleItems.slice(lastCountRef.current, currentCount);
+    const deltaHeight = newItems.reduce((acc, it) => {
       const el = msgRefs.current[it.id];
       if (!el) return acc;
       const rect = el.getBoundingClientRect();
       const style = getComputedStyle(el);
       const mb = parseFloat(style.marginBottom) || 0;
       return acc + rect.height + mb;
-    }, 0) || ( (currentCount - lastCountRef.current) * 40 ); // fallback
+    }, 0);
 
-    gsap.to(".fixed-container", {
-      y: `-=${addedHeight}`,
-      duration: 0.45,
-      ease: "power3.out",
-      overwrite: "auto",
-    });
+    if (deltaHeight > 0) {
+      // move by the delta (relative), then refresh ScrollTrigger to re-sync everything
+const st = scrollTl.current?.scrollTrigger;
+if (!st) return;
+
+// move container visually
+gsap.to(".fixed-container", {
+  y: `-=${deltaHeight}`,
+  duration: 0.45,
+  ease: "power3.out",
+  overwrite: "auto",
+});
+
+// ALSO move scroll position forward
+const scrollRange = st.end - st.start;
+const progressDelta = deltaHeight / scrollRange;
+
+st.scroll(st.scroll() + deltaHeight);
+st.update()
+    } else {
+      // still refresh if nothing moved (safety)
+      ScrollTrigger.refresh();
+    }
   }
 
   lastCountRef.current = currentCount;
 }, [visibleItems.length]);
+
 
     /* ================= FALLBACK APPEAR ================= */
 
