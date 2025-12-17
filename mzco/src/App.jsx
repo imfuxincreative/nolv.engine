@@ -37,7 +37,7 @@ import Gallary from './pages/Gallary/Gallary.jsx'
 import Bg from './components/Bg.jsx'
 import {ThemeProvider} from './context/ThemeContext.jsx'
 import {useSmoothScroll , LenisProvider} from './context/LenisContext.jsx';
-import Nav from "./components/nav.jsx";
+import Nav from "./components/Nav.jsx";
 // Page animation settings
 const pageVariants = {
   initial: { opacity: 0,  },
