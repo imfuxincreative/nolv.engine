@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
-
-const VoiceChat = ({ src }) => {
+import { IoMdPlay } from "react-icons/io";
+import { MdPause } from "react-icons/md";
+const VoiceChat = ({ src, title }) => {
   const audioRef = useRef(null);
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
@@ -31,7 +32,7 @@ const VoiceChat = ({ src }) => {
         onClick={togglePlay}
         className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center text-sm"
       >
-        {playing ? "❚❚" : "▶"}
+        {playing ? <MdPause size={22} /> : <IoMdPlay size={16} className="ml-[1px]" />}
       </button>
 
       {/* Timeline + Time */}

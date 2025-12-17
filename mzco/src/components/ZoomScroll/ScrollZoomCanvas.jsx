@@ -2,6 +2,7 @@ import React from 'react'
 import {Canvas, useFrame, useThree} from '@react-three/fiber'
 import {useRef ,useEffect} from 'react'
 import LoopingTexts from './LoopingTexts';
+import LoopingUI from '../loopingUi';
 
 
 function InfiniteCamera ({scrollRef}){
@@ -58,6 +59,7 @@ useEffect(() => {
         className='!fixed  top-0 left-0 w-full h-screen'>
             <ambientLight  intensity = {1} />
             <LoopingTexts/>
+             {/* <LoopingUI />   */}
             <InfiniteCamera scrollRef = {scrollRef}/>
         </Canvas>
     </div>

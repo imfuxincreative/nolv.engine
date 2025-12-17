@@ -983,8 +983,9 @@ useEffect(() => {
                   <div className="flex gap-3 fixed top-[40vh] right-20 ">
               <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
 
-      <VoiceChat src="/blindingLight.mp3" />
+      <VoiceChat title={'Blinding lights'} src="/blindingLight.mp3" />
         </div>
+    
 
         <div className="flex gap-3 fixed top-[30vh] right-20 ">
               <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
