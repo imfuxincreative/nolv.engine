@@ -37,6 +37,7 @@ import Gallary from './pages/Gallary/Gallary.jsx'
 import Bg from './components/Bg.jsx'
 import {ThemeProvider} from './context/ThemeContext.jsx'
 import {useSmoothScroll , LenisProvider} from './context/LenisContext.jsx';
+import Nav from "./components/nav.jsx";
 // Page animation settings
 const pageVariants = {
   initial: { opacity: 0,  },
@@ -312,6 +313,7 @@ function AppWithBlur() {
           <CustomCursor/>
           <ScrollProgressBar/>
           <Navber/>
+          <Nav/>
           {/* <Navber /> */}
           <Bg/>
           <div className="sticky z-[999] top-0">
