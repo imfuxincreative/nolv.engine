@@ -49,6 +49,8 @@
 const [timeline, setTimeline] = useState([
   // INTRO
   { id: "l1", sender: "bot", animated: true, static: true, content: <p>Hii</p> },
+  { id: "01", sender: "bot", animated: true, static: true, content: <p>Scroll</p> },
+
   // { id: "l2", sender: "bot", animated: true, content: <p>Yeah</p> },
   { id: "l3", sender: "bot", animated: true, content: <p>you’re here</p> },
   { id: "l4", sender: "bot", animated: true, content: <p>Take your time</p> },
@@ -246,9 +248,9 @@ const lastCountRef = useRef(0);
     const PRECHAT_COUNT = 4;
     const BASE_SCROLL_END = 8000;
   useEffect(() => {
-    const el = msgRefs.current["l1"];
+    const el = msgRefs.current["l1", "01"];
     if (el) {
-      gsap.set(el, { opacity: 1, y: -10, marginBottom : 16 });
+      gsap.set(el, { opacity: 1 });
     }
   }, []);
     /* ================= SCRIPTED FLOWS ================= */
@@ -398,92 +400,124 @@ const scriptedFlows = {
   },
 };
 
-
+const resizeTimer = useRef(null);
+const resizeObserver = useRef(null);
 
   const visibleItems = timeline.filter((item, index) =>
     shouldRenderItem(item, index)
   );
     /* ================= SCROLL TIMELINE (rebuild on timeline change) ================= */
-    useEffect(() => {
-      // build (or rebuild) a fresh GSAP timeline for the current timeline array
-      function buildScrollTimeline() {
-        scrollTl.current?.kill();
-        ScrollTrigger.getAll().forEach((st) => st.kill()); // clear any old triggers
+useEffect(() => {
+  function buildScrollTimeline() {
+    // kill previous
+    if (scrollTl.current?.scrollTrigger) scrollTl.current.scrollTrigger.kill();
+    scrollTl.current?.kill();
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-          trigger: ".scroll-spacer",
-         start: "top bottom",
-            end: `+=${BASE_SCROLL_END}`, // we'll adjust end below
-            scrub: true,
-            // markers: true,
-          },
-        });
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".scroll-spacer",
+        start: "top bottom",
+        end: `+=${BASE_SCROLL_END}`, // will be updated below
+        scrub: true,
+      },
+    });
 
-  const total = visibleItems.length;
+    const total = visibleItems.length;
 
-  // how much each message moves container
-  const LINE_SHIFT = 40;
+    // measure each visible line: height + marginBottom
+    const heights = visibleItems.map((item) => {
+      const el = msgRefs.current[item.id];
+      if (!el) return 0;
+      const rect = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      const mb = parseFloat(style.marginBottom) || 0;
+      return rect.height + mb;
+    });
 
-  // how much breathing room you want at end
-  const END_PADDING = window.innerHeight * 20;
+    // cumulative sums: cum[i] = sum of heights[0..i-1]
+    const cum = [0];
+    for (let i = 1; i <= heights.length; i++) {
+      cum[i] = (cum[i - 1] || 0) + (heights[i - 1] || 0);
+    }
 
-  // total vertical movement needed
-  const contentShift = Math.max(0, total - 1) * LINE_SHIFT;
+    // final scroll length = total content shift + padding
+    const END_PADDING = window.innerHeight * 20;
+    const contentShift = cum[total] || 0;
+    const endValue = contentShift + END_PADDING;
 
-  // final scroll length
-  const endValue = contentShift + END_PADDING;
+    gsap.set(".scroll-spacer", { height: endValue });
 
-  gsap.set(".scroll-spacer", {
-    height: endValue,
-  });
+    // build timeline: reveal each .line-i and move fixed-container by the cumulative height
     for (let i = 0; i < total; i++) {
-    const item = timeline[i];
+      const item = visibleItems[i];
 
-    // 🔥 Skip animation for Hello
-    if (!item.static) {
-      tl.fromTo(
-        `.line-${i}`,
-        { opacity: 0, y: 0 },
-        { opacity: 1, y: 0, duration: 1 },
-        i * 0.6
-      );
-    }
-
-    if (i >= 1) {
-      tl.to(
-        ".fixed-container",
-        { y: -i * 40, },
-        "<"
-      );
-    }
-  }
-
-        // adjust scroll end
-        const st = tl.scrollTrigger;
-        if (st) {
-          st.vars.end = `+=${endValue}`;
-          st.end = st.vars.end;
-        }
-
-        scrollTl.current = tl;
-        ScrollTrigger.refresh();
+      if (!item.static) {
+        tl.fromTo(
+          `.line-${i}`,
+          { opacity: 0, y: 0 },
+          { opacity: 1, y: 0, duration: 1 },
+          i * 0.6
+        );
       }
 
-      buildScrollTimeline();
+      if (i >= 1) {
+        // move fixed container by the height of all previous lines
+        tl.to(".fixed-container", { y: -cum[i] }, "<");
+      }
+    }
 
-      return () => {
-        scrollTl.current?.kill();
-      };
-      // Rebuild whenever timeline changes so .line-{index} matches rendered order
-    }, [visibleItems.length]);
+    // update scrollTrigger end
+    const st = tl.scrollTrigger;
+    if (st) {
+      st.vars.end = `+=${endValue}`;
+      st.end = st.vars.end;
+    }
+
+    scrollTl.current = tl;
+    ScrollTrigger.refresh();
+  }
+
+  buildScrollTimeline();
+
+  // watch for size changes (images loading / text wrap)
+  if (typeof ResizeObserver !== "undefined") {
+    resizeObserver.current = new ResizeObserver(() => {
+      clearTimeout(resizeTimer.current);
+      resizeTimer.current = setTimeout(() => {
+        buildScrollTimeline();
+      }, 60);
+    });
+
+    visibleItems.forEach((it) => {
+      const el = msgRefs.current[it.id];
+      if (el) resizeObserver.current.observe(el);
+    });
+
+    // also rebuild when images inside .scroll-spacer load
+    document.querySelectorAll(".scroll-spacer img").forEach((img) => {
+      img.addEventListener("load", buildScrollTimeline);
+    });
+  }
+
+  return () => {
+    scrollTl.current?.kill();
+    if (resizeObserver.current) {
+      resizeObserver.current.disconnect();
+      resizeObserver.current = null;
+    }
+    clearTimeout(resizeTimer.current);
+    document.querySelectorAll(".scroll-spacer img").forEach((img) => {
+      img.removeEventListener("load", buildScrollTimeline);
+    });
+  };
+}, [visibleItems.length]); // rebuild whenever number of visible items changes
 
 const hasMountedRef = useRef(false);
 
 useEffect(() => {
   const currentCount = visibleItems.length;
 
-  // ⛔ skip first render completely
+  // skip first render
   if (!hasMountedRef.current) {
     hasMountedRef.current = true;
     lastCountRef.current = currentCount;
@@ -491,12 +525,18 @@ useEffect(() => {
   }
 
   if (currentCount > lastCountRef.current) {
-    const delta = currentCount - lastCountRef.current;
-    const SHIFT_PER_LINE = 40;
-    const moveBy = delta * SHIFT_PER_LINE;
+    const added = visibleItems.slice(lastCountRef.current, currentCount);
+    const addedHeight = added.reduce((acc, it) => {
+      const el = msgRefs.current[it.id];
+      if (!el) return acc;
+      const rect = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      const mb = parseFloat(style.marginBottom) || 0;
+      return acc + rect.height + mb;
+    }, 0) || ( (currentCount - lastCountRef.current) * 40 ); // fallback
 
     gsap.to(".fixed-container", {
-      y: `-=${moveBy}`,
+      y: `-=${addedHeight}`,
       duration: 0.45,
       ease: "power3.out",
       overwrite: "auto",
@@ -749,7 +789,27 @@ async function handleDecision(id, choice) {
   }
 }
 
+useEffect(() => {
+  gsap.set(".more", { opacity: 1 });
 
+  const tween = gsap.to(".more", {
+    opacity: 0,
+
+    ease: "none",
+    scrollTrigger: {
+      trigger: document.body,   // 🔥 NOT scroll-spacer
+      start: "top top",
+      end: "+=300",
+      scrub: true,
+      invalidateOnRefresh: false,
+    },
+  });
+
+  return () => {
+    tween.scrollTrigger?.kill();
+    tween.kill();
+  };
+}, []);
 
 useEffect(() => {
   timeline.forEach((item) => {
@@ -799,6 +859,8 @@ useEffect(() => {
         React.isValidElement(item.content) && item.content.type === "p";
 
       const bubbleRadius = isUser ? "18px 18px 4px 18px" : "18px 18px 18px 4px";
+      const bubbleRadiusRev = isUser ? "18px 4px 18px 18px" : "4px 18px 18px 18px";
+
 
       const bgClass = isUser ? "bg-[#dadada] text-black" : isParagraph ? "bg-black text-white" : "";
 
@@ -808,12 +870,12 @@ useEffect(() => {
           ref={(el) => (msgRefs.current[item.id] = el)}
           className={`line-${index} mb-1 w-fit max-w-[50vw] ${isUser ? "ml-auto" : ""}`}
         >
-          <div className={`${bgClass} px-3 py-1.5`} style={{ borderRadius: bubbleRadius }}>
+          <div className={`${bgClass} px-3 py-1.5`} style={{ borderRadius: index % 2 === 0 ? bubbleRadius : bubbleRadiusRev}}>
             {item.content}
           </div>
 
           {item.type === "decision" && (
-            <div className="mt-2 flex fixed  bottom gap-2 w-screen overflow-x-scroll">
+            <div className="mt-2 flex fixed  bottom gap-2 w-screen">
               {/* show buttons only if not answered */}
               {!item.answered &&
                 item.options.map((opt) => (
@@ -862,6 +924,35 @@ useEffect(() => {
     /* ================= JSX ================= */
     return (
       <div className="scroll-spacer w-screen">
+
+<div className="more">
+
+
+        <div className="flex gap-3 fixed top-[50vh] right-20 ">
+              <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
+
+          <p style={{borderRadius : "18px 18px 18px 4px"}} className="bg-black py-1.5 w-fit text-white px-3">Welcome</p>
+        </div>
+
+    <div className="flex gap-3 fixed top-[70vh] right-60 ">
+              <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
+
+          <p style={{borderRadius : "18px 18px 18px 4px"}} className="bg-black py-1.5 w-fit text-white px-3">I'm fuckin' creative</p>
+        </div>
+
+    <div className="flex gap-3 fixed top-[20vh] right-30 ">
+              <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
+
+          <p style={{borderRadius : "18px 18px 18px 4px"}} className="bg-black py-1.5 w-fit text-white px-3">let's chat</p>
+        </div>
+
+            <div className="flex gap-3 fixed top-[80vh] right-10 ">
+              <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
+
+          <p style={{borderRadius : "18px 18px 18px 4px"}} className="bg-black py-1.5 w-fit text-white px-3">listen to me</p>
+        </div>
+        
+</div>
         <div className="fixed w-full top-[30vh]">
           <div className="fixed-container  flex px-4">
             <div className="flex w-screen  gap-1">
