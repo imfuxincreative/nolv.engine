@@ -209,7 +209,7 @@ const [timeline, setTimeline] = useState([
     options: ["go on", "What else?", "Later maybe"],
     answered: false,
   },
-  { id: "ldd18", sender: "bot", animated: true, content: <p>space</p> },
+
 
   // DECISION 2
   {
@@ -217,7 +217,7 @@ const [timeline, setTimeline] = useState([
     sender: "bot",
     type: "decision",
     animated: true,
-    content: <p>Should I show you how profiles work?</p>,
+    content: <p>Should I show you how profiles function ?</p>,
     options: ["Show me", "Sounds good", "nope"],
     answered: false,
   },
@@ -235,7 +235,7 @@ const [timeline, setTimeline] = useState([
 
   // OUTRO
   { id: "l19", sender: "bot", animated: true, content: <p>If you’re still here</p> },
-  { id: "l20", sender: "bot", animated: true, content: <p>Thanks for looking</p> },
+  { id: "l20", sender: "bot", animated: true, content: <p>Thanks for Staying</p> },
 
   { id: "l22", sender: "bot", animated: true, content: <p>Or stay a bit longer</p> },
 ]);
@@ -1004,7 +1004,7 @@ useEffect(() => {
         </div>
         
 </div>
-        <div className="fixed w-full top-[30vh]">
+        <div className="fixed w-full top-[60vh]">
           <div className="fixed-container  flex px-4">
             <div className="flex w-screen  gap-1">
               <img className="h-6 w-6 rounded-full" src={img3} alt="avatar" />
