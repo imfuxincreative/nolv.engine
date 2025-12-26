@@ -12,6 +12,7 @@ function ImageCard({src , index ,  scaleDown, isFull , to = '/gallary'}) {
   
 const navigate = useNavigate()
 const imageRef = useRef()
+
 const handleImageClick = () => {
   const rect = imageRef.current.getBoundingClientRect()
   const scrollX = window.scrollX || window.pageXOffset

@@ -5,13 +5,34 @@
   import { sendMessageToBot } from "../../api/chat.js";
   import { IoIosSend } from "react-icons/io";
 import VoiceChat from "../../components/VoiceChat.jsx";
+import ImageOpenerEasy from "../../components/ImageOpenerEasy.jsx";
+import { useTheme } from "../../context/ThemeContext.jsx";
   gsap.registerPlugin(ScrollTrigger);
 
   function Projects() {
     const msgRefs = useRef({});
     const scrollTl = useRef(null);
     const [input, setInput] = useState("");
+      const {isDarkMode} = useTheme()
     const [isTyping, setIsTyping] = useState(false);
+  const imgRef = useRef(null)
+  const [activeSrc, setActiveSrc] = useState(null)
+  const [rect, setRect] = useState(null)
+  const [open, setOpen] = useState(false)
+const handleClick = (e) => {
+  const img = e.currentTarget
+  const r = img.getBoundingClientRect()
+
+  setRect({
+    top: r.top,
+    left: r.left,
+    width: r.width,
+    height: r.height,
+  })
+
+  setActiveSrc(img.src)   // ✅ IMPORTANT
+  setOpen(true)
+}
 
 
 // const [timeline, setTimeline] = useState([
@@ -192,7 +213,7 @@ const [timeline, setTimeline] = useState([
     sender: "bot",
     animated: true,
     content: (
-     <img src={'/ss.jpg'} className="rounded-lg md:h-60 object-cover md:w-100"/>
+     <img src={'/ss.jpg'}   onClick={handleClick} className="rounded-lg md:h-60 object-cover md:w-100"/>
     ),
   },
 
@@ -290,8 +311,8 @@ const scriptedFlows = {
         sender: "bot",
         animated: true,
         content: (
-               <img src={img3} className="rounded-lg md:h-60 object-cover md:w-100"/>
-
+               <img     onClick={handleClick} src={img3} className="rounded-lg md:h-60 object-cover md:w-100"/>
+ 
         ),
       },
       "Brands don’t overpower creators",
@@ -309,7 +330,7 @@ const scriptedFlows = {
         content: (
           <div >
 
-               <img src='/pp.jpg'className="rounded-lg md:h-60 object-cover md:w-100"/>
+               <img src='/pp.jpg'    onClick={handleClick} className="rounded-lg md:h-60 object-cover md:w-100"/>
           </div>
         ),
       },
@@ -404,6 +425,8 @@ const scriptedFlows = {
 
 const resizeTimer = useRef(null);
 const resizeObserver = useRef(null);
+  const [openData, setOpenData] = useState(null)
+
 
   const visibleItems = timeline.filter((item, index) =>
     shouldRenderItem(item, index)
@@ -768,7 +791,7 @@ useEffect(() => {
       const bubbleRadiusRev = isUser ? "18px 4px 18px 18px" : "4px 18px 18px 18px";
 
 
-      const bgClass = isUser ? "bg-[#dadada] text-black" : isParagraph ? "bg-black text-white" : "";
+      const bgClass = isUser ? !isDarkMode ? "bg-[#dadada] text-black":'bg-[#2d2d2d]  text-white' : isParagraph ? !isDarkMode ? "bg-black text-white": "bg-white text-black" : "";
 
       return (
         <div
@@ -788,7 +811,7 @@ useEffect(() => {
                   <button
                     key={opt}
                     onClick={() => handleDecision(item.id, opt)}
-                    className="px-2 py-1 rounded-full  h-fit  bg-[#dadada] text-sm"
+                    className={`px-2 py-1 rounded-full  h-fit ${!isDarkMode ? 'bg-[#dadada]': 'bg-[#2d2d2d] text-white'} text-sm`}
                   >
                   <p>
                     {opt}
@@ -830,7 +853,13 @@ useEffect(() => {
     /* ================= JSX ================= */
     return (
       <div className="scroll-spacer w-screen">
+{open && rect && activeSrc && (        <ImageOpenerEasy
 
+             src={activeSrc} 
+          rect={rect}
+          onClose={() => setOpen(false)}
+        />
+      )}
 <div className="more">
 
      
@@ -844,25 +873,25 @@ useEffect(() => {
         <div className="flex gap-3 fixed top-[30vh] right-20 ">
               <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
 
-          <p style={{borderRadius : "18px 18px 18px 4px"}} className="bg-black py-1.5 w-fit text-white px-3">Welcome</p>
+          <p style={{borderRadius : "18px 18px 18px 4px"}} className={`duration-300 ${!isDarkMode  ? 'bg-black text-white':'bg-white text-black'} py-1.5 w-fit  px-3`}>Welcome</p>
         </div>
 
     <div className="flex gap-3 fixed top-[70vh] right-60 ">
               <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
 
-          <p style={{borderRadius : "18px 18px 18px 4px"}} className="bg-black py-1.5 w-fit text-white px-3">I'm fuckin' creative</p>
+          <p style={{borderRadius : "18px 18px 18px 4px"}}  className={`duration-300 ${!isDarkMode  ? 'bg-black text-white':'bg-white text-black'} py-1.5 w-fit  px-3`}>I'm fuckin' creative</p>
         </div>
 
     <div className="flex gap-3 fixed top-[20vh] right-30 ">
               <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
 
-          <p style={{borderRadius : "18px 18px 18px 4px"}} className="bg-black py-1.5 w-fit text-white px-3">let's chat</p>
+          <p style={{borderRadius : "18px 18px 18px 4px"}} className={`duration-300 ${!isDarkMode  ? 'bg-black text-white':'bg-white text-black'} py-1.5 w-fit  px-3`}>let's chat</p>
         </div>
 
             <div className="flex gap-3 fixed top-[80vh] right-10 ">
               <img className="h-6 w-6 rounded-full " src={img3} alt="avatar" />
 
-          <p style={{borderRadius : "18px 18px 18px 4px"}} className="bg-black py-1.5 w-fit text-white px-3">listen to me</p>
+          <p style={{borderRadius : "18px 18px 18px 4px"}} className={`duration-300 ${!isDarkMode  ? 'bg-black text-white':'bg-white text-black'} py-1.5 w-fit  px-3`}>listen to me</p>
         </div>
         
 </div>
