@@ -49,8 +49,8 @@ import VoiceChat from "../../components/VoiceChat.jsx";
 
 const [timeline, setTimeline] = useState([
   // INTRO
-  { id: "l1", sender: "bot", animated: true, static: true, content: <p>Hii</p> },
-  { id: "01", sender: "bot", animated: true, static: true, content: <p>Scroll</p> },
+  { id: "l1", sender: "bot", animated: true, static: true, content: <p className="">Hii</p> },
+  { id: "01", sender: "bot", animated: true, static: true, content: <p className="">Scroll</p> },
 
   // { id: "l2", sender: "bot", animated: true, content: <p>Yeah</p> },
   { id: "l3", sender: "bot", animated: true, content: <p>you’re here</p> },
@@ -192,7 +192,7 @@ const [timeline, setTimeline] = useState([
     sender: "bot",
     animated: true,
     content: (
-     <img src={img3} className="rounded-xl w-60 h-40 object-cover"/>
+     <img src={'/ss.jpg'} className="rounded-lg md:h-60 object-cover md:w-100"/>
     ),
   },
 
@@ -251,7 +251,7 @@ const lastCountRef = useRef(0);
   useEffect(() => {
     const el = msgRefs.current["l1", "01"];
     if (el) {
-      gsap.set(el, { opacity: 1 });
+      gsap.set(el, { opacity: 1  });
     }
   }, []);
     /* ================= SCRIPTED FLOWS ================= */
@@ -290,7 +290,7 @@ const scriptedFlows = {
         sender: "bot",
         animated: true,
         content: (
-               <img src={img3} className="rounded-xl w-60 h-40 object-cover"/>
+               <img src={img3} className="rounded-lg md:h-60 object-cover md:w-100"/>
 
         ),
       },
@@ -299,7 +299,7 @@ const scriptedFlows = {
     ],
 
     "What else?": [
-      "People don’t always work solo",
+      "Create your brand or,",
       "Studios",
       "Teams",
       "Groups",
@@ -309,8 +309,7 @@ const scriptedFlows = {
         content: (
           <div >
 
-               <img src='/discover.png' className="rounded-[6px] w-100 h-30 object-cover border border-[#dadada]"/>
-
+               <img src='/pp.jpg'className="rounded-lg md:h-60 object-cover md:w-100"/>
           </div>
         ),
       },
@@ -338,8 +337,10 @@ const scriptedFlows = {
         sender: "bot",
         animated: true,
         content: (
-          <div className="rounded-xl w-60 h-32 bg-neutral-800 flex items-center justify-center text-white text-sm">
-            Profile page UI
+          <div >
+               <img src='/profile.png' className="rounded-[6px] w-100 h-30 object-cover border border-[#dadada]"/>
+
+            {/* Profile page UI */}
           </div>
         ),
       },
@@ -455,7 +456,7 @@ useEffect(() => {
       if (!item.static) {
         tl.fromTo(
           `.line-${i}`,
-          { opacity: 0, y: 0 },
+          { opacity: 0, y: 12 },
           { opacity: 1, y: 0, duration: 1 },
           i * 0.6
         );
@@ -515,37 +516,6 @@ useEffect(() => {
 
 const hasMountedRef = useRef(false);
 
-// useEffect(() => {
-//   const currentCount = visibleItems.length;
-
-//   if (!hasMountedRef.current) {
-//     hasMountedRef.current = true;
-//     lastCountRef.current = currentCount;
-//     return;
-//   }
-
-//   if (currentCount > lastCountRef.current) {
-//     const added = visibleItems.slice(0, currentCount); // take all visible items
-//     const totalHeight = added.reduce((acc, it) => {
-//       const el = msgRefs.current[it.id];
-//       if (!el) return acc;
-//       const rect = el.getBoundingClientRect();
-//       const style = getComputedStyle(el);
-//       const mb = parseFloat(style.marginBottom) || 0;
-//       return acc + rect.height + mb;
-//     }, 0);
-
-//     gsap.to(".fixed-container", {
-//       y: -totalHeight, // <-- absolute value, not relative
-//       duration: 0.45,
-//       ease: "power3.out",
-//       overwrite: "auto",
-//     });
-//   }
-
-//   lastCountRef.current = currentCount;
-// }, [visibleItems.length]);
-
 
 
 useEffect(() => {
@@ -597,20 +567,6 @@ st.update()
   lastCountRef.current = currentCount;
 }, [visibleItems.length]);
 
-
-    /* ================= FALLBACK APPEAR ================= */
-
-    // useEffect(() => {
-    //   timeline.forEach((item) => {
-    //     if (item.animated) return;
-    //     const el = msgRefs.current[item.id];
-    //     if (!el || el.dataset.animated) return;
-
-    //     el.dataset.animated = "true";
-
-    //     gsap.fromTo(el, { opacity: 0, y: 12 }, { opacity: 1, y: -20, duration: 0.45 , stagger : 0.7});
-    //   });
-    // }, [timeline.length, isTyping]);  
     /* ================= DECISION HANDLER ================= */
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -637,109 +593,7 @@ function getMidPause(text) {
   return 150 + Math.random() * 250;
 }
 
-// async function handleDecision(id, choice) {
-//   const scripted = scriptedFlows[id]?.[choice] || [];
-//   let continuation = [];
 
-//   // 1️⃣ Insert user choice + REMOVE continuation from timeline
-//   setTimeline((prev) => {
-//     const idx = prev.findIndex((it) => it.id === id);
-//     if (idx === -1 || prev[idx].answered) return prev;
-
-//     continuation = prev.slice(idx + 1);
-
-//     return [
-//       ...prev.slice(0, idx),
-//       { ...prev[idx], answered: true },
-//       {
-//         id: `u-${Date.now()}`,
-//         sender: "user",
-//         animated: true,
-//         justAdded: true,
-//         content: <p>{choice}</p>,
-//       },
-//     ];
-//   });
-
-//   // 2️⃣ SCRIPTED REPLIES (typing + animation)
-//   for (let i = 0; i < scripted.length; i++) {
-//     const text = scripted[i];
-
-//     await sleep(getThinkingDelay());
-
-//     setIsTyping(true);
-//     await sleep(getTypingDuration(text));
-
-//     const midPause = getMidPause(text);
-//     if (midPause) {
-//       setIsTyping(false);
-//       await sleep(midPause);
-//       setIsTyping(true);
-//       await sleep(120 + Math.random() * 180);
-//     }
-
-//     setIsTyping(false);
-
-//     setTimeline((prev) => [
-//       ...prev,
-//       {
-//         id: `b-${Date.now()}-${i}`,
-//         sender: "bot",
-//         animated: true,
-//         justAdded: true,
-//         content: <p className="">{text}</p>,
-//       },
-//     ]);
-//   }
-
-//   // 3️⃣ CONTINUATION (l4, l5…) WITH SAME TYPING FLOW
-//   for (let i = 0; i < continuation.length; i++) {
-//     const item = continuation[i];
-
-//     // If the next item is a decision -> append that decision AND
-//     // reattach the rest of the continuation so later answering can continue it
-//     if (item.type === "decision") {
-//       setIsTyping(false);
-
-//       const rest = continuation.slice(i + 1);
-
-//       setTimeline((prev) => [
-//         ...prev,
-//         {
-//           ...item,
-//           animated: true,
-//           justAdded: true,
-//         },
-//         // re-attach remaining items so they exist in the timeline.
-//         // They will remain hidden by shouldRenderItem until this decision is answered.
-//         ...rest.map((m) => ({ ...m, animated: false })),
-//       ]);
-
-//       break;
-//     }
-
-//     // normal message -> simulate typing then append
-//     const text =
-//       typeof item.content?.props?.children === "string"
-//         ? item.content.props.children
-//         : "";
-
-//     await sleep(getThinkingDelay());
-
-//     setIsTyping(true);
-//     await sleep(getTypingDuration(text));
-//     setIsTyping(false);
-
-//     setTimeline((prev) => [
-//       ...prev,
-//       {
-//         ...item,
-//         animated: true,
-//         justAdded: true,
-//       },
-//     ]);
-//   }
-// }
 async function handleDecision(id, choice) {
   const scripted = scriptedFlows[id]?.[choice] || [];
   let continuation = [];
