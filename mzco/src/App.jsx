@@ -38,6 +38,7 @@ import Bg from './components/Bg.jsx'
 import {ThemeProvider} from './context/ThemeContext.jsx'
 import {useSmoothScroll , LenisProvider} from './context/LenisContext.jsx';
 import Nav from "./components/Nav.jsx";
+import InfiniteChat from "./pages/InfiniteChat/InfiniteChat.jsx";
 // Page animation settings
 const pageVariants = {
   initial: { opacity: 0,  },
@@ -279,6 +280,21 @@ useEffect(()=>{
               transition={pageTransition}
             >
               <Projects/>
+            </motion.div>
+          }
+        />
+           <Route
+          path="/InfiniteChat"
+          element={
+            <motion.div  
+            className="relative z-[100]"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <InfiniteChat/>
             </motion.div>
           }
         />

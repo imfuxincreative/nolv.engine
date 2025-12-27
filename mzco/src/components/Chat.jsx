@@ -1,0 +1,57 @@
+import React, { useRef, useEffect, useState } from 'react'
+import { useTheme } from '../context/ThemeContext.jsx'
+
+function Chat({ message, profile }) {
+  const { isDarkMode } = useTheme()
+
+  const parentRef = useRef(null)
+  const chatRef = useRef(null)
+  const [pos, setPos] = useState({ top: 0, left: 0 })
+
+  useEffect(() => {
+    if (!parentRef.current || !chatRef.current) return
+
+    const p = parentRef.current.getBoundingClientRect()
+    const c = chatRef.current.getBoundingClientRect()
+
+    setPos({
+      top: Math.random() * (p.height - c.height),
+      left: Math.random() * (p.width - c.width),
+    })
+  }, [])
+
+  return (
+    <div
+      ref={parentRef}
+      className={`relative border-r-[1px] border-b-[1px] flex flex-col duration-500 items-center justify-center
+        ${isDarkMode ? 'border-[#363636]' : 'border-[#ffffff]'}
+        lg:h-[250px] lg:w-[250px] max-sm:h-[200px] max-sm:w-[200px] md:h-[260px] md:w-[260px]`}
+    >
+      <div
+        ref={chatRef}
+        className="chat absolute flex gap-3 items-center transition-opacity duration-100"
+        style={{
+          top: pos.top,
+          left: pos.left,
+          color: isDarkMode ? '#fff' : '#000',
+        }}
+      >
+        <img
+          src={profile}
+          className="h-6 w-6 rounded-full"
+          alt="avatar"
+        />
+
+        <p
+          style={{ borderRadius: '18px 18px 18px 4px' }}
+          className={`py-1.5 px-3 text-sm whitespace-nowrap
+            ${!isDarkMode ? 'bg-black text-white' : 'bg-white text-black'}`}
+        >
+          {message}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+export default Chat
