@@ -14,6 +14,10 @@ const CHAT_THEMES = {
     bg: 'orangered',
     text: '#ffffff',
   },
+    blue: {
+    bg: '#0004DD',
+    text: 'white',
+  },
   pink: {
     bg: '#FDE4F2',
     text: 'black',
@@ -59,7 +63,8 @@ function Chat({ message, profile, theme = 'black' }) {
         style={{
           top: pos.top,
           left: pos.left,
-          color: isDarkMode ? '#fff' : '#000',
+          
+        
         }}
       >
         <img

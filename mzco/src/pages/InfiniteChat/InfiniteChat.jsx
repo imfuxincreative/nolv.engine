@@ -7,13 +7,14 @@ import { IsMobileContext } from '../../context/IsMobile';
 import { useCursor } from '../../context/CursorContext';
 import Chat from '../../components/Chat.jsx';
 import img3 from '../../assets/images/visuals/img3.jpg'
+import { useTheme } from '../../context/ThemeContext.jsx';
 export default function InfiniteChat() {
   const { isMobile } = useContext(IsMobileContext);
   const { setCursorAnimation } = useCursor();
   const TILE_SIZE = isMobile ? 195 : 250;
   const GRID_SIZE = isMobile ? 6 : 12;
   const GRID_WIDTH = TILE_SIZE * GRID_SIZE;
-
+  const { isDarkMode } = useTheme()
   // PARALLAX: background will follow a fraction of the main motion
   const PARALLAX_FACTOR = 0.28; // tweak (0.1 = much slower, 0.5 = half speed)
 
@@ -36,12 +37,12 @@ const chats = [
   { name: "User", profile: img3, message: "I'm Fuckin' creative", theme: "neon" },
   { name: "User", profile: img3, message: "hello", theme: "gray" },
   { name: "User", profile: img3, message: "flow()", theme: "neon" },
-  { name: "User", profile: img3, message: "code", theme: "red" },
+  { name: "User", profile: img3, message: "code", theme: "pink" },
   { name: "User", profile: img3, message: "innovation", theme: "gray" },
   { name: "User", profile: img3, message: "function()", theme: "neon" },
   { name: "User", profile: img3, message: "404", theme: "black" },
   { name: "User", profile: img3, message: "<motion/>", theme: "neon" },
-  { name: "User", profile: img3, message: "I love motion", theme: "red" },
+  { name: "User", profile: img3, message: "I love motion", theme: "blue" },
   { name: "User", profile: img3, message: "blend", theme: "gray" },
   { name: "User", profile: img3, message: "creative", theme: "neon" },
   { name: "User", profile: img3, message: "Design", theme: "gray" },
@@ -49,10 +50,10 @@ const chats = [
   { name: "User", profile: img3, message: "craft", theme: "neon" },
   { name: "User", profile: img3, message: "visual", theme: "pink" },
   { name: "User", profile: img3, message: ":)", theme: "black" },
-  { name: "User", profile: img3, message: "I'm wanna shine", theme: "red" },
+  { name: "User", profile: img3, message: "I'm wanna shine", theme: "pink" },
   { name: "User", profile: img3, message: "mzco.creative", theme: "neon" },
   { name: "User", profile: img3, message: "Stooop.", theme: "black" },
-  { name: "User", profile: img3, message: "figma", theme: "red" },
+  { name: "User", profile: img3, message: "figma", theme: "pink" },
 ];
 
   const { isLoading, setIsLoading } = useContext(LoadingContext);
@@ -144,7 +145,11 @@ const chats = [
   }, [GRID_SIZE, GRID_WIDTH, TILE_SIZE, x, y]);
 
   return (
-    <div>
+    <div className='h-screen w-screen'>
+     {!isMobile && <div>   <div className={`absolute w-screen h-40 bg-gradient-to-t ${!isDarkMode ?'from-white to-[#ffffff00]':'from-black to-[#00000000]'} bottom-0 z-[10]`}></div>
+      <div className={`absolute w-screen h-40 bg-gradient-to-b ${!isDarkMode ?'from-white to-[#ffffff00]':'from-black to-[#00000000]'} top-0 z-[10]`}> </div>
+          <div className={`absolute h-screen w-40 bg-gradient-to-r ${!isDarkMode ?'from-white to-[#ffffff00]':'from-black to-[#00000000]'} top-0 left-0 z-[10]`}> </div>
+              <div className={`absolute h-screen w-40 bg-gradient-to-l ${!isDarkMode ?'from-white to-[#ffffff00]':'from-black to-[#00000000]'} top-0 right-0 z-[10]`}> </div></div>}  
       <div className={`${isLoading ? "opacity-0" : "opacity-100"} duration-500`}>
         <div
           onMouseEnter={() => setCursorAnimation("playground-animation")}

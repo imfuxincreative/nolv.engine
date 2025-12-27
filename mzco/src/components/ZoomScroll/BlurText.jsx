@@ -7,13 +7,41 @@ import { useTheme } from '../../context/ThemeContext.jsx'
 import img3 from '../../assets/images/InfiniteImages/beach1.jpg'
 
 const BlurText = forwardRef(function BlurText(
-  { position, text },
+  { position, message, theme, profile },
   externalRef
 ) {
   const ref = useRef()
   const { camera } = useThree()
   const { isDarkMode } = useTheme()
-
+  const CHAT_THEMES = {
+  black: {
+    bg: 'black',
+    text: '#ffffff',
+  },
+    gray: {
+    bg: '#ededed',
+    text: 'black',
+  },
+  red: {
+    bg: 'orangered',
+    text: '#ffffff',
+  },
+    blue: {
+    bg: '#0004DD',
+    text: 'white',
+  },
+  pink: {
+    bg: '#FDE4F2',
+    text: 'black',
+  },
+  neon: {
+    bg: '#D9FF00',
+    text: 'black',
+  },
+}
+  const currentTheme =
+    CHAT_THEMES[theme?.toLowerCase()] || CHAT_THEMES.black
+console.log(currentTheme)
   useFrame(() => {
     if (!ref.current) return
 
@@ -57,11 +85,16 @@ const BlurText = forwardRef(function BlurText(
           />
 
           <p
-            style={{ borderRadius: '18px 18px 18px 4px' }}
+     style={{
+            backgroundColor: currentTheme.bg,
+            color: currentTheme.text,
+            boxShadow: currentTheme.glow,
+            borderRadius: '18px 18px 18px 4px',
+          }}
             className={`py-1.5 px-3 text-sm whitespace-nowrap
-              ${!isDarkMode ? 'bg-black text-white' : 'bg-white text-black'}`}
+              `}
           >
-            {text}
+            {message}
           </p>
         </div>
       </Html>

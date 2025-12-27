@@ -363,7 +363,7 @@ const menuTransition  = {duration : .7 , ease : 'linear'}
               variants={pageVariants}
               transition={pageTransition}
             >
-              <Home cursorAnnimation = {cursorAnnimation} setCursorAnnimation = {setCursorAnnimation}/>
+       
             </motion.div>} />
     <Route path='/playground' exact element={<motion.div
               initial="initial"

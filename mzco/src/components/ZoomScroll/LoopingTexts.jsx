@@ -2,9 +2,32 @@ import { useFrame } from '@react-three/fiber'
 import React, { useMemo } from 'react'
 import BlurText from './BlurText'
 import {useRef} from 'react'
+import img3 from '../../assets/images/InfiniteImages/beach1.jpg'
 function LoopingTexts({count = 80, zRange = 160}) {
   const textRefs = useRef([])
-  const textOptions = ['hiii', "I'm Fuckin' creative",'hello','flow()', 'code','inovation', 'function()','404','<motion/>' ,'I love motion', 'blend','creative', 'Design',';)', 'craft','visual', ':)', "I'm wanna shine", 'mzco.creative', 'Stooop.','figma']
+  const textOptions =  [
+    { name: "User", profile: img3, message: "hiii", theme: "neon" },
+    { name: "User", profile: img3, message: "I'm Fuckin' creative", theme: "neon" },
+    { name: "User", profile: img3, message: "hello", theme: "gray" },
+    { name: "User", profile: img3, message: "flow()", theme: "neon" },
+    { name: "User", profile: img3, message: "code", theme: "pink" },
+    { name: "User", profile: img3, message: "innovation", theme: "gray" },
+    { name: "User", profile: img3, message: "function()", theme: "neon" },
+    { name: "User", profile: img3, message: "404", theme: "black" },
+    { name: "User", profile: img3, message: "<motion/>", theme: "neon" },
+    { name: "User", profile: img3, message: "I love motion", theme: "blue" },
+    { name: "User", profile: img3, message: "blend", theme: "gray" },
+    { name: "User", profile: img3, message: "creative", theme: "neon" },
+    { name: "User", profile: img3, message: "Design", theme: "gray" },
+    { name: "User", profile: img3, message: ";)", theme: "black" },
+    { name: "User", profile: img3, message: "craft", theme: "neon" },
+    { name: "User", profile: img3, message: "visual", theme: "pink" },
+    { name: "User", profile: img3, message: ":)", theme: "black" },
+    { name: "User", profile: img3, message: "I'm wanna shine", theme: "pink" },
+    { name: "User", profile: img3, message: "mzco.creative", theme: "neon" },
+    { name: "User", profile: img3, message: "Stooop.", theme: "black" },
+    { name: "User", profile: img3, message: "figma", theme: "pink" },
+  ];
 
   const positions = useMemo(() => {
     return Array.from({ length: count }).map(() => ({
@@ -32,7 +55,9 @@ function LoopingTexts({count = 80, zRange = 160}) {
         <BlurText
           key={i}
           position={[pos.x, pos.y, pos.z]}
-          text={pos.word}
+          message={pos.word.message}
+          theme={pos.word.theme}
+          profile={pos.word.profile}
           ref={(el) => (textRefs.current[i] = el)}
         />
       ))}

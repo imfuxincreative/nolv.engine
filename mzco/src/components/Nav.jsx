@@ -6,9 +6,35 @@ import { useNavigate, useLocation } from 'react-router-dom'
 function Nav() {
   const navigate = useNavigate()
   const location = useLocation()
+const CHAT_THEMES = {
+  black: {
+    bg: 'black',
+    text: '#ffffff',
+  },
+    gray: {
+    bg: '#ededed',
+    text: 'black',
+  },
+  red: {
+    bg: 'orangered',
+    text: '#ffffff',
+  },
+    blue: {
+    bg: '#0004DD',
+    text: 'white',
+  },
+  pink: {
+    bg: '#FDE4F2',
+    text: 'black',
+  },
+  neon: {
+    bg: '#D9FF00',
+    text: 'black',
+  },
+}
 
   const isHome = location.pathname === '/'
-  const isProjects = location.pathname === '/projects'
+  const isProjects = location.pathname === '/infiniteChat'
 
   return (
     <div className='flex flex-col gap-1 bg-[#ededed] rounded-full fixed right-3 top-1/2 -translate-y-1/2 z-[999] items-center'>
@@ -24,7 +50,7 @@ function Nav() {
 
       {/* PROJECTS */}
       <button
-        onClick={() => navigate('/projects')}
+        onClick={() => navigate('/infiniteChat')}
         className={`h-7 w-7 flex items-center justify-center rounded-full
           ${isProjects ? 'bg-black text-white' : ''}`}
       >
