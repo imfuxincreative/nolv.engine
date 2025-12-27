@@ -1,12 +1,38 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { useTheme } from '../context/ThemeContext.jsx'
 
-function Chat({ message, profile }) {
+const CHAT_THEMES = {
+  black: {
+    bg: 'black',
+    text: '#ffffff',
+  },
+    gray: {
+    bg: '#ededed',
+    text: 'black',
+  },
+  red: {
+    bg: 'orangered',
+    text: '#ffffff',
+  },
+  pink: {
+    bg: '#FDE4F2',
+    text: 'black',
+  },
+  neon: {
+    bg: '#D9FF00',
+    text: 'black',
+  },
+}
+
+function Chat({ message, profile, theme = 'black' }) {
   const { isDarkMode } = useTheme()
 
   const parentRef = useRef(null)
   const chatRef = useRef(null)
   const [pos, setPos] = useState({ top: 0, left: 0 })
+
+  const currentTheme =
+    CHAT_THEMES[theme?.toLowerCase()] || CHAT_THEMES.black
 
   useEffect(() => {
     if (!parentRef.current || !chatRef.current) return
@@ -43,9 +69,13 @@ function Chat({ message, profile }) {
         />
 
         <p
-          style={{ borderRadius: '18px 18px 18px 4px' }}
-          className={`py-1.5 px-3 text-sm whitespace-nowrap
-            ${!isDarkMode ? 'bg-black text-white' : 'bg-white text-black'}`}
+          style={{
+            backgroundColor: currentTheme.bg,
+            color: currentTheme.text,
+            boxShadow: currentTheme.glow,
+            borderRadius: '18px 18px 18px 4px',
+          }}
+          className="py-1.5 px-3 text-sm whitespace-nowrap"
         >
           {message}
         </p>
