@@ -38,15 +38,9 @@ const {isLoading , setIsLoding , showMessage , setShowMessage} = useContext(Load
 
       const docHeight = document.documentElement.scrollHeight
   
-      const scrollPercent = (scrollTop / docHeight) * 100;
-      if(scrollPercent > 99){
-        setShowMessage(true)
-        setTimeout(()=>{
-          scrollTo(0 , 0)
-            
-           
-        }, 2000)
-      }
+      const scrollPercent = (scrollTop / (docHeight - window.innerHeight)) * 100;
+      
+
       if (progressRef.current) {
         progressRef.current.style.width = `${scrollPercent}%`;
       }
@@ -58,9 +52,6 @@ const {isLoading , setIsLoding , showMessage , setShowMessage} = useContext(Load
 
   return (
     <div className='pointer-events-none'>
-<div style={{opacity : showMessage ? 1 : 0}} className={`h-screen fixed flex items-center justify-center z-[10] duration-100 w-screen ${isDarkMode ? 'bg-black text-white ' :'bg-white text-black' }`}>
-<h2>you made a mess here.</h2>
-</div>
     <div
       ref={progressRef}
       className={` fixed z-[120] top-0 duration-1000 left-0  ${isDarkMode ? 'bg-white' :'bg-black' }  h-[5px] w-0 `}

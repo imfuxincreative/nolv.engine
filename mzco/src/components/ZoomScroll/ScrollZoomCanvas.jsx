@@ -10,7 +10,12 @@ const isMobile = () => typeof window !== 'undefined' && (window.innerWidth < 768
 function InfiniteCamera({ scrollRef }) {
   const { camera } = useThree();
   useFrame(() => {
-    const targetZ = 10 + scrollRef.current * 10
+    const scrollMax = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
+    const scrollProgress = Math.min(1, Math.max(0, window.scrollY / scrollMax))
+    // Linear interpolation for anamorphic perspective
+    const startZ = -800;
+    const finalZ = 150;
+    const targetZ = startZ + scrollProgress * (finalZ - startZ)
     camera.position.z += (targetZ - camera.position.z) * 0.1
   })
   return null
@@ -57,7 +62,7 @@ export default function ScrollZoomCanvas() {
 
 
   return (
-    <div className='relative w-full bg-transparent' style={{ height: mobile ? '20000px' : '100000px' }}>
+    <div className='relative w-full bg-transparent' style={{ height: mobile ? '15000px' : '40000px' }}>
       <Canvas camera={{ position: [0, 0, 10], fov: 50 }}
         className='!fixed  top-0 left-0 w-full h-screen'
         dpr={mobile ? 1 : [1, 2]}
@@ -68,7 +73,7 @@ export default function ScrollZoomCanvas() {
         <directionalLight position={[5, 5, 5]} intensity={0.8} />
         {!mobile && <pointLight position={[-3, 2, 4]} intensity={0.5} color="#D9FF00" />}
         {!mobile && <hemisphereLight groundColor="#1a1a2e" intensity={0.3} />}
-        <LoopingTexts count={mobile ? 20 : 80} zRange={mobile ? 60 : 160} />
+        <LoopingTexts count={mobile ? 50 : 200} zRange={mobile ? 400 : 800} />
         {/* <LoopingUI />   */}
         <InfiniteCamera scrollRef={scrollRef} />
       </Canvas>

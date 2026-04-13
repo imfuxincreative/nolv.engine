@@ -105,13 +105,8 @@ const Floating3DItem = forwardRef(function Floating3DItem(
   useFrame((_, delta) => {
     if (!groupRef.current || !innerRef.current) return
 
-    // Fade based on distance
-    const distance = Math.abs(groupRef.current.position.z - camera.position.z)
-    const fadeStart = 20
-    const fadeEnd = 60
-    const t = Math.min(1, Math.max(0, (distance - fadeStart) / (fadeEnd - fadeStart)))
-    const opacity = 1 - t
-    groupRef.current.visible = opacity > 0.01
+    // Make invisible if behind camera
+    groupRef.current.visible = groupRef.current.position.z < camera.position.z + 5
 
     // Only rotate from drag momentum (no auto-rotate)
     rotationVelocity.current.x *= 0.96

@@ -44,16 +44,15 @@ const BlurText = forwardRef(function BlurText(
   useFrame(() => {
     if (!ref.current) return
 
-    const distance = Math.abs(ref.current.position.z - camera.position.z)
-
-    const fadeStart = 20
-    const fadeEnd = 60
-    const t = Math.min(1, Math.max(0, (distance - fadeStart) / (fadeEnd - fadeStart)))
-    const opacity = 1 - t
-
-    // apply fade to DOM
-    const el = ref.current.__html
-    if (el) el.style.opacity = opacity
+    // Items should stay fully visible if they are in front of the camera
+    // If they go behind the camera, we can make them invisible
+    if (ref.current.position.z > camera.position.z + 5) {
+      ref.current.visible = false
+    } else {
+      ref.current.visible = true
+      const el = ref.current.__html
+      if (el) el.style.opacity = 1
+    }
   })
 
   return (
