@@ -120,7 +120,7 @@ export default function ScrollZoomCanvas() {
         <directionalLight position={[5, 5, 5]} intensity={0.8} />
         {!mobile && <pointLight position={[-3, 2, 4]} intensity={0.5} color="#D9FF00" />}
         {!mobile && <hemisphereLight groundColor="#1a1a2e" intensity={0.3} />}
-        <LoopingTexts count={mobile ? 400 : 1200} zRange={mobile ? 1600 : 2400} />
+        <LoopingTexts count={mobile ? 1200 : 1200} zRange={2400} />
         {/* <LoopingUI />   */}
         <InfiniteCamera scrollRef={scrollRef} />
       </Canvas>

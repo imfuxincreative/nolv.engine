@@ -13,7 +13,7 @@ function CameraScrollZoom({ scrollRef }) {
 
     const targetZ = 10 + scrollRef.current * 10
     camera.position.z += (targetZ - camera.position.z) * 0.1
-   
+
   })
 
   return null
@@ -76,31 +76,31 @@ export default function ZoomCanvas({ count = 100 }) {
   }, [])
 
   return (
-    <div className="relative w-full bg-white" style={{ height: mobile ? '20000px' : '100000px' }}>
+    <div className="relative w-full bg-white" style={{ height: mobile ? '100000px' : '100000px' }}>
       <Canvas
-      camera={{ position: [0, 0, 10], fov: 50 }}
-      className="!fixed top-0 left-0 w-full h-screen"
-      dpr={mobile ? 1 : [1, 2]}
-      gl={{ powerPreference: 'high-performance', antialias: !mobile }}
-      performance={{ min: 0.5 }}
-    >
-      <ambientLight intensity={1} />
+        camera={{ position: [0, 0, 10], fov: 50 }}
+        className="!fixed top-0 left-0 w-full h-screen"
+        dpr={mobile ? 1 : [1, 2]}
+        gl={{ powerPreference: 'high-performance', antialias: !mobile }}
+        performance={{ min: 0.5 }}
+      >
+        <ambientLight intensity={1} />
 
-      {/* Your text and camera movement */}
-      <FloatingLoopingTexts count={effectiveCount} />
-      <CameraScrollZoom scrollRef={scrollRef} />
+        {/* Your text and camera movement */}
+        <FloatingLoopingTexts count={effectiveCount} />
+        <CameraScrollZoom scrollRef={scrollRef} />
 
-      {/* ✅ Add smooth blur effect here */}
-      {/* <EffectComposer>
+        {/* ✅ Add smooth blur effect here */}
+        {/* <EffectComposer>
         <DepthOfField
           focusDistance={5}   // sharp around z = 0–5
           focalLength={10}     // small depth = more blur
           bokehScale={3.5}         // strength of the blur
           height={720}           // effect resolution
         /> */}
-      {/* </EffectComposer> */}
-      {/* <GlassShaderOverlay/> */}
-    </Canvas>
+        {/* </EffectComposer> */}
+        {/* <GlassShaderOverlay/> */}
+      </Canvas>
     </div>
   )
 }
