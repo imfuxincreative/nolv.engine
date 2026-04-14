@@ -11,6 +11,7 @@ const BlurText = forwardRef(function BlurText(
   externalRef
 ) {
   const ref = useRef()
+  const pRef = useRef()
   const { camera } = useThree()
   const { isDarkMode } = useTheme()
   const CHAT_THEMES = {
@@ -50,8 +51,15 @@ const BlurText = forwardRef(function BlurText(
       ref.current.visible = false
     } else {
       ref.current.visible = true
-      const el = ref.current.__html
-      if (el) el.style.opacity = 1
+      // fade the html brightness to 0 to make it black before UI slide (80% -> 90%)
+      const scrollMax = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
+      const scrollProgress = Math.min(1, Math.max(0, window.scrollY / scrollMax))
+      const fade = Math.max(0, Math.min(1, (scrollProgress - 0.80) / 0.10))
+      
+      if (pRef.current) {
+        // transitioning bg and text colors directly to black
+        pRef.current.style.filter = `brightness(${1 - fade})`
+      }
     }
   })
 
@@ -83,6 +91,7 @@ const BlurText = forwardRef(function BlurText(
           /> */}
 
           <p
+            ref={pRef}
             style={{
               backgroundColor: 'black',
               color: 'white',

@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @layer base {
+
   /* ===== Custom Fonts ===== */
   @font-face {
     font-family: inter-regular;
@@ -16,12 +17,12 @@
     font-family: inter-medium;
     src: url(./assets/fonts/Inter_28pt-Medium.ttf);
   }
-  
 
-audio {
-  width: 70vw;
 
-}
+  audio {
+    width: 70vw;
+
+  }
 
 
   /* ===== Mobile Styles (Default) ===== */
@@ -30,40 +31,42 @@ audio {
     font-size: 26px;
     letter-spacing: -0.2vw;
     line-height: 2.1vh;
-  
+
   }
 
   h2 {
     font-family: 'inter-light';
     font-size: 30px;
     line-height: 40px;
-    letter-spacing:  -1px;
-  
+    letter-spacing: -1px;
+
   }
 
- 
- h4 {
-   
-      font-family : 'inter-light';
-      font-size: 15px ;
 
-  
-    }
- p {
-   
-      font-family : 'inter-light';
-      font-size: 13px ;
+  h4 {
+
+    font-family: 'inter-light';
+    font-size: 15px;
+
+
+  }
+
+  p {
+
+    font-family: 'inter-regular';
+    font-size: 13px;
     letter-spacing: 0.2px;
     line-height: 16px;
 
-  
-    }
+
+  }
+
   h5 {
     font-family: 'inter-regular';
     font-size: 3.3vw;
     letter-spacing: 0;
     line-height: 1.5vh;
-  
+
   }
 
   h6 {
@@ -71,7 +74,7 @@ audio {
     font-size: 3.5vw;
     letter-spacing: 0;
     line-height: 1.5vh;
-   
+
   }
 
   a {
@@ -88,7 +91,7 @@ audio {
 
     font-size: 13px;
     line-height: 1.5vh;
-   
+
   }
 }
 
@@ -96,26 +99,26 @@ audio {
 @layer base {
   @media (min-width: 768px) {
     h1 {
-      font-family:'inter-light';
+      font-family: 'inter-light';
       font-size: 29px;
       letter-spacing: -0.050vw;
       line-height: 3.1vh;
     }
 
     h2 {
-      font-size:32px;
+      font-size: 32px;
       letter-spacing: -0.050vw;
 
-      
+
     }
 
 
-  
-    
+
+
 
     h5 {
       font-size: 14px;
-      font-family : 'inter-regular' ; 
+      font-family: 'inter-regular';
       line-height: 1;
     }
 
@@ -128,6 +131,6 @@ audio {
       font-size: 14px;
     }
 
-  
+
   }
 }

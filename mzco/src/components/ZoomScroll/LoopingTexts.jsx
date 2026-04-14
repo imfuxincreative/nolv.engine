@@ -3,6 +3,7 @@ import React, { useMemo, useState, useEffect } from 'react'
 import BlurText from './BlurText'
 import Floating3DItem from './Floating3DItem'
 import { useRef } from 'react'
+import * as THREE from 'three'
 import img3 from '../../assets/images/InfiniteImages/beach1.jpg'
 
 // ─── Image pool for floating images ──────────────────────────────────────────
@@ -52,10 +53,10 @@ function LoopingTexts({ count = 80, zRange = 160 }) {
       const basePos = {
         x: (Math.random() - 0.5) * 8, // increase slightly to fill space
         y: (Math.random() - 0.5) * 6,
-        zBase: -Math.random() * zRange,
+        zBase: 120 - Math.random() * zRange, // Items generated from Z=120 down to deepest tunnel bounds
       }
 
-      if (roll < 0.5) {
+      if (roll < 0.15) {
         // ─── Chat text bubble ──────────────────────────────────────────
         return {
           type: 'text',
@@ -77,10 +78,17 @@ function LoopingTexts({ count = 80, zRange = 160 }) {
     })
   }, [count, zRange]) // added zRange to deps
 
-  // ── Read Logo points ────────────────────────────────────────────────────────
+  // ── Read Logo points & Load Texture ────────────────────────────────────────────────────────
   const [logoPoints, setLogoPoints] = useState([])
+  const [logoTex, setLogoTex] = useState(null)
+  const realLogoRef = useRef()
 
   useEffect(() => {
+    new THREE.TextureLoader().load('/nolv.png', (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace
+      setLogoTex(tex)
+    })
+
     const img = new Image()
     img.src = '/nolv.png'
     img.onload = () => {
@@ -111,6 +119,9 @@ function LoopingTexts({ count = 80, zRange = 160 }) {
   useFrame(() => {
     if (logoPoints.length === 0) return
 
+    const scrollMax = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
+    const scrollProgress = Math.min(1, Math.max(0, window.scrollY / scrollMax))
+
     // The camera smoothly travels from z=10 to z=150.
     // At z=150, the perspective alignment perfectly recreates the logo.
     const finalCameraZ = 150
@@ -127,14 +138,21 @@ function LoopingTexts({ count = 80, zRange = 160 }) {
 
       // Multiply the normalized 2D point based on its distance to the final camera point.
       // This forms a perspective cone (anamorphic illusion).
-      const spreadFactor = 0.40 
+      const spreadFactor = 0.08 
+      
+      // Shift the final assembled logo UP slightly at the very end to make room for text
+      // This happens strictly between 90% and 94%, finishing BEFORE the UI starts appearing
+      const finalFade = Math.max(0, Math.min(1, (scrollProgress - 0.90) / 0.04))
+      const targetYOffset = finalFade * 0.8 // shift UP by 0.8 in normalized coordinate space
       
       ref.position.x = targetPoint.x * distanceToFinal * spreadFactor
-      ref.position.y = targetPoint.y * distanceToFinal * spreadFactor
+      ref.position.y = (targetPoint.y + targetYOffset) * distanceToFinal * spreadFactor
       ref.position.z = itemZ
 
-      // Scale items so they appear roughly the same size regardless of Z depth.
-      const scale = distanceToFinal * 0.035
+      // Dynamically make items larger during the fly-through, but shrink them to tiny pixels exactly when the camera locks (90%)
+      const cameraProgress = Math.min(1, scrollProgress / 0.90)
+      const dynamicSizeMultiplier = 1 + (1.5 * (1 - cameraProgress))
+      const scale = distanceToFinal * 0.0015 * dynamicSizeMultiplier
       ref.scale.set(scale, scale, scale)
       
       // Make sure they face the camera perfectly to maintain the illusion

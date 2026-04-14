@@ -108,6 +108,18 @@ const Floating3DItem = forwardRef(function Floating3DItem(
     // Make invisible if behind camera
     groupRef.current.visible = groupRef.current.position.z < camera.position.z + 5
 
+    // Transform items to black before the UI state (80% to 90%)
+    const scrollMax = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
+    const scrollProgress = Math.min(1, Math.max(0, window.scrollY / scrollMax))
+    const fade = Math.max(0, Math.min(1, (scrollProgress - 0.80) / 0.10)) 
+
+    innerRef.current.traverse((child) => {
+      if (child.isMesh && child.material && child.material.color) {
+        const v = 1 - fade
+        child.material.color.setRGB(v, v, v)
+      }
+    })
+
     // Only rotate from drag momentum (no auto-rotate)
     rotationVelocity.current.x *= 0.96
     rotationVelocity.current.y *= 0.96
