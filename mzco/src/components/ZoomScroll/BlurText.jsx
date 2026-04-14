@@ -5,6 +5,7 @@ import { useThree, useFrame } from '@react-three/fiber'
 import { useRef, forwardRef } from 'react'
 import { useTheme } from '../../context/ThemeContext.jsx'
 import img3 from '../../assets/images/InfiniteImages/beach1.jpg'
+import { scrollState } from './scrollState'
 
 const BlurText = forwardRef(function BlurText(
   { position, message, theme, profile },
@@ -12,7 +13,7 @@ const BlurText = forwardRef(function BlurText(
 ) {
   const ref = useRef()
   const pRef = useRef()
-  const { camera } = useThree()
+  const camera = useThree((s) => s.camera)
   const { isDarkMode } = useTheme()
   const CHAT_THEMES = {
     black: {
@@ -42,6 +43,10 @@ const BlurText = forwardRef(function BlurText(
   }
   const currentTheme =
     CHAT_THEMES[theme?.toLowerCase()] || CHAT_THEMES.black
+
+  // PERF: Track last fade value to avoid unnecessary DOM writes
+  const lastFade = useRef(-1)
+
   useFrame(() => {
     if (!ref.current) return
 
@@ -51,14 +56,18 @@ const BlurText = forwardRef(function BlurText(
       ref.current.visible = false
     } else {
       ref.current.visible = true
-      // fade the html brightness to 0 to make it black before UI slide (80% -> 90%)
-      const scrollMax = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
-      const scrollProgress = Math.min(1, Math.max(0, window.scrollY / scrollMax))
-      const fade = Math.max(0, Math.min(1, (scrollProgress - 0.80) / 0.10))
-      
-      if (pRef.current) {
-        // transitioning bg and text colors directly to black
-        pRef.current.style.filter = `brightness(${1 - fade})`
+
+      // PERF: Read from shared scrollState instead of DOM
+      const fade = Math.max(0, Math.min(1, (scrollState.progress - 0.80) / 0.10))
+
+      // PERF: Only update DOM style when fade actually changes (quantized to 20 steps)
+      const rounded = (fade * 20 | 0) / 20
+      if (rounded !== lastFade.current) {
+        lastFade.current = rounded
+        if (pRef.current) {
+          // transitioning bg and text colors directly to black
+          pRef.current.style.filter = `brightness(${1 - fade})`
+        }
       }
     }
   })

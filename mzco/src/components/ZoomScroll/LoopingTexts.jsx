@@ -5,6 +5,7 @@ import Floating3DItem from './Floating3DItem'
 import { useRef } from 'react'
 import * as THREE from 'three'
 import img3 from '../../assets/images/InfiniteImages/beach1.jpg'
+import { scrollState } from './scrollState'
 
 // ─── Image pool for floating images ──────────────────────────────────────────
 import imgBeach2 from '../../assets/images/InfiniteImages/beach2.jpg'
@@ -119,15 +120,26 @@ function LoopingTexts({ count = 80, zRange = 160 }) {
   useFrame(() => {
     if (logoPoints.length === 0) return
 
-    const scrollMax = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
-    const scrollProgress = Math.min(1, Math.max(0, window.scrollY / scrollMax))
+    // PERF: Read from shared scrollState instead of accessing DOM
+    const scrollProgress = scrollState.progress
 
     // The camera smoothly travels from z=10 to z=150.
     // At z=150, the perspective alignment perfectly recreates the logo.
     const finalCameraZ = 150
 
-    itemRefs.current.forEach((ref, i) => {
-      if (!ref) return
+    // PERF: Pre-compute values used by all items
+    const cameraProgress = Math.min(1, scrollProgress / 0.90)
+    const dynamicSizeMultiplier = 1 + (1.5 * (1 - cameraProgress))
+    const finalFade = Math.max(0, Math.min(1, (scrollProgress - 0.90) / 0.04))
+    const targetYOffset = finalFade * 0.8
+    const spreadFactor = 0.08
+
+    const refs = itemRefs.current
+    const len = refs.length
+
+    for (let i = 0; i < len; i++) {
+      const ref = refs[i]
+      if (!ref) continue
       
       const item = items[i]
       const targetPoint = logoPoints[i % logoPoints.length]
@@ -138,27 +150,18 @@ function LoopingTexts({ count = 80, zRange = 160 }) {
 
       // Multiply the normalized 2D point based on its distance to the final camera point.
       // This forms a perspective cone (anamorphic illusion).
-      const spreadFactor = 0.08 
-      
-      // Shift the final assembled logo UP slightly at the very end to make room for text
-      // This happens strictly between 90% and 94%, finishing BEFORE the UI starts appearing
-      const finalFade = Math.max(0, Math.min(1, (scrollProgress - 0.90) / 0.04))
-      const targetYOffset = finalFade * 0.8 // shift UP by 0.8 in normalized coordinate space
-      
       ref.position.x = targetPoint.x * distanceToFinal * spreadFactor
       ref.position.y = (targetPoint.y + targetYOffset) * distanceToFinal * spreadFactor
       ref.position.z = itemZ
 
       // Dynamically make items larger during the fly-through, but shrink them to tiny pixels exactly when the camera locks (90%)
-      const cameraProgress = Math.min(1, scrollProgress / 0.90)
-      const dynamicSizeMultiplier = 1 + (1.5 * (1 - cameraProgress))
       const scale = distanceToFinal * 0.0015 * dynamicSizeMultiplier
       ref.scale.set(scale, scale, scale)
       
       // Make sure they face the camera perfectly to maintain the illusion
       ref.rotation.x = 0
       ref.rotation.y = 0
-    })
+    }
   })
 
   return (

@@ -5,6 +5,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { useGLTF, Float, RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
 import { forwardRef } from 'react'
+import { scrollState } from './scrollState'
 
 // ─── GLB Model (Desk) ─────────────────────────────────────────────────────────
 function DeskModel({ scale = 1 }) {
@@ -13,8 +14,10 @@ function DeskModel({ scale = 1 }) {
   return <primitive object={cloned} scale={scale} />
 }
 
-// Preload so it doesn't stutter
-useGLTF.preload('/models/Desk.glb')
+// PERF: Removed useGLTF.preload — DeskModel is never rendered (only 'image'
+// type items are generated in LoopingTexts). The preload wasted network + memory
+// loading a GLB that was never used.
+// useGLTF.preload('/models/Desk.glb')
 
 // ─── Simple Square Shape ──────────────────────────────────────────────────────
 function SquareShape({ scale = 1 }) {
@@ -35,6 +38,11 @@ function SquareShape({ scale = 1 }) {
 // Stores { tex, aspect, listeners[] } per image source
 const _textureCache = new Map()
 
+// ─── Shared geometry for ALL image planes ─────────────────────────────────────
+// PERF: One geometry buffer shared across ~1000 instances instead of each
+// creating its own. Scale is used to handle different aspect ratios.
+const _sharedPlaneGeo = new THREE.PlaneGeometry(1, 1)
+
 // ─── 3D Floating Image (no card, just the image as a plane) ───────────────────
 function FloatingImage({ imageSrc, scale = 1 }) {
   const meshRef = useRef()
@@ -53,6 +61,11 @@ function FloatingImage({ imageSrc, scale = 1 }) {
       entry.listeners = []
     })
     tex.colorSpace = THREE.SRGBColorSpace
+    // PERF: Disable mipmaps — these items are scaled dynamically already,
+    // mipmaps waste GPU memory (especially with 13 unique textures).
+    tex.generateMipmaps = false
+    tex.minFilter = THREE.LinearFilter
+    tex.magFilter = THREE.LinearFilter
     entry.tex = tex
     _textureCache.set(imageSrc, entry)
     return tex
@@ -74,8 +87,7 @@ function FloatingImage({ imageSrc, scale = 1 }) {
 
   return (
     <group scale={scale}>
-      <mesh ref={meshRef} key={aspect}>
-        <planeGeometry args={[fixedWidth, fixedWidth * aspect]} />
+      <mesh ref={meshRef} geometry={_sharedPlaneGeo} scale={[fixedWidth, fixedWidth * aspect, 1]} key={aspect}>
         <meshBasicMaterial
           map={texture}
           side={THREE.DoubleSide}
@@ -93,59 +105,45 @@ const Floating3DItem = forwardRef(function Floating3DItem(
 ) {
   const groupRef = useRef()
   const innerRef = useRef()
-  const { camera } = useThree()
+  const camera = useThree((s) => s.camera)
 
-  // Drag-to-rotate state
-  const isDragging = useRef(false)
-  const previousMouse = useRef({ x: 0, y: 0 })
-  const rotationVelocity = useRef({ x: 0, y: 0 })
+  // PERF: Track last fade to avoid redundant traverse() calls.
+  // Previously, traverse() ran on ALL ~1000 items EVERY frame, even when
+  // the color wasn't changing. Now it only runs when needed (~20 times total).
+  const lastFade = useRef(-1)
 
-
-
-  useFrame((_, delta) => {
-    if (!groupRef.current || !innerRef.current) return
+  useFrame(() => {
+    const g = groupRef.current
+    if (!g || !innerRef.current) return
 
     // Make invisible if behind camera
-    groupRef.current.visible = groupRef.current.position.z < camera.position.z + 5
+    g.visible = g.position.z < camera.position.z + 5
+
+    // PERF: Skip ALL further processing if item is invisible
+    if (!g.visible) return
 
     // Transform items to black before the UI state (80% to 90%)
-    const scrollMax = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
-    const scrollProgress = Math.min(1, Math.max(0, window.scrollY / scrollMax))
-    const fade = Math.max(0, Math.min(1, (scrollProgress - 0.80) / 0.10)) 
+    const fade = Math.max(0, Math.min(1, (scrollState.progress - 0.80) / 0.10))
 
-    innerRef.current.traverse((child) => {
-      if (child.isMesh && child.material && child.material.color) {
-        const v = 1 - fade
-        child.material.color.setRGB(v, v, v)
-      }
-    })
-
-    // Only rotate from drag momentum (no auto-rotate)
-    rotationVelocity.current.x *= 0.96
-    rotationVelocity.current.y *= 0.96
-    innerRef.current.rotation.x += rotationVelocity.current.x * delta
-    innerRef.current.rotation.y += rotationVelocity.current.y * delta
+    // Only traverse when fade value actually changes (quantized to 20 steps)
+    const rounded = (fade * 20 | 0) / 20
+    if (rounded !== lastFade.current) {
+      lastFade.current = rounded
+      const v = 1 - fade
+      innerRef.current.traverse((child) => {
+        if (child.isMesh && child.material && child.material.color) {
+          child.material.color.setRGB(v, v, v)
+        }
+      })
+    }
   })
 
-  const handlePointerDown = (e) => {
-    e.stopPropagation()
-    isDragging.current = true
-    previousMouse.current = { x: e.clientX, y: e.clientY }
-    e.target.setPointerCapture?.(e.pointerId)
-  }
-
-  const handlePointerMove = (e) => {
-    if (!isDragging.current) return
-    const dx = e.clientX - previousMouse.current.x
-    const dy = e.clientY - previousMouse.current.y
-    rotationVelocity.current.x = dy * 0.08
-    rotationVelocity.current.y = dx * 0.08
-    previousMouse.current = { x: e.clientX, y: e.clientY }
-  }
-
-  const handlePointerUp = () => {
-    isDragging.current = false
-  }
+  // PERF: Removed drag-to-rotate pointer handlers (onPointerDown/Move/Up/Leave).
+  // Reasons:
+  // 1. LoopingTexts sets ref.rotation.x = 0 and ref.rotation.y = 0 every frame,
+  //    overriding any user-applied rotation anyway
+  // 2. Pointer handlers cause THREE.js to raycast against ALL ~1000 items on
+  //    EVERY mouse/touch move — extremely expensive, especially on mobile
 
   const renderItem = () => {
     switch (itemType) {
@@ -178,10 +176,6 @@ const Floating3DItem = forwardRef(function Floating3DItem(
         else if (externalRef) externalRef.current = el
       }}
       position={position}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerLeave={handlePointerUp}
     >
       <group ref={innerRef}>
         {renderItem()}
