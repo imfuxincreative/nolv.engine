@@ -54,6 +54,13 @@ useEffect(() => {
    setIsDarkMode((prev) => !prev
   )
   }
+const handleLogin = () => {
+  const callbackUrl = encodeURIComponent(
+    'http://localhost:5173/auth/callback'
+  );
+
+  window.location.href = `https://mzverse.vercel.app/signup?redirect=${callbackUrl}`;
+};
 
   const handleWhatIf = () => {
      if (location.pathname === '/infiniteGrid' && playgroundBtnRef.current) {
@@ -87,12 +94,19 @@ useEffect(() => {
 {!openGallary ? <div className='flex fixed items-center top-10 right-10 gap-1 z-[999]'>
 <button  onClick={handleThemeClick}  className={` h-[27px]  w-[27px] flex items-center justify-center  px-2 rounded-full ${isDarkMode ?'bg-white text-black' : 'bg-black text-white'} duration-500 `} ><CiLight size={23} className=''/></button>
       {/* Top Right Button */}
-      <button ref={playgroundBtnRef}
+      {/* <button ref={playgroundBtnRef}
         onClick={handleWhatIf}
         onMouseLeave={()=> setCursorAnimation('onhome-animation')} onMouseEnter={()=> setCursorAnimation('whatif-animation')} 
         className={` ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} duration-500 h-fit py-2  w-fit px-3 rounded-full `}
         >
 Design
+      </button> */}
+            <button 
+onClick={handleLogin}
+        onMouseLeave={()=> setCursorAnimation('onhome-animation')} onMouseEnter={()=> setCursorAnimation('whatif-animation')} 
+        className={` ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} duration-500 h-fit py-2  w-fit px-3 rounded-full `}
+        >
+Join Community
       </button>
         </div> : <button onClick={()=>{ navigate(-1) ,setOpenGallary(false)}} className={`h-[35px] lg:h-[40px] lg:w-[40px] w-[35px] flex justify-center items-center px-2 rounded-full ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'}  fixed top-10 right-10 gap-1 z-[999] `}><RxCross1/></button>}
     </div>

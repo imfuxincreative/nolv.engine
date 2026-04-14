@@ -14,34 +14,34 @@ const BlurText = forwardRef(function BlurText(
   const { camera } = useThree()
   const { isDarkMode } = useTheme()
   const CHAT_THEMES = {
-  black: {
-    bg: 'black',
-    text: '#ffffff',
-  },
+    black: {
+      bg: 'black',
+      text: '#ffffff',
+    },
     gray: {
-    bg: '#ededed',
-    text: 'black',
-  },
-  red: {
-    bg: 'orangered',
-    text: '#ffffff',
-  },
+      bg: '#ededed',
+      text: 'black',
+    },
+    red: {
+      bg: 'orangered',
+      text: '#ffffff',
+    },
     blue: {
-    bg: '#0004DD',
-    text: 'white',
-  },
-  pink: {
-    bg: '#FDE4F2',
-    text: 'black',
-  },
-  neon: {
-    bg: '#D9FF00',
-    text: 'black',
-  },
-}
+      bg: '#0004DD',
+      text: 'white',
+    },
+    pink: {
+      bg: '#FDE4F2',
+      text: 'black',
+    },
+    neon: {
+      bg: '#D9FF00',
+      text: 'black',
+    },
+  }
   const currentTheme =
     CHAT_THEMES[theme?.toLowerCase()] || CHAT_THEMES.black
-console.log(currentTheme)
+  console.log(currentTheme)
   useFrame(() => {
     if (!ref.current) return
 
@@ -78,20 +78,20 @@ console.log(currentTheme)
             color: isDarkMode ? '#fff' : '#000',
           }}
         >
-          <img
+          {/* <img
             src={img3}
             className="h-6 w-6 rounded-full"
             alt="avatar"
-          />
+          /> */}
 
           <p
-     style={{
-            backgroundColor: currentTheme.bg,
-            color: currentTheme.text,
-            boxShadow: currentTheme.glow,
-            borderRadius: '18px 18px 18px 4px',
-          }}
-            className={`py-1.5 px-3 text-sm whitespace-nowrap
+            style={{
+              backgroundColor: 'black',
+              color: 'white',
+              boxShadow: currentTheme.glow,
+              // borderRadius: '18px 18px 18px 4px',
+            }}
+            className={` px-3 text-sm whitespace-nowrap
               `}
           >
             {message}

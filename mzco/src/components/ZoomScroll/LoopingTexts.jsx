@@ -1,11 +1,26 @@
 import { useFrame } from '@react-three/fiber'
 import React, { useMemo } from 'react'
 import BlurText from './BlurText'
-import {useRef} from 'react'
+import Floating3DItem from './Floating3DItem'
+import { useRef } from 'react'
 import img3 from '../../assets/images/InfiniteImages/beach1.jpg'
-function LoopingTexts({count = 80, zRange = 160}) {
-  const textRefs = useRef([])
-  const textOptions =  [
+
+// ─── Image pool for floating images ──────────────────────────────────────────
+import imgBeach2 from '../../assets/images/InfiniteImages/beach2.jpg'
+import imgFlower from '../../assets/images/InfiniteImages/flower.jpg'
+import imgMountain from '../../assets/images/InfiniteImages/mountain.jpg'
+import imgRain from '../../assets/images/InfiniteImages/rain.jpg'
+import imgSerenity from '../../assets/images/InfiniteImages/serenity.jpg'
+import imgBuilding from '../../assets/images/InfiniteImages/building.jpg'
+import imgLake from '../../assets/images/InfiniteImages/lake.jpg'
+
+const CARD_IMAGES = [img3, imgBeach2, imgFlower, imgRain, imgSerenity, imgBuilding, '/InfiniteImages/abundance.webp', '/InfiniteImages/monster.webp', '/InfiniteImages/wanted.webp', '/InfiniteImages/nostalogia.webp', '/InfiniteImages/freedom.webp', '/InfiniteImages/architecture.webp', '/InfiniteImages/starlight.webp']
+
+function LoopingTexts({ count = 80, zRange = 160 }) {
+  const itemRefs = useRef([])
+
+  // ── Chat text options ───────────────────────────────────────────────────────
+  const textOptions = [
     { name: "User", profile: img3, message: "hiii", theme: "neon" },
     { name: "User", profile: img3, message: "I'm Fuckin' creative", theme: "neon" },
     { name: "User", profile: img3, message: "hello", theme: "gray" },
@@ -27,19 +42,43 @@ function LoopingTexts({count = 80, zRange = 160}) {
     { name: "User", profile: img3, message: "mzco.creative", theme: "neon" },
     { name: "User", profile: img3, message: "Stooop.", theme: "black" },
     { name: "User", profile: img3, message: "figma", theme: "pink" },
-  ];
+  ]
 
-  const positions = useMemo(() => {
-    return Array.from({ length: count }).map(() => ({
-      x: (Math.random() - 0.5) * 6,
-      y: (Math.random() - 0.5) * 4,
-      z: -Math.random() * zRange,
-      word: textOptions[Math.floor(Math.random() * textOptions.length)],
-    }))
+  // ── Generate random items: ~50% text, ~50% images ──────────────────────────
+  const items = useMemo(() => {
+    return Array.from({ length: count }).map(() => {
+      const roll = Math.random()
+
+      const basePos = {
+        x: (Math.random() - 0.5) * 6,
+        y: (Math.random() - 0.5) * 4,
+        z: -Math.random() * zRange,
+      }
+
+      if (roll < 0.5) {
+        // ─── Chat text bubble ──────────────────────────────────────────
+        return {
+          type: 'text',
+          ...basePos,
+          data: textOptions[Math.floor(Math.random() * textOptions.length)],
+        }
+      } else {
+        // ─── Floating image ────────────────────────────────────────────
+        const img = CARD_IMAGES[Math.floor(Math.random() * CARD_IMAGES.length)]
+        return {
+          type: 'image',
+          ...basePos,
+          data: {
+            imageSrc: img,
+            scale: 0.5 + Math.random() * 0.4,
+          },
+        }
+      }
+    })
   }, [count])
 
   useFrame(({ camera }) => {
-    textRefs.current.forEach((ref, i) => {
+    itemRefs.current.forEach((ref) => {
       if (!ref) return
 
       // Recycle if behind camera
@@ -51,16 +90,30 @@ function LoopingTexts({count = 80, zRange = 160}) {
 
   return (
     <>
-      {positions.map((pos, i) => (
-        <BlurText
-          key={i}
-          position={[pos.x, pos.y, pos.z]}
-          message={pos.word.message}
-          theme={pos.word.theme}
-          profile={pos.word.profile}
-          ref={(el) => (textRefs.current[i] = el)}
-        />
-      ))}
+      {items.map((item, i) => {
+        if (item.type === 'text') {
+          return (
+            <BlurText
+              key={i}
+              position={[item.x, item.y, item.z]}
+              message={item.data.message}
+              theme={item.data.theme}
+              profile={item.data.profile}
+              ref={(el) => (itemRefs.current[i] = el)}
+            />
+          )
+        }
+
+        return (
+          <Floating3DItem
+            key={i}
+            position={[item.x, item.y, item.z]}
+            itemType={item.type}
+            itemData={item.data}
+            ref={(el) => (itemRefs.current[i] = el)}
+          />
+        )
+      })}
     </>
   )
 }
