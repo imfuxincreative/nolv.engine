@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useMemo, useState } from 'react'
+import { useRef, useMemo, useState, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { useGLTF, Float, RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
@@ -31,6 +31,10 @@ function SquareShape({ scale = 1 }) {
   )
 }
 
+// ─── Texture cache to prevent duplicate loads ─────────────────────────────────
+// Stores { tex, aspect, listeners[] } per image source
+const _textureCache = new Map()
+
 // ─── 3D Floating Image (no card, just the image as a plane) ───────────────────
 function FloatingImage({ imageSrc, scale = 1 }) {
   const meshRef = useRef()
@@ -38,14 +42,34 @@ function FloatingImage({ imageSrc, scale = 1 }) {
   const fixedWidth = 0.9
 
   const texture = useMemo(() => {
+    if (_textureCache.has(imageSrc)) {
+      return _textureCache.get(imageSrc).tex
+    }
+    const entry = { tex: null, aspect: null, listeners: [] }
     const tex = new THREE.TextureLoader().load(imageSrc, (loaded) => {
-      // Once loaded, read image natural size and compute aspect ratio
-      const w = loaded.image.width
-      const h = loaded.image.height
-      setAspect(h / w)
+      entry.aspect = loaded.image.height / loaded.image.width
+      // Notify all subscribed instances
+      entry.listeners.forEach(fn => fn(entry.aspect))
+      entry.listeners = []
     })
     tex.colorSpace = THREE.SRGBColorSpace
+    entry.tex = tex
+    _textureCache.set(imageSrc, entry)
     return tex
+  }, [imageSrc])
+
+  // Subscribe to get correct aspect ratio (works for both cached and fresh textures)
+  useEffect(() => {
+    const entry = _textureCache.get(imageSrc)
+    if (!entry) return
+    if (entry.aspect !== null) {
+      setAspect(entry.aspect)
+    } else {
+      entry.listeners.push(setAspect)
+      return () => {
+        entry.listeners = entry.listeners.filter(fn => fn !== setAspect)
+      }
+    }
   }, [imageSrc])
 
   return (

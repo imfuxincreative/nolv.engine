@@ -1,7 +1,9 @@
 'use client'
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useRef, useEffect, useMemo } from 'react'
+import { useRef, useEffect, useMemo, useState } from 'react'
+
+const isMobile = () => typeof window !== 'undefined' && (window.innerWidth < 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent))
 import BlurText from './BlurText.jsx' // make sure the filename is correct (TextBlur or BlurText)
 
 
@@ -57,6 +59,8 @@ function FloatingLoopingTexts({ count = 80, zRange = 160 }) {
 
 export default function ZoomCanvas({ count = 100 }) {
   const scrollRef = useRef(0)
+  const [mobile] = useState(() => isMobile())
+  const effectiveCount = mobile ? Math.min(count, 25) : count
 
   useEffect(() => {
     const handleScroll = () => {
@@ -72,15 +76,18 @@ export default function ZoomCanvas({ count = 100 }) {
   }, [])
 
   return (
-    <div className="relative w-full h-[100000px] bg-white">
+    <div className="relative w-full bg-white" style={{ height: mobile ? '20000px' : '100000px' }}>
       <Canvas
       camera={{ position: [0, 0, 10], fov: 50 }}
       className="!fixed top-0 left-0 w-full h-screen"
+      dpr={mobile ? 1 : [1, 2]}
+      gl={{ powerPreference: 'high-performance', antialias: !mobile }}
+      performance={{ min: 0.5 }}
     >
       <ambientLight intensity={1} />
 
       {/* Your text and camera movement */}
-      <FloatingLoopingTexts count={count} />
+      <FloatingLoopingTexts count={effectiveCount} />
       <CameraScrollZoom scrollRef={scrollRef} />
 
       {/* ✅ Add smooth blur effect here */}

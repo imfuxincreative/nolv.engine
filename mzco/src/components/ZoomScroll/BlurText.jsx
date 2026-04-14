@@ -41,7 +41,6 @@ const BlurText = forwardRef(function BlurText(
   }
   const currentTheme =
     CHAT_THEMES[theme?.toLowerCase()] || CHAT_THEMES.black
-  console.log(currentTheme)
   useFrame(() => {
     if (!ref.current) return
 
