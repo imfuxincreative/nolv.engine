@@ -1,24 +1,26 @@
 import { useFrame } from '@react-three/fiber'
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useRef } from 'react'
 import BlurText from './BlurText'
 import Floating3DItem from './Floating3DItem'
-import { useRef } from 'react'
 import * as THREE from 'three'
 import img3 from '../../assets/images/InfiniteImages/beach1.jpg'
 import { scrollState } from './scrollState'
+import { useLayoutMode } from '../../context/LayoutContext.jsx'
 
 // ─── Image pool for floating images ──────────────────────────────────────────
 import imgBeach2 from '../../assets/images/InfiniteImages/beach2.jpg'
 import imgFlower from '../../assets/images/InfiniteImages/flower.jpg'
+
+
 import imgMountain from '../../assets/images/InfiniteImages/mountain.jpg'
 import imgRain from '../../assets/images/InfiniteImages/rain.jpg'
 import imgSerenity from '../../assets/images/InfiniteImages/serenity.jpg'
 import imgBuilding from '../../assets/images/InfiniteImages/building.jpg'
 import imgLake from '../../assets/images/InfiniteImages/lake.jpg'
 
-const CARD_IMAGES = [img3, imgBeach2, imgFlower, imgRain, imgSerenity, imgBuilding, '/InfiniteImages/abundance.webp', '/InfiniteImages/monster.webp', '/InfiniteImages/wanted.webp', '/InfiniteImages/nostalogia.webp', '/InfiniteImages/freedom.webp', '/InfiniteImages/architecture.webp', '/InfiniteImages/starlight.webp']
+const CARD_IMAGES = [img3, imgBeach2, imgFlower, imgRain, imgSerenity, imgBuilding, '/InfiniteImages/abundance.webp', '/InfiniteImages/monster.webp', '/InfiniteImages/wanted.webp', '/InfiniteImages/nostalogia.webp', '/InfiniteImages/freedom.webp', '/InfiniteImages/architecture.webp', '/InfiniteImages/starlight.webp', '/harv.webp', '/fire.jpg', '/InfiniteImages/founder.webp', '/InfiniteImages/timeless.webp', '/InfiniteImages/black.jpg', '/InfiniteImages/white.jpg', '/InfiniteImages/first.jpg', '/InfiniteImages/ar.jpg', '/InfiniteImages/vtw.webp', '/InfiniteImages/vbw.webp', '/InfiniteImages/vai.webp', '/InfiniteImages/insane.jpg', '/InfiniteImages/air.jpg', '/InfiniteImages/kng.webp', '/InfiniteImages/flash.jpg', '/InfiniteImages/eid.heic', '/InfiniteImages/ky.jpg', '/InfiniteImages/color.jpg', '/InfiniteImages/dry.jpg', '/InfiniteImages/ship.heic', '/InfiniteImages/xxo.jpg', '/InfiniteImages/travis.webp', '/InfiniteImages/sham.jpg']
 
-function LoopingTexts({ count = 80, zRange = 160 }) {
+function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
   const itemRefs = useRef([])
 
   // ── Chat text options ───────────────────────────────────────────────────────
@@ -48,6 +50,7 @@ function LoopingTexts({ count = 80, zRange = 160 }) {
 
   // ── Generate random items: ~50% text, ~50% images ──────────────────────────
   const items = useMemo(() => {
+    const areaSize = 45; // Match random layout area size for 2D wrapping
     return Array.from({ length: count }).map(() => {
       const roll = Math.random()
 
@@ -55,6 +58,8 @@ function LoopingTexts({ count = 80, zRange = 160 }) {
         x: (Math.random() - 0.5) * 8, // increase slightly to fill space
         y: (Math.random() - 0.5) * 6,
         zBase: 120 - Math.random() * zRange, // Items generated from Z=120 down to deepest tunnel bounds
+        rand2DX: (Math.random() - 0.5) * areaSize,
+        rand2DY: (Math.random() - 0.5) * areaSize,
       }
 
       if (roll < 0.15) {
@@ -107,7 +112,7 @@ function LoopingTexts({ count = 80, zRange = 160 }) {
         for (let x = 0; x < w; x += 2) {
           const alpha = data[(y * w + x) * 4 + 3]
           if (alpha > 128) { // non-transparent
-            const nx = (x / w) - 0.5 
+            const nx = (x / w) - 0.5
             const ny = -((y / h) - 0.5) * (h / w)
             points.push({ x: nx, y: ny })
           }
@@ -117,8 +122,18 @@ function LoopingTexts({ count = 80, zRange = 160 }) {
     }
   }, [])
 
-  useFrame(() => {
+  const { is2DMode } = useLayoutMode()
+  const layoutProgress = useRef(0)
+
+  const wrap = (val, max) => ((val % max) + max) % max;
+
+  useFrame((stateEvent) => {
     if (logoPoints.length === 0) return
+
+    // Interpolate layout mode smoothly and blazingly fast
+    const targetMode = is2DMode ? 1 : 0
+    layoutProgress.current += (targetMode - layoutProgress.current) * 0.15
+    scrollState.layoutProgress = layoutProgress.current;
 
     // PERF: Read from shared scrollState instead of accessing DOM
     const scrollProgress = scrollState.progress
@@ -137,30 +152,108 @@ function LoopingTexts({ count = 80, zRange = 160 }) {
     const refs = itemRefs.current
     const len = refs.length
 
+    // Handle physics updates
+    let dx = 0;
+    let dy = 0;
+    const state = dragRef?.current;
+    if (state) {
+      if (!state.isDragging) {
+        // Friction on the inertia injection
+        state.vx *= 0.92; // 0.92 adds nice slide
+        state.vy *= 0.92;
+        state.targetX += state.vx;
+        state.targetY += state.vy;
+      }
+
+      // Smooth lerp for buttery lag like Lenis
+      // Lenis uses ~0.1 interpolation rate
+      state.x += (state.targetX - state.x) * 0.1;
+      state.y += (state.targetY - state.y) * 0.1;
+
+      dx = state.x * 0.025;
+      dy = state.y * 0.025; // Positive to match natural grab/move action
+    }
+
+    // 2D Canvas Layout Area Constants
+    const cols = Math.ceil(Math.sqrt(len));
+    const gridSpacing = 1.6; // Keeping spacing relative to scales
+    const gridWidth = cols * gridSpacing;
+    const gridHeight = cols * gridSpacing;
+    const z2D = 143; // Pulled back from camera (Z=150) for a wider, zoomed-out field of view
+
     for (let i = 0; i < len; i++) {
       const ref = refs[i]
       if (!ref) continue
-      
+
       const item = items[i]
       const targetPoint = logoPoints[i % logoPoints.length]
-      
-      // Keep items entirely stationary.
-      const itemZ = item.zBase 
-      const distanceToFinal = finalCameraZ - itemZ 
 
-      // Multiply the normalized 2D point based on its distance to the final camera point.
-      // This forms a perspective cone (anamorphic illusion).
-      ref.position.x = targetPoint.x * distanceToFinal * spreadFactor
-      ref.position.y = (targetPoint.y + targetYOffset) * distanceToFinal * spreadFactor
-      ref.position.z = itemZ
+      // --- 3D Anamorphic Layout ---
+      const itemZ = item.zBase
+      const distanceToFinal = finalCameraZ - itemZ
 
-      // Dynamically make items larger during the fly-through, but shrink them to tiny pixels exactly when the camera locks (90%)
-      const scale = distanceToFinal * 0.0015 * dynamicSizeMultiplier
-      ref.scale.set(scale, scale, scale)
-      
-      // Make sure they face the camera perfectly to maintain the illusion
-      ref.rotation.x = 0
-      ref.rotation.y = 0
+      const pos3D_x = targetPoint.x * distanceToFinal * spreadFactor
+      const pos3D_y = (targetPoint.y + targetYOffset) * distanceToFinal * spreadFactor
+      const pos3D_z = itemZ
+      const scale3D = distanceToFinal * 0.0015 * dynamicSizeMultiplier
+
+      // --- 2D Scattered Layout ---
+      const rowIndex = Math.floor(i / cols)
+      const colIndex = i % cols
+
+      // Deterministic pseudo-random scatter offsets based on node index
+      const randX = Math.sin(i * 13.52) * 2.5; // organic horiz spread
+      const randY = Math.cos(i * 18.21) * 2.5; // organic vert spread
+
+      const rawX = colIndex * gridSpacing + randX + dx;
+      const rawY = rowIndex * gridSpacing + randY + dy;
+
+      const wrappedX = wrap(rawX, gridWidth);
+      const wrappedY = wrap(rawY, gridHeight);
+
+      const px = wrappedX - gridWidth / 2;
+      const py = -(wrappedY - gridHeight / 2); // Drag pulls in natural inverted Y direction
+
+      // Tilt plane for isometric perspective
+      const angleX = 0.15; // tilt slightly back
+      const angleY = -0.15; // tilt the plane slightly
+
+      let lz = 0;
+      let ty = py * Math.cos(angleX) - lz * Math.sin(angleX);
+      let tz = py * Math.sin(angleX) + lz * Math.cos(angleX);
+      let updatedPY = ty; lz = tz;
+
+      let tx = px * Math.cos(angleY) + lz * Math.sin(angleY);
+      tz = -px * Math.sin(angleY) + lz * Math.cos(angleY);
+      let updatedPX = tx; lz = tz;
+
+      const pos2D_x = updatedPX;
+      const pos2D_y = updatedPY;
+      // We can also mildly randomize Z so they aren't totally flat, 
+      // adding extreme depth to the scatter in 2D mode!
+      const randZ = Math.sin(i * 24.11) * 2.0; // depth float
+      const pos2D_z = z2D + lz + randZ;
+
+      // Base uniform scale in 2D, organically randomized to reflect image aesthetic
+      const randomScaleBase = Math.cos(i * 31.42); 
+      let targetScale2D = item.type === 'text' 
+          ? 0.35 + (randomScaleBase * 0.15) 
+          : 0.95 + (randomScaleBase * 0.4); 
+          
+      // ensure we don't scale negatively
+      if (targetScale2D < 0.2) targetScale2D = 0.2;
+
+      // Apply lerp
+      const lp = layoutProgress.current
+      ref.position.x = pos3D_x + (pos2D_x - pos3D_x) * lp
+      ref.position.y = pos3D_y + (pos2D_y - pos3D_y) * lp
+      ref.position.z = pos3D_z + (pos2D_z - pos3D_z) * lp
+
+      const finalScale = scale3D + (targetScale2D - scale3D) * lp
+      ref.scale.set(finalScale, finalScale, finalScale)
+
+      ref.rotation.x = angleX * lp
+      ref.rotation.y = angleY * lp
     }
   })
 

@@ -35,15 +35,16 @@ import ImageViewer from './components/ImageViewer.jsx'
 import { ImageProvider } from "./context/ImageContext.jsx";
 import Gallary from './pages/Gallary/Gallary.jsx'
 import Bg from './components/Bg.jsx'
-import {ThemeProvider} from './context/ThemeContext.jsx'
-import {useSmoothScroll , LenisProvider} from './context/LenisContext.jsx';
+import { ThemeProvider } from './context/ThemeContext.jsx'
+import { useSmoothScroll, LenisProvider } from './context/LenisContext.jsx';
 import Nav from "./components/Nav.jsx";
 import InfiniteChat from "./pages/InfiniteChat/InfiniteChat.jsx";
+import { LayoutProvider } from "./context/LayoutContext.jsx";
 // Page animation settings
 const pageVariants = {
-  initial: { opacity: 0,  },
-  animate: { opacity: 1,  },
-  exit: { opacity: 0,  },
+  initial: { opacity: 0, },
+  animate: { opacity: 1, },
+  exit: { opacity: 0, },
 };
 const pageTransition = {
   type: "tween",
@@ -53,15 +54,15 @@ const pageTransition = {
 
 // Wrap routes with AnimatePresence and motion.div
 const AnimatedRoutes = () => {
-  const [isMobile , setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const location = useLocation();
-useEffect(()=>{
-  if(window.innerWidth >= 640){
-    setIsMobile(false)
-  }else{
-    setIsMobile(true)
-  }
-},[])
+  useEffect(() => {
+    if (window.innerWidth >= 640) {
+      setIsMobile(false)
+    } else {
+      setIsMobile(true)
+    }
+  }, [])
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
@@ -75,15 +76,15 @@ useEffect(()=>{
               exit="exit"
               transition={pageTransition}
             >
-             <InfiniteInfo/>
+              <InfiniteInfo />
             </motion.div>
           }
         />
-         <Route
+        <Route
           path="/visuals"
           element={
             <motion.div
-            className = 'relative z-[300]'
+              className='relative z-[300]'
               variants={pageVariants}
               initial="initial"
               animate="animate"
@@ -94,45 +95,45 @@ useEffect(()=>{
             </motion.div>
           }
         />
-        
-           <Route
+
+        <Route
           path="/infinitegrid"
           element={
             <motion.div
-            className = 'relative z-[100]'
+              className='relative z-[100]'
               variants={pageVariants}
               initial="initial"
               animate="animate"
-          
+
               transition={pageTransition}
             >
-          <InfiniteGrid/>
+              <InfiniteGrid />
             </motion.div>
           }
         />
-          <Route
+        <Route
           path="/gallary"
           element={
             <motion.div
-            className = 'relative z-[100]'
+              className='relative z-[100]'
               variants={pageVariants}
               initial="initial"
               animate="animate"
-          
+
               transition={pageTransition}
             >
-          <Gallary/>
+              <Gallary />
             </motion.div>
           }
         />
-                   <Route
+        <Route
           path="/viewer"
           element={
             <motion.div
-            className = 'relative z-[100]'
-           
+              className='relative z-[100]'
+
             >
-          <ImageViewer/>
+              <ImageViewer />
             </motion.div>
           }
         />
@@ -150,12 +151,12 @@ useEffect(()=>{
             </motion.div>
           }
         />
-         <Route
+        <Route
           path="/resources"
-          
+
           element={
             <motion.div
-            className="relative z-[300]"
+              className="relative z-[300]"
               variants={pageVariants}
               initial="initial"
               animate="animate"
@@ -166,23 +167,23 @@ useEffect(()=>{
             </motion.div>
           }
         />
-         <Route
+        <Route
           path="/about"
           element={
             <motion.div
-            
-  className="relative z-[100]"
+
+              className="relative z-[100]"
               variants={pageVariants}
               initial="initial"
               animate="animate"
               exit="exit"
               transition={pageTransition}
             >
-              <About/>
+              <About />
             </motion.div>
           }
         />
-          <Route
+        <Route
           path="/templates"
           element={
             <motion.div
@@ -210,7 +211,7 @@ useEffect(()=>{
             </motion.div>
           }
         />
-         <Route
+        <Route
           path="/mzverse"
           element={
             <motion.div
@@ -224,11 +225,11 @@ useEffect(()=>{
             </motion.div>
           }
         />
-         <Route
+        <Route
           path="/portfolio-2024"
           element={
             <motion.div
-            
+
               variants={pageVariants}
               initial="initial"
               animate="animate"
@@ -239,7 +240,7 @@ useEffect(()=>{
             </motion.div>
           }
         />
-         <Route
+        <Route
           path="/timeless"
           element={
             <motion.div
@@ -253,9 +254,9 @@ useEffect(()=>{
             </motion.div>
           }
         />
-         <Route
+        <Route
           path="/arcitecture"
-          className = ""
+          className=""
           element={
             <motion.div
               variants={pageVariants}
@@ -268,39 +269,39 @@ useEffect(()=>{
             </motion.div>
           }
         />
-         <Route
+        <Route
           path="/projects"
           element={
-            <motion.div  
-            className="relative z-[100]"
+            <motion.div
+              className="relative z-[100]"
               variants={pageVariants}
               initial="initial"
               animate="animate"
               exit="exit"
               transition={pageTransition}
             >
-              <Projects/>
+              <Projects />
             </motion.div>
           }
         />
-           <Route
+        <Route
           path="/InfiniteChat"
           element={
-            <motion.div  
-            className="relative z-[100]"
+            <motion.div
+              className="relative z-[100]"
               variants={pageVariants}
               initial="initial"
               animate="animate"
               exit="exit"
               transition={pageTransition}
             >
-              <InfiniteChat/>
+              <InfiniteChat />
             </motion.div>
           }
         />
-         <Route
+        <Route
           path="/InfiniteInfo"
-          className = ""
+          className=""
           element={
             <motion.div
               variants={pageVariants}
@@ -319,58 +320,60 @@ useEffect(()=>{
 };
 
 function App() {
-  
 
-function AppWithBlur() {
-  return (
-    <div>
-      {/* {window.innerWidth < 640 ? ( */}
+
+  function AppWithBlur() {
+    return (
+      <div>
+        {/* {window.innerWidth < 640 ? ( */}
         <div>
-          <CustomCursor/>
-          <ScrollProgressBar/>
-          <Navber/>
-          <Nav/>
+          <CustomCursor />
+          <ScrollProgressBar />
+          <Navber />
+          <Nav />
           {/* <Navber /> */}
-          <Bg/>
+          <Bg />
           <div className="sticky z-[999] top-0">
             {/* <ControlBar /> */}
           </div>
           <AnimatedRoutes />
         </div>
-      {/* ) : (
+        {/* ) : (
        <SwitchToMobile/>
       )} */}
-    </div>
-  );
-}
+      </div>
+    );
+  }
 
   return (
     <LenisProvider  >
 
-    <ThemeProvider>
+      <ThemeProvider>
+        <LayoutProvider>
 
-    <LoadProvider>
-      <CursorProvider>
-<ImageProvider>
+        <LoadProvider>
+          <CursorProvider>
+            <ImageProvider>
 
-      <IsMobileProvider>
+              <IsMobileProvider>
 
-      <IsAboutProvider>
-      <MenuBgProvider>
-      <BlurProvider>
-        <ReverseAnimeProvider>
-          <Router>
-            <AppWithBlur />
-          </Router>
-        </ReverseAnimeProvider>
-      </BlurProvider>
-    </MenuBgProvider>
-    </IsAboutProvider>
-      </IsMobileProvider>
-</ImageProvider>
-      </CursorProvider>
-    </LoadProvider>
-    </ThemeProvider>
+                <IsAboutProvider>
+                  <MenuBgProvider>
+                    <BlurProvider>
+                      <ReverseAnimeProvider>
+                        <Router>
+                          <AppWithBlur />
+                        </Router>
+                      </ReverseAnimeProvider>
+                    </BlurProvider>
+                  </MenuBgProvider>
+                </IsAboutProvider>
+              </IsMobileProvider>
+            </ImageProvider>
+          </CursorProvider>
+        </LoadProvider>
+        </LayoutProvider>
+      </ThemeProvider>
     </LenisProvider>
   );
 }

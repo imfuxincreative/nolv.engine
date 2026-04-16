@@ -4,6 +4,7 @@ import { Html } from '@react-three/drei'
 import { useThree, useFrame } from '@react-three/fiber'
 import { useRef, forwardRef } from 'react'
 import { useTheme } from '../../context/ThemeContext.jsx'
+import { useLayoutMode } from '../../context/LayoutContext.jsx'
 import img3 from '../../assets/images/InfiniteImages/beach1.jpg'
 import { scrollState } from './scrollState'
 
@@ -15,6 +16,7 @@ const BlurText = forwardRef(function BlurText(
   const pRef = useRef()
   const camera = useThree((s) => s.camera)
   const { isDarkMode } = useTheme()
+  const { is2DMode } = useLayoutMode()
   const CHAT_THEMES = {
     black: {
       bg: 'black',
@@ -45,7 +47,7 @@ const BlurText = forwardRef(function BlurText(
     CHAT_THEMES[theme?.toLowerCase()] || CHAT_THEMES.black
 
   // PERF: Track last fade value to avoid unnecessary DOM writes
-  const lastFade = useRef(-1)
+  const lastFade = useRef('')
 
   useFrame(() => {
     if (!ref.current) return
@@ -58,15 +60,24 @@ const BlurText = forwardRef(function BlurText(
       ref.current.visible = true
 
       // PERF: Read from shared scrollState instead of DOM
-      const fade = Math.max(0, Math.min(1, (scrollState.progress - 0.80) / 0.10))
+      const fade = is2DMode ? 0 : Math.max(0, Math.min(1, (scrollState.progress - 0.80) / 0.10))
 
-      // PERF: Only update DOM style when fade actually changes (quantized to 20 steps)
       const rounded = (fade * 20 | 0) / 20
-      if (rounded !== lastFade.current) {
-        lastFade.current = rounded
+      const cacheKey = `${rounded}_${isDarkMode}`
+      if (cacheKey !== lastFade.current) {
+        lastFade.current = cacheKey
         if (pRef.current) {
-          // transitioning bg and text colors directly to black
-          pRef.current.style.filter = `brightness(${1 - fade})`
+          if (isDarkMode) {
+            // Dark mode: fade to white
+            pRef.current.style.filter = `brightness(${1 + fade * 9})`
+            // Force text to fade out (white on white) at high fades so it's a pure white block
+            pRef.current.style.color = fade > 0.6 ? 'white' : 'black'
+          } else {
+            // Light mode: fade to black
+            pRef.current.style.filter = `brightness(${1 - fade})`
+            // Force text to fade out (black on black) at high fades so it's a pure black block
+            pRef.current.style.color = fade > 0.6 ? 'black' : 'white'
+          }
         }
       }
     }
@@ -84,11 +95,11 @@ const BlurText = forwardRef(function BlurText(
       <Html
         transform
         distanceFactor={1.2}
-        occlude={false}
+        occlude="blending"
         wrapperClass="pointer-events-none"
       >
         <div
-          className="flex gap-3 items-center transition-opacity duration-100"
+          className="flex gap-3 items-center transition-colors duration-500"
           style={{
             color: isDarkMode ? '#fff' : '#000',
           }}
@@ -102,12 +113,12 @@ const BlurText = forwardRef(function BlurText(
           <p
             ref={pRef}
             style={{
-              backgroundColor: 'black',
-              color: 'white',
+              backgroundColor: isDarkMode ? 'white' : 'black',
+              color: isDarkMode ? 'black' : 'white',
               boxShadow: currentTheme.glow,
               // borderRadius: '18px 18px 18px 4px',
             }}
-            className={` px-3 text-sm whitespace-nowrap
+            className={` px-3 text-sm whitespace-nowrap transition-colors duration-500
               `}
           >
             {message}

@@ -1,39 +1,39 @@
 import React, { useRef, useContext, useEffect, useState } from 'react';
-import { useNavigate , useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { LoadingContext } from '../context/LoadingContext';
 import { useCursor } from '../context/CursorContext';
 import { CiLight } from "react-icons/ci";
 import { RxCross1 } from "react-icons/rx";
-import {useTheme} from '../context/ThemeContext.jsx'
+import { useTheme } from '../context/ThemeContext.jsx'
 import { TfiInfinite } from "react-icons/tfi";
 import { PiImagesSquareLight } from "react-icons/pi";
 function Navber2() {
-  const {setIsDarkMode , isDarkMode} = useTheme()
-  const { setIsLoading  , setShowMessage} = useContext(LoadingContext);
-  const {setCursorAnimation} = useCursor()
+  const { setIsDarkMode, isDarkMode } = useTheme()
+  const { setIsLoading, setShowMessage } = useContext(LoadingContext);
+  const { setCursorAnimation } = useCursor()
   const playgroundBtnRef = useRef()
   const navigate = useNavigate();
   const menuSliderRef = useRef();
-// Track screen size
+  // Track screen size
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1024);
   const location = useLocation();
-const [openGallary , setOpenGallary] = useState (false)
-useEffect(() => {
-  if (!playgroundBtnRef.current) return;
+  const [openGallary, setOpenGallary] = useState(false)
+  useEffect(() => {
+    if (!playgroundBtnRef.current) return;
 
-  if (location.pathname === '/infiniteGrid') {
+    if (location.pathname === '/infiniteGrid') {
 
-    playgroundBtnRef.current.textContent = 'Instagram';
-  } else if (location.pathname === '/gallary') {
-    setOpenGallary(true);
-  }
-   else {
-    playgroundBtnRef.current.textContent = 'What If ?';
-  }
-}, [location.pathname]);
+      playgroundBtnRef.current.textContent = 'Instagram';
+    } else if (location.pathname === '/gallary') {
+      setOpenGallary(true);
+    }
+    else {
+      playgroundBtnRef.current.textContent = 'What If ?';
+    }
+  }, [location.pathname]);
 
 
-  useEffect(() => {                           
+  useEffect(() => {
     const handleResize = () => {
       setIsLargeScreen(window.innerWidth >= 1024);
     };
@@ -50,26 +50,26 @@ useEffect(() => {
     }
   };
 
-  const handleThemeClick = ()=>{
-   setIsDarkMode((prev) => !prev
-  )
+  const handleThemeClick = () => {
+    setIsDarkMode((prev) => !prev
+    )
   }
-const handleLogin = () => {
-  const callbackUrl = encodeURIComponent(
-    'http://localhost:5173/auth/callback'
-  );
+  const handleLogin = () => {
+    const callbackUrl = encodeURIComponent(
+      'http://localhost:5173/auth/callback'
+    );
 
-  window.location.href = `https://mzverse.vercel.app/signup?redirect=${callbackUrl}`;
-};
+    window.location.href = `https://mzverse.vercel.app/signup?redirect=${callbackUrl}`;
+  };
 
   const handleWhatIf = () => {
-     if (location.pathname === '/infiniteGrid' && playgroundBtnRef.current) {
+    if (location.pathname === '/infiniteGrid' && playgroundBtnRef.current) {
       window.location.href = 'https://www.instagram.com/mzco.creative/'
-     }else{
+    } else {
 
-       setIsLoading(true);
-       setTimeout(() => navigate('/infiniteGrid'), 1000);
-      }
+      setIsLoading(true);
+      setTimeout(() => navigate('/infiniteGrid'), 1000);
+    }
   };
 
   return (
@@ -91,24 +91,24 @@ const handleLogin = () => {
 
 
           </div> */}
-{!openGallary ? <div className='flex fixed items-center top-10 right-10 gap-1 z-[999]'>
-<button  onClick={handleThemeClick}  className={` h-[27px]  w-[27px] flex items-center justify-center  px-2 rounded-full ${isDarkMode ?'bg-white text-black' : 'bg-black text-white'} duration-500 `} ><CiLight size={23} className=''/></button>
-      {/* Top Right Button */}
-      {/* <button ref={playgroundBtnRef}
+      {!openGallary ? <div className='flex fixed items-center top-10 right-10 gap-1 z-[999]'>
+        <button onClick={handleThemeClick} className={` h-[27px]  w-[27px] flex items-center justify-center  px-2 rounded-full ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} duration-500 `} ><CiLight size={23} className='' /></button>
+        {/* Top Right Button */}
+        {/* <button ref={playgroundBtnRef}
         onClick={handleWhatIf}
         onMouseLeave={()=> setCursorAnimation('onhome-animation')} onMouseEnter={()=> setCursorAnimation('whatif-animation')} 
         className={` ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} duration-500 h-fit py-2  w-fit px-3 rounded-full `}
         >
 Design
       </button> */}
-            <button 
-onClick={handleLogin}
-        onMouseLeave={()=> setCursorAnimation('onhome-animation')} onMouseEnter={()=> setCursorAnimation('whatif-animation')} 
-        className={` ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} duration-500 h-fit py-2  w-fit px-3 rounded-full `}
+        <button
+          onClick={handleLogin}
+          onMouseLeave={() => setCursorAnimation('onhome-animation')} onMouseEnter={() => setCursorAnimation('whatif-animation')}
+          className={` ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} duration-500 h-fit py-2  w-fit px-3 rounded-full `}
         >
-Join Community
-      </button>
-        </div> : <button onClick={()=>{ navigate(-1) ,setOpenGallary(false)}} className={`h-[35px] lg:h-[40px] lg:w-[40px] w-[35px] flex justify-center items-center px-2 rounded-full ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'}  fixed top-10 right-10 gap-1 z-[999] `}><RxCross1/></button>}
+          Join Now
+        </button>
+      </div> : <button onClick={() => { navigate(-1), setOpenGallary(false) }} className={`h-[35px] lg:h-[40px] lg:w-[40px] w-[35px] flex justify-center items-center px-2 rounded-full ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'}  fixed top-10 right-10 gap-1 z-[999] `}><RxCross1 /></button>}
     </div>
   );
 }

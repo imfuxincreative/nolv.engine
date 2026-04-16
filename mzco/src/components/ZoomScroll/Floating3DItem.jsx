@@ -6,6 +6,8 @@ import { useGLTF, Float, RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
 import { forwardRef } from 'react'
 import { scrollState } from './scrollState'
+import { useTheme } from '../../context/ThemeContext.jsx'
+import { useLayoutMode } from '../../context/LayoutContext.jsx'
 
 // ─── GLB Model (Desk) ─────────────────────────────────────────────────────────
 function DeskModel({ scale = 1 }) {
@@ -106,11 +108,11 @@ const Floating3DItem = forwardRef(function Floating3DItem(
   const groupRef = useRef()
   const innerRef = useRef()
   const camera = useThree((s) => s.camera)
+  const { isDarkMode } = useTheme()
+  const { is2DMode } = useLayoutMode()
 
   // PERF: Track last fade to avoid redundant traverse() calls.
-  // Previously, traverse() ran on ALL ~1000 items EVERY frame, even when
-  // the color wasn't changing. Now it only runs when needed (~20 times total).
-  const lastFade = useRef(-1)
+  const lastFade = useRef('')
 
   useFrame(() => {
     const g = groupRef.current
@@ -122,17 +124,55 @@ const Floating3DItem = forwardRef(function Floating3DItem(
     // PERF: Skip ALL further processing if item is invisible
     if (!g.visible) return
 
-    // Transform items to black before the UI state (80% to 90%)
-    const fade = Math.max(0, Math.min(1, (scrollState.progress - 0.80) / 0.10))
+    // Transform items to black/white before the UI state (80% to 90%)
+    // Skip if in 2D grid mode
+    const fade = is2DMode ? 0 : Math.max(0, Math.min(1, (scrollState.progress - 0.80) / 0.10))
 
-    // Only traverse when fade value actually changes (quantized to 20 steps)
+    // Only traverse when fade value or dark mode actually changes
     const rounded = (fade * 20 | 0) / 20
-    if (rounded !== lastFade.current) {
-      lastFade.current = rounded
-      const v = 1 - fade
+    const cacheKey = `${rounded}_${isDarkMode}`
+    if (cacheKey !== lastFade.current) {
+      lastFade.current = cacheKey
       innerRef.current.traverse((child) => {
-        if (child.isMesh && child.material && child.material.color) {
-          child.material.color.setRGB(v, v, v)
+        if (child.isMesh && child.material) {
+          // Save original texture map once
+          if (child.material._origMap === undefined) {
+            child.material._origMap = child.material.map
+          }
+
+          if (isDarkMode) {
+            if (fade > 0.6) {
+              // High fade: remove texture, solid white for clean logo
+              if (child.material.map !== null) {
+                child.material.map = null
+                child.material.needsUpdate = true
+              }
+              child.material.color.setRGB(1, 1, 1)
+            } else if (fade > 0) {
+              // Mid fade: boost brightness with texture still visible
+              if (child.material.map !== child.material._origMap) {
+                child.material.map = child.material._origMap
+                child.material.needsUpdate = true
+              }
+              const v = 1 + fade * 8
+              child.material.color.setRGB(v, v, v)
+            } else {
+              // No fade: restore original
+              if (child.material.map !== child.material._origMap) {
+                child.material.map = child.material._origMap
+                child.material.needsUpdate = true
+              }
+              child.material.color.setRGB(1, 1, 1)
+            }
+          } else {
+            // Light mode: fade to black (multiplication naturally works)
+            if (child.material.map !== child.material._origMap) {
+              child.material.map = child.material._origMap
+              child.material.needsUpdate = true
+            }
+            const v = 1 - fade
+            child.material.color.setRGB(v, v, v)
+          }
         }
       })
     }
