@@ -105,13 +105,19 @@ const isMobile = () => typeof window !== 'undefined' && (window.innerWidth < 768
 function InfiniteCamera() {
   const camera = useThree((s) => s.camera)
   const { is2DMode } = useLayoutMode()
-  const transitionRef = useRef(is2DMode ? 1 : 0)
+  const mouseRef = useRef({ x: 0, y: 0 })
+
+  useEffect(() => {
+    const handleMove = (e) => {
+      // Replicate R3F's native pointer state math using generic global coordinates
+      mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    }
+    window.addEventListener('pointermove', handleMove)
+    return () => window.removeEventListener('pointermove', handleMove)
+  }, [])
 
   useFrame(() => {
-    // Fast, uniform target mode interpolation
-    const targetMode = is2DMode ? 1 : 0
-    transitionRef.current += (targetMode - transitionRef.current) * 0.15
-
     // PERF: Uses shared scrollState instead of reading DOM
     const cameraProgress = Math.min(1, scrollState.progress / 0.90)
 
@@ -121,10 +127,25 @@ function InfiniteCamera() {
 
     const scrollZ = startZ + cameraProgress * (finalZ - startZ);
 
-    // Direct linear alignment with the layout toggle so there is zero camera lag/overtake variance
-    const targetZ = scrollZ + (150 - scrollZ) * transitionRef.current;
+    // Bind strictly perfectly to the EXACT layout metric used by the structural grid geometry.
+    const lp = scrollState.layoutProgress || 0;
+    camera.position.z = scrollZ + (150 - scrollZ) * lp;
 
-    camera.position.z += (targetZ - camera.position.z) * 0.3
+    // --- Dynamic Mouse Skew Parallax ---
+    // Physical shifting: moving the camera opposite to pointer makes items 'lean' toward pointer
+    const targetX = -mouseRef.current.x * 3.0; // move opposite to slide items toward pointer
+    const targetY = -mouseRef.current.y * 3.0;
+    
+    // Rotational skewing: turn the camera's gaze slightly to exaggerate the skew depth
+    const targetRotX = mouseRef.current.y * 0.03;
+    const targetRotY = mouseRef.current.x * 0.03;
+
+    // Buttery smooth lerp applied constantly
+    camera.position.x += (targetX - camera.position.x) * 0.08;
+    camera.position.y += (targetY - camera.position.y) * 0.08;
+    
+    camera.rotation.x += (targetRotX - camera.rotation.x) * 0.08;
+    camera.rotation.y += (targetRotY - camera.rotation.y) * 0.08;
   })
   return null
 }
@@ -132,6 +153,7 @@ function InfiniteCamera() {
 export default function ScrollZoomCanvas() {
   const [mobile] = useState(() => isMobile())
   const [sceneReady, setSceneReady] = useState(false)
+  const { isDarkMode } = useTheme()
 
   const handleSceneReady = useCallback(() => {
     setSceneReady(true)
@@ -222,11 +244,23 @@ export default function ScrollZoomCanvas() {
         />
       )}
 
-      {/* Screen Frame Vignette Overlay (Premium Gallery Framing) */}
+      {/* Light Mode Vignette Overlay (Premium Fog Gradient Edge) */}
       <div 
-        className={`fixed inset-[12px] pointer-events-none z-[100] rounded-[34px] transition-all duration-1000 ease-in-out ${is2DMode ? 'opacity-100' : 'opacity-0'}`}
+        className="fixed inset-0 pointer-events-none z-[100] transition-opacity duration-1000 ease-in-out"
         style={{ 
-          boxShadow: `0 0 0 100vmax #ffffff`, // Force white frame as requested
+          background: `radial-gradient(circle, transparent 45%, rgba(255,255,255,0.85) 110%)`,
+          boxShadow: `inset 0 0 100px 30px rgba(255,255,255,0.5)`,
+          opacity: isDarkMode ? 0 : 1
+        }}
+      />
+
+      {/* Dark Mode Vignette Overlay (Premium Fog Gradient Edge) */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-[100] transition-opacity duration-1000 ease-in-out"
+        style={{ 
+          background: `radial-gradient(circle, transparent 45%, rgba(0,0,0,0.85) 110%)`,
+          boxShadow: `inset 0 0 100px 30px rgba(0,0,0,0.5)`,
+          opacity: isDarkMode ? 1 : 0
         }}
       />
     </div>

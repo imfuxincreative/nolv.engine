@@ -118,7 +118,9 @@ function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
           }
         }
       }
-      setLogoPoints(points.sort(() => 0.5 - Math.random()))
+      // Removed random shuffle so the logo mapping physically ties to the grid map
+      // This prevents the chaotic 'flying across the screen' and anchors their paths.
+      setLogoPoints(points)
     }
   }, [])
 
@@ -214,25 +216,16 @@ function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
       const px = wrappedX - gridWidth / 2;
       const py = -(wrappedY - gridHeight / 2); // Drag pulls in natural inverted Y direction
 
-      // Tilt plane for isometric perspective
-      const angleX = 0.15; // tilt slightly back
-      const angleY = -0.15; // tilt the plane slightly
+      // Force pure flat 2D projection with zero isometric tilt
+      const angleX = 0;
+      const angleY = 0;
 
-      let lz = 0;
-      let ty = py * Math.cos(angleX) - lz * Math.sin(angleX);
-      let tz = py * Math.sin(angleX) + lz * Math.cos(angleX);
-      let updatedPY = ty; lz = tz;
-
-      let tx = px * Math.cos(angleY) + lz * Math.sin(angleY);
-      tz = -px * Math.sin(angleY) + lz * Math.cos(angleY);
-      let updatedPX = tx; lz = tz;
-
-      const pos2D_x = updatedPX;
-      const pos2D_y = updatedPY;
-      // We can also mildly randomize Z so they aren't totally flat, 
-      // adding extreme depth to the scatter in 2D mode!
-      const randZ = Math.sin(i * 24.11) * 2.0; // depth float
-      const pos2D_z = z2D + lz + randZ;
+      const pos2D_x = px;
+      const pos2D_y = py;
+      
+      // Microscopic Z offset purely for z-buffer layering (prevents flickering)
+      // Removes all 'parallax' or floating depth completely.
+      const pos2D_z = z2D + (i * 0.001);
 
       // Base uniform scale in 2D, organically randomized to reflect image aesthetic
       const randomScaleBase = Math.cos(i * 31.42); 
