@@ -351,27 +351,27 @@ function App() {
       <ThemeProvider>
         <LayoutProvider>
 
-        <LoadProvider>
-          <CursorProvider>
-            <ImageProvider>
+          <LoadProvider>
+            <CursorProvider>
+              <ImageProvider>
 
-              <IsMobileProvider>
+                <IsMobileProvider>
 
-                <IsAboutProvider>
-                  <MenuBgProvider>
-                    <BlurProvider>
-                      <ReverseAnimeProvider>
-                        <Router>
-                          <AppWithBlur />
-                        </Router>
-                      </ReverseAnimeProvider>
-                    </BlurProvider>
-                  </MenuBgProvider>
-                </IsAboutProvider>
-              </IsMobileProvider>
-            </ImageProvider>
-          </CursorProvider>
-        </LoadProvider>
+                  <IsAboutProvider>
+                    <MenuBgProvider>
+                      <BlurProvider>
+                        <ReverseAnimeProvider>
+                          <Router>
+                            <AppWithBlur />
+                          </Router>
+                        </ReverseAnimeProvider>
+                      </BlurProvider>
+                    </MenuBgProvider>
+                  </IsAboutProvider>
+                </IsMobileProvider>
+              </ImageProvider>
+            </CursorProvider>
+          </LoadProvider>
         </LayoutProvider>
       </ThemeProvider>
     </LenisProvider>
