@@ -59,7 +59,7 @@ function Navber2() {
       'http://localhost:5173/auth/callback'
     );
 
-    window.location.href = `https://mzverse.vercel.app/signup`;
+    window.location.href = `https://nolv.vercel.app/signup`;
   };
 
   const handleWhatIf = () => {
