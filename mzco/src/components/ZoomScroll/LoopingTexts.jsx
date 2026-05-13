@@ -1,9 +1,9 @@
 import { useFrame } from '@react-three/fiber'
 import React, { useMemo, useState, useEffect, useRef } from 'react'
-import BlurText from './BlurText'
+
 import Floating3DItem from './Floating3DItem'
 import * as THREE from 'three'
-import img3 from '../../assets/images/InfiniteImages/beach1.jpg'
+
 import { scrollState } from './scrollState'
 import { useLayoutMode } from '../../context/LayoutContext.jsx'
 
@@ -18,71 +18,32 @@ import imgSerenity from '../../assets/images/InfiniteImages/serenity.jpg'
 import imgBuilding from '../../assets/images/InfiniteImages/building.jpg'
 import imgLake from '../../assets/images/InfiniteImages/lake.jpg'
 
-const CARD_IMAGES = [img3, imgBeach2, imgFlower, imgRain, imgSerenity, imgBuilding, '/InfiniteImages/abundance.webp', '/InfiniteImages/monster.webp', '/InfiniteImages/wanted.webp', '/InfiniteImages/nostalogia.webp', '/InfiniteImages/freedom.webp', '/InfiniteImages/architecture.webp', '/InfiniteImages/starlight.webp', '/harv.webp', '/fire.jpg', '/InfiniteImages/founder.webp', '/InfiniteImages/timeless.webp', '/InfiniteImages/black.jpg', '/InfiniteImages/white.jpg', '/InfiniteImages/first.jpg', '/InfiniteImages/ar.jpg', '/InfiniteImages/vtw.webp', '/InfiniteImages/vbw.webp', '/InfiniteImages/vai.webp', '/InfiniteImages/insane.jpg', '/InfiniteImages/air.jpg', '/InfiniteImages/kng.webp', '/InfiniteImages/flash.jpg', '/InfiniteImages/eid.heic', '/InfiniteImages/ky.jpg', '/InfiniteImages/color.jpg', '/InfiniteImages/dry.jpg', '/InfiniteImages/ship.heic', '/InfiniteImages/xxo.jpg', '/InfiniteImages/travis.webp', '/InfiniteImages/sham.jpg']
+const CARD_IMAGES = [imgFlower, imgRain, imgSerenity, imgBuilding, '/InfiniteImages/abundance.webp', '/InfiniteImages/monster.webp', '/InfiniteImages/wanted.webp', '/InfiniteImages/cyber.png', '/InfiniteImages/wanted.webp', '/InfiniteImages/flying.png', '/InfiniteImages/pre1.png', '/InfiniteImages/architecture.webp', '/InfiniteImages/starlight.webp', '/fire.jpg', '/InfiniteImages/black.jpg', '/InfiniteImages/white.jpg', '/InfiniteImages/ar.jpg', '/InfiniteImages/vai.webp', '/InfiniteImages/insane.jpg', '/InfiniteImages/air.jpg']
 
 function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
   const itemRefs = useRef([])
 
-  // ── Chat text options ───────────────────────────────────────────────────────
-  const textOptions = [
-    { name: "User", profile: img3, message: "hiii", theme: "neon" },
-    { name: "User", profile: img3, message: "I'm Fuckin' creative", theme: "neon" },
-    { name: "User", profile: img3, message: "hello", theme: "gray" },
-    { name: "User", profile: img3, message: "flow()", theme: "neon" },
-    { name: "User", profile: img3, message: "code", theme: "pink" },
-    { name: "User", profile: img3, message: "innovation", theme: "gray" },
-    { name: "User", profile: img3, message: "function()", theme: "neon" },
-    { name: "User", profile: img3, message: "404", theme: "black" },
-    { name: "User", profile: img3, message: "<motion/>", theme: "neon" },
-    { name: "User", profile: img3, message: "I love motion", theme: "blue" },
-    { name: "User", profile: img3, message: "blend", theme: "gray" },
-    { name: "User", profile: img3, message: "creative", theme: "neon" },
-    { name: "User", profile: img3, message: "Design", theme: "gray" },
-    { name: "User", profile: img3, message: ";)", theme: "black" },
-    { name: "User", profile: img3, message: "craft", theme: "neon" },
-    { name: "User", profile: img3, message: "visual", theme: "pink" },
-    { name: "User", profile: img3, message: ":)", theme: "black" },
-    { name: "User", profile: img3, message: "I'm wanna shine", theme: "pink" },
-    { name: "User", profile: img3, message: "mzco.creative", theme: "neon" },
-    { name: "User", profile: img3, message: "Stooop.", theme: "black" },
-    { name: "User", profile: img3, message: "figma", theme: "pink" },
-  ]
 
-  // ── Generate random items: ~50% text, ~50% images ──────────────────────────
+
+  // ── Generate image items ───────────────────────────────────────────────────
   const items = useMemo(() => {
     const areaSize = 45; // Match random layout area size for 2D wrapping
     return Array.from({ length: count }).map(() => {
-      const roll = Math.random()
-
-      const basePos = {
-        x: (Math.random() - 0.5) * 8, // increase slightly to fill space
+      const img = CARD_IMAGES[Math.floor(Math.random() * CARD_IMAGES.length)]
+      return {
+        type: 'image',
+        x: (Math.random() - 0.5) * 8,
         y: (Math.random() - 0.5) * 6,
-        zBase: 120 - Math.random() * zRange, // Items generated from Z=120 down to deepest tunnel bounds
+        zBase: 120 - Math.random() * zRange,
         rand2DX: (Math.random() - 0.5) * areaSize,
         rand2DY: (Math.random() - 0.5) * areaSize,
-      }
-
-      if (roll < 0.15) {
-        // ─── Chat text bubble ──────────────────────────────────────────
-        return {
-          type: 'text',
-          ...basePos,
-          data: textOptions[Math.floor(Math.random() * textOptions.length)],
-        }
-      } else {
-        // ─── Floating image ────────────────────────────────────────────
-        const img = CARD_IMAGES[Math.floor(Math.random() * CARD_IMAGES.length)]
-        return {
-          type: 'image',
-          ...basePos,
-          data: {
-            imageSrc: img,
-            scale: 0.5 + Math.random() * 0.4,
-          },
-        }
+        data: {
+          imageSrc: img,
+          scale: 0.5 + Math.random() * 0.4,
+        },
       }
     })
-  }, [count, zRange]) // added zRange to deps
+  }, [count, zRange])
 
   // ── Read Logo points & Load Texture ────────────────────────────────────────────────────────
   const [logoPoints, setLogoPoints] = useState([])
@@ -222,17 +183,15 @@ function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
 
       const pos2D_x = px;
       const pos2D_y = py;
-      
+
       // Microscopic Z offset purely for z-buffer layering (prevents flickering)
       // Removes all 'parallax' or floating depth completely.
       const pos2D_z = z2D + (i * 0.001);
 
       // Base uniform scale in 2D, organically randomized to reflect image aesthetic
-      const randomScaleBase = Math.cos(i * 31.42); 
-      let targetScale2D = item.type === 'text' 
-          ? 0.35 + (randomScaleBase * 0.15) 
-          : 0.95 + (randomScaleBase * 0.4); 
-          
+      const randomScaleBase = Math.cos(i * 31.42);
+      let targetScale2D = 0.95 + (randomScaleBase * 0.4);
+
       // ensure we don't scale negatively
       if (targetScale2D < 0.2) targetScale2D = 0.2;
 
@@ -252,30 +211,15 @@ function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
 
   return (
     <>
-      {items.map((item, i) => {
-        if (item.type === 'text') {
-          return (
-            <BlurText
-              key={i}
-              position={[item.x, item.y, item.zBase]}
-              message={item.data.message}
-              theme={item.data.theme}
-              profile={item.data.profile}
-              ref={(el) => (itemRefs.current[i] = el)}
-            />
-          )
-        }
-
-        return (
-          <Floating3DItem
-            key={i}
-            position={[item.x, item.y, item.zBase]}
-            itemType={item.type}
-            itemData={item.data}
-            ref={(el) => (itemRefs.current[i] = el)}
-          />
-        )
-      })}
+      {items.map((item, i) => (
+        <Floating3DItem
+          key={i}
+          position={[item.x, item.y, item.zBase]}
+          itemType={item.type}
+          itemData={item.data}
+          ref={(el) => (itemRefs.current[i] = el)}
+        />
+      ))}
     </>
   )
 }

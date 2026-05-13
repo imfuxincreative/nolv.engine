@@ -186,7 +186,7 @@
                 <div className="rounded-full overflow-hidden content-center lg:h-[25px] lg:w-[25px] h-[6vw] w-[6vw] bg-white">
                   <img className="" src={meeza} alt="meeza" />
                 </div>
-                <a href='https://www.instagram.com/mzco.creative' target='_blank' rel="noopener noreferrer">
+                <a href='https://www.instagram.com/imfuxincreative' target='_blank' rel="noopener noreferrer">
                   mzco.creative
                 </a>
                 <GoArrowUpRight className='bg-black rounded-full text-white' size={12} />

@@ -2,39 +2,14 @@
 
 import { useRef, useMemo, useState, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useGLTF, Float, RoundedBox } from '@react-three/drei'
+import { Html } from '@react-three/drei'
 import * as THREE from 'three'
 import { forwardRef } from 'react'
 import { scrollState } from './scrollState'
 import { useTheme } from '../../context/ThemeContext.jsx'
 import { useLayoutMode } from '../../context/LayoutContext.jsx'
 
-// ─── GLB Model (Desk) ─────────────────────────────────────────────────────────
-function DeskModel({ scale = 1 }) {
-  const { scene } = useGLTF('/models/Desk.glb')
-  const cloned = useMemo(() => scene.clone(), [scene])
-  return <primitive object={cloned} scale={scale} />
-}
 
-// PERF: Removed useGLTF.preload — DeskModel is never rendered (only 'image'
-// type items are generated in LoopingTexts). The preload wasted network + memory
-// loading a GLB that was never used.
-// useGLTF.preload('/models/Desk.glb')
-
-// ─── Simple Square Shape ──────────────────────────────────────────────────────
-function SquareShape({ scale = 1 }) {
-  return (
-    <group scale={scale}>
-      <RoundedBox args={[0.5, 0.5, 0.5]} radius={0.04} smoothness={4}>
-        <meshStandardMaterial
-          color="#ededed"
-          metalness={0.05}
-          roughness={0.6}
-        />
-      </RoundedBox>
-    </group>
-  )
-}
 
 // ─── Texture cache to prevent duplicate loads ─────────────────────────────────
 // Stores { tex, aspect, listeners[] } per image source
@@ -45,8 +20,13 @@ const _textureCache = new Map()
 // creating its own. Scale is used to handle different aspect ratios.
 const _sharedPlaneGeo = new THREE.PlaneGeometry(1, 1)
 
-// ─── 3D Floating Image (no card, just the image as a plane) ───────────────────
-function FloatingImage({ imageSrc, scale = 1 }) {
+// PERF: Shared temp vector for per-frame world position queries
+const _tempVec3 = new THREE.Vector3()
+
+// ─── 3D Floating Image with Title Overlay ─────────────────────────────────────
+// Each image gets an editorial-style title positioned at bottom-left, matching
+// the magazine/editorial UI reference.
+function FloatingImage({ imageSrc, scale = 1, title = 'nolv' }) {
   const meshRef = useRef()
   const [aspect, setAspect] = useState(1)
   const fixedWidth = 0.9
@@ -96,6 +76,9 @@ function FloatingImage({ imageSrc, scale = 1 }) {
           toneMapped={false}
         />
       </mesh>
+
+      {/* ── Editorial Title Overlay ── */}
+
     </group>
   )
 }
@@ -185,28 +168,9 @@ const Floating3DItem = forwardRef(function Floating3DItem(
   // 2. Pointer handlers cause THREE.js to raycast against ALL ~1000 items on
   //    EVERY mouse/touch move — extremely expensive, especially on mobile
 
-  const renderItem = () => {
-    switch (itemType) {
-      case 'desk':
-        return (
-          <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.3}>
-            <DeskModel scale={itemData.scale || 0.5} />
-          </Float>
-        )
-      case 'square':
-        return (
-          <Float speed={1.2} rotationIntensity={0.3} floatIntensity={0.4}>
-            <SquareShape scale={itemData.scale || 1} />
-          </Float>
-        )
-      case 'image':
-        return (
-          <FloatingImage imageSrc={itemData.imageSrc} scale={itemData.scale || 0.7} />
-        )
-      default:
-        return null
-    }
-  }
+  const renderItem = () => (
+    <FloatingImage imageSrc={itemData.imageSrc} scale={itemData.scale || 0.7} title={itemData.title || ''} />
+  )
 
   return (
     <group
