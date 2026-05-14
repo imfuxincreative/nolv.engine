@@ -2,10 +2,10 @@
 
 import { useRef, useMemo, useState, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { Html } from '@react-three/drei'
+import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 import { forwardRef } from 'react'
-import { scrollState } from './scrollState'
+import { scrollState, interactState } from './scrollState'
 import { useTheme } from '../../context/ThemeContext.jsx'
 import { useLayoutMode } from '../../context/LayoutContext.jsx'
 
@@ -20,15 +20,24 @@ const _textureCache = new Map()
 // creating its own. Scale is used to handle different aspect ratios.
 const _sharedPlaneGeo = new THREE.PlaneGeometry(1, 1)
 
-// PERF: Shared temp vector for per-frame world position queries
-const _tempVec3 = new THREE.Vector3()
+// ─── Constants for smooth theme color interpolation ───────────────────────────
+const _colorLightBg = new THREE.Color('#111111')
+const _colorDarkBg = new THREE.Color('#ffffff')
+const _colorLightText = new THREE.Color('#ffffff')
+const _colorDarkText = new THREE.Color('#000000')
+const _tempColor = new THREE.Color()
 
 // ─── 3D Floating Image with Title Overlay ─────────────────────────────────────
 // Each image gets an editorial-style title positioned at bottom-left, matching
 // the magazine/editorial UI reference.
-function FloatingImage({ imageSrc, scale = 1, title = 'nolv' }) {
+function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, onClick }) {
   const meshRef = useRef()
+  const bgMatRef = useRef()
+  const textRef = useRef()
+  const themeProgress = useRef(isDarkMode ? 1 : 0)
+  const hoverProgress = useRef(0)
   const [aspect, setAspect] = useState(1)
+  const [hovered, setHovered] = useState(false)
   const fixedWidth = 0.9
 
   const texture = useMemo(() => {
@@ -67,9 +76,77 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv' }) {
     }
   }, [imageSrc])
 
+  // Smoothly interpolate label colors on theme change
+  useFrame((state, delta) => {
+    // Clamp delta to avoid massive jumps when browser hangs during theme toggle
+    const safeDelta = Math.min(delta, 0.032)
+    const target = isDarkMode ? 1 : 0
+    const speed = 5.0 // Takes exactly 0.2 seconds to fully transition
+
+    if (themeProgress.current < target) {
+      themeProgress.current = Math.min(target, themeProgress.current + safeDelta * speed)
+    } else if (themeProgress.current > target) {
+      themeProgress.current = Math.max(target, themeProgress.current - safeDelta * speed)
+    }
+
+    if (bgMatRef.current) {
+      bgMatRef.current.color.copy(_colorLightBg).lerp(_colorDarkBg, themeProgress.current)
+    }
+    if (textRef.current) {
+      _tempColor.copy(_colorLightText).lerp(_colorDarkText, themeProgress.current)
+      textRef.current.color = '#' + _tempColor.getHexString()
+    }
+
+    // Hover fade animation
+    const hTarget = hovered ? 1 : 0
+    if (Math.abs(hoverProgress.current - hTarget) > 0.001) {
+      hoverProgress.current += (hTarget - hoverProgress.current) * (safeDelta * 10)
+    } else {
+      hoverProgress.current = hTarget
+    }
+
+    if (bgMatRef.current) {
+      bgMatRef.current.opacity = hoverProgress.current
+    }
+    if (textRef.current) {
+      textRef.current.fillOpacity = hoverProgress.current
+    }
+  })
+
+  const labelWidth = Math.max(0.2, (title?.length || 0) * 0.02) + 0.04
+  const labelHeight = 0.07
+
+  const labelGeo = useMemo(() => {
+    const shape = new THREE.Shape()
+    const w = labelWidth
+    const h = labelHeight
+    const r = h // Full rounded top-right corner
+
+    shape.moveTo(0, h)
+    shape.lineTo(w - r, h)
+    shape.absarc(w - r, h - r, r, Math.PI / 2, 0, true)
+    shape.lineTo(w, 0)
+    shape.lineTo(0, 0)
+    shape.lineTo(0, h)
+
+    const geo = new THREE.ShapeGeometry(shape)
+    geo.translate(-w / 2, -h / 2, 0)
+    return geo
+  }, [labelWidth, labelHeight])
+
+
   return (
     <group scale={scale}>
-      <mesh ref={meshRef} geometry={_sharedPlaneGeo} scale={[fixedWidth, fixedWidth * aspect, 1]} key={aspect}>
+      <mesh
+        name="imagePlane"
+        ref={meshRef}
+        geometry={_sharedPlaneGeo}
+        scale={[fixedWidth, fixedWidth * aspect, 1]}
+        key={aspect}
+        onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; setHovered(true) }}
+        onPointerOut={(e) => { document.body.style.cursor = 'auto'; setHovered(false) }}
+        onClick={onClick}
+      >
         <meshBasicMaterial
           map={texture}
           side={THREE.DoubleSide}
@@ -78,14 +155,38 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv' }) {
       </mesh>
 
       {/* ── Editorial Title Overlay ── */}
+      {title && (
+        <group position={[
+          -fixedWidth / 2 + labelWidth / 2,
+          (fixedWidth * aspect) / 2 + labelHeight / 2,
+          0.001
+        ]}>
+          <mesh geometry={labelGeo} position={[0, 0, 0]}>
+            <meshBasicMaterial ref={bgMatRef} toneMapped={false} transparent opacity={0} depthWrite={false} />
+          </mesh>
+          <Text
+            ref={textRef}
+            position={[0, -0.002, 0.001]}
+            fontSize={0.035}
 
+            padding
+            anchorX="center"
+            anchorY="middle"
+            font="/inter.ttf"
+            letterSpacing={0.02}
+            fillOpacity={0}
+          >
+            {title}
+          </Text>
+        </group>
+      )}
     </group>
   )
 }
 
 // ─── Main Floating 3D Item ───────────────────────────────────────────────────
 const Floating3DItem = forwardRef(function Floating3DItem(
-  { position, itemType, itemData },
+  { position, itemType, itemData, index },
   externalRef
 ) {
   const groupRef = useRef()
@@ -108,8 +209,9 @@ const Floating3DItem = forwardRef(function Floating3DItem(
     if (!g.visible) return
 
     // Transform items to black/white before the UI state (80% to 90%)
-    // Skip if in 2D grid mode
-    const fade = is2DMode ? 0 : Math.max(0, Math.min(1, (scrollState.progress - 0.80) / 0.10))
+    // Skip if in 2D grid mode or if this item is currently focused
+    const isFocused = interactState.focusedIndex === index
+    const fade = (is2DMode || isFocused) ? 0 : Math.max(0, Math.min(1, (scrollState.progress - 0.80) / 0.10))
 
     // Only traverse when fade value or dark mode actually changes
     const rounded = (fade * 20 | 0) / 20
@@ -117,7 +219,7 @@ const Floating3DItem = forwardRef(function Floating3DItem(
     if (cacheKey !== lastFade.current) {
       lastFade.current = cacheKey
       innerRef.current.traverse((child) => {
-        if (child.isMesh && child.material) {
+        if (child.isMesh && child.material && child.name === 'imagePlane') {
           // Save original texture map once
           if (child.material._origMap === undefined) {
             child.material._origMap = child.material.map
@@ -169,7 +271,20 @@ const Floating3DItem = forwardRef(function Floating3DItem(
   //    EVERY mouse/touch move — extremely expensive, especially on mobile
 
   const renderItem = () => (
-    <FloatingImage imageSrc={itemData.imageSrc} scale={itemData.scale || 0.7} title={itemData.title || ''} />
+    <FloatingImage 
+      imageSrc={itemData.imageSrc} 
+      scale={itemData.scale || 0.7} 
+      title={itemData.title || ''} 
+      isDarkMode={isDarkMode} 
+      onClick={(e) => {
+        e.stopPropagation()
+        if (interactState.focusedIndex === index) {
+          interactState.focusedIndex = null;
+        } else {
+          interactState.focusedIndex = index;
+        }
+      }}
+    />
   )
 
   return (

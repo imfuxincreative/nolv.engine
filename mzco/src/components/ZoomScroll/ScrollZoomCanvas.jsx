@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import LoopingTexts from './LoopingTexts';
-import { scrollState, updateScrollState } from './scrollState'
+import { scrollState, updateScrollState, interactState } from './scrollState'
 import LoadingScreen from '../LoadingScreen'
 import { useTheme } from '../../context/ThemeContext.jsx'
 import { useLayoutMode } from '../../context/LayoutContext.jsx'
@@ -55,7 +55,8 @@ function FinalUIOverlay() {
       // Tighten the layoutAlpha so the UI only begins to appear when morph is > 90% complete
       const layoutAlpha = Math.pow(1 - lp, 8);
       
-      const targetFade = fade * layoutAlpha;
+      const isFocused = interactState.focusedIndex !== null;
+      const targetFade = isFocused ? 0 : (fade * layoutAlpha);
 
       // Only touch DOM when value actually changes significantly
       const rounded = Math.round(targetFade * 50) / 50
@@ -100,6 +101,8 @@ function FinalUIOverlay() {
 }
 
 const isMobile = () => typeof window !== 'undefined' && (window.innerWidth < 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent))
+
+
 
 
 function InfiniteCamera() {
@@ -159,6 +162,11 @@ export default function ScrollZoomCanvas() {
     setSceneReady(true)
   }, [])
 
+  // Auto-close focused image when theme changes
+  useEffect(() => {
+    interactState.focusedIndex = null;
+  }, [isDarkMode])
+
   // Hide browser scrollbar while this page is active
   useEffect(() => {
     const style = document.createElement('style')
@@ -189,6 +197,14 @@ export default function ScrollZoomCanvas() {
 
   const { is2DMode } = useLayoutMode()
 
+  const prevIs2DMode = useRef(is2DMode)
+  useEffect(() => {
+    if (is2DMode && !prevIs2DMode.current) {
+      interactState.focusedIndex = null;
+    }
+    prevIs2DMode.current = is2DMode;
+  }, [is2DMode])
+
   const dragRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0, vx: 0, vy: 0, isDragging: false });
 
   const bind = useDrag(
@@ -216,7 +232,11 @@ export default function ScrollZoomCanvas() {
   );
 
   return (
-    <div className='relative w-full bg-transparent' style={{ height: mobile ? '12000px' : '20000px' }}>
+    <div 
+      {...(is2DMode ? bind() : {})} 
+      className={`relative w-full bg-transparent ${is2DMode ? 'touch-none cursor-grab active:cursor-grabbing' : ''}`} 
+      style={{ height: mobile ? '12000px' : '20000px' }}
+    >
       <LoadingScreen sceneReady={sceneReady} onComplete={handleLoadingComplete} />
       <Canvas camera={{ position: [0, 0, 10], fov: 50, far: 10000 }}
         className='!fixed  top-0 left-0 w-full h-screen'
@@ -234,15 +254,6 @@ export default function ScrollZoomCanvas() {
         <InfiniteCamera />
       </Canvas>
       <FinalUIOverlay />
-
-      {/* 2D Mode Interaction Overlay */}
-      {is2DMode && (
-        <div
-          {...bind()}
-          className="fixed inset-0 z-40 touch-none cursor-grab active:cursor-grabbing"
-          style={{ background: 'transparent' }}
-        />
-      )}
 
       {/* Light Mode Vignette Overlay (Premium Fog Gradient Edge) */}
       <div 

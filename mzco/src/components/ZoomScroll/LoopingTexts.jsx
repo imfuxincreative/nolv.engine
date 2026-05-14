@@ -4,7 +4,7 @@ import React, { useMemo, useState, useEffect, useRef } from 'react'
 import Floating3DItem from './Floating3DItem'
 import * as THREE from 'three'
 
-import { scrollState } from './scrollState'
+import { scrollState, interactState } from './scrollState'
 import { useLayoutMode } from '../../context/LayoutContext.jsx'
 
 // ─── Image pool for floating images ──────────────────────────────────────────
@@ -40,6 +40,7 @@ function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
         data: {
           imageSrc: img,
           scale: 0.5 + Math.random() * 0.4,
+          title: img.split('/').pop()
         },
       }
     })
@@ -144,6 +145,8 @@ function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
     const gridHeight = cols * gridSpacing;
     const z2D = 143; // Pulled back from camera (Z=150) for a wider, zoomed-out field of view
 
+    const isMorphing = Math.abs(layoutProgress.current - targetMode) > 0.01;
+
     for (let i = 0; i < len; i++) {
       const ref = refs[i]
       if (!ref) continue
@@ -197,15 +200,80 @@ function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
 
       // Apply lerp
       const lp = layoutProgress.current
-      ref.position.x = pos3D_x + (pos2D_x - pos3D_x) * lp
-      ref.position.y = pos3D_y + (pos2D_y - pos3D_y) * lp
-      ref.position.z = pos3D_z + (pos2D_z - pos3D_z) * lp
+      let targetX = pos3D_x + (pos2D_x - pos3D_x) * lp
+      let targetY = pos3D_y + (pos2D_y - pos3D_y) * lp
+      let targetZ = pos3D_z + (pos2D_z - pos3D_z) * lp
+      let finalScale = scale3D + (targetScale2D - scale3D) * lp
+      let targetRotX = angleX * lp
+      let targetRotY = angleY * lp
 
-      const finalScale = scale3D + (targetScale2D - scale3D) * lp
-      ref.scale.set(finalScale, finalScale, finalScale)
+      // --- Focus Logic ---
+      if (ref.userData.offsetX === undefined) {
+        ref.userData.offsetX = 0;
+        ref.userData.offsetY = 0;
+        ref.userData.offsetZ = 0;
+        ref.userData.offsetScale = 0;
+        ref.userData.offsetRotX = 0;
+        ref.userData.offsetRotY = 0;
+      }
+      
+      const isFocused = interactState.focusedIndex === i;
+      const anyFocused = interactState.focusedIndex !== null;
 
-      ref.rotation.x = angleX * lp
-      ref.rotation.y = angleY * lp
+      let targetOffsetX = 0;
+      let targetOffsetY = 0;
+      let targetOffsetZ = 0;
+      let targetOffsetScale = 0;
+      let targetOffsetRotX = 0;
+      let targetOffsetRotY = 0;
+
+      if (isFocused) {
+        const cam = stateEvent.camera;
+        targetOffsetX = cam.position.x - targetX;
+        targetOffsetY = cam.position.y - targetY;
+        targetOffsetZ = (cam.position.z - 3) - targetZ;
+        targetOffsetScale = 1.2 - finalScale;
+        targetOffsetRotX = cam.rotation.x - targetRotX;
+        targetOffsetRotY = cam.rotation.y - targetRotY;
+      } else if (anyFocused) {
+        let dirX = targetX;
+        let dirY = targetY;
+        
+        if (Math.abs(dirX) < 0.1 && Math.abs(dirY) < 0.1) {
+          dirX = (i % 2 === 0) ? 1 : -1;
+          dirY = (i % 3 === 0) ? 1 : -1;
+        }
+
+        const len = Math.sqrt(dirX * dirX + dirY * dirY);
+        dirX /= len;
+        dirY /= len;
+
+        targetOffsetX = dirX * 30;
+        targetOffsetY = dirY * 30;
+      }
+
+      // Dynamic interpolation speeds
+      let lerpSpeed = anyFocused ? 0.28 : 0.06;
+      if (isMorphing && !anyFocused) {
+        lerpSpeed = 0.15; // Match layout transition speed
+      }
+
+      ref.userData.offsetX += (targetOffsetX - ref.userData.offsetX) * lerpSpeed;
+      ref.userData.offsetY += (targetOffsetY - ref.userData.offsetY) * lerpSpeed;
+      ref.userData.offsetZ += (targetOffsetZ - ref.userData.offsetZ) * lerpSpeed;
+      ref.userData.offsetScale += (targetOffsetScale - ref.userData.offsetScale) * lerpSpeed;
+      ref.userData.offsetRotX += (targetOffsetRotX - ref.userData.offsetRotX) * lerpSpeed;
+      ref.userData.offsetRotY += (targetOffsetRotY - ref.userData.offsetRotY) * lerpSpeed;
+
+      ref.position.x = targetX + ref.userData.offsetX;
+      ref.position.y = targetY + ref.userData.offsetY;
+      ref.position.z = targetZ + ref.userData.offsetZ;
+
+      const currentScale = finalScale + ref.userData.offsetScale;
+      ref.scale.set(currentScale, currentScale, currentScale);
+
+      ref.rotation.x = targetRotX + ref.userData.offsetRotX;
+      ref.rotation.y = targetRotY + ref.userData.offsetRotY;
     }
   })
 
@@ -214,6 +282,7 @@ function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
       {items.map((item, i) => (
         <Floating3DItem
           key={i}
+          index={i}
           position={[item.x, item.y, item.zBase]}
           itemType={item.type}
           itemData={item.data}
