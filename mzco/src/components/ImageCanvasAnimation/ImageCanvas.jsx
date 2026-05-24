@@ -20,7 +20,7 @@ import imgLake from '../../assets/images/InfiniteImages/lake.jpg'
 
 const CARD_IMAGES = [imgFlower, imgRain, imgSerenity, imgBuilding, '/InfiniteImages/abundance.webp', '/InfiniteImages/monster.webp', '/InfiniteImages/wanted.webp', '/InfiniteImages/cyber.png', '/InfiniteImages/wanted.webp', '/InfiniteImages/flying.png', '/InfiniteImages/pre1.png', '/InfiniteImages/architecture.webp', '/InfiniteImages/starlight.webp', '/fire.jpg', '/InfiniteImages/black.jpg', '/InfiniteImages/white.jpg', '/InfiniteImages/ar.jpg', '/InfiniteImages/vai.webp', '/InfiniteImages/insane.jpg', '/InfiniteImages/air.jpg']
 
-function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
+function ImageCanvas({ count = 80, zRange = 160, dragRef }) {
   const itemRefs = useRef([])
 
 
@@ -293,4 +293,4 @@ function LoopingTexts({ count = 80, zRange = 160, dragRef }) {
   )
 }
 
-export default LoopingTexts
+export default ImageCanvas
