@@ -172,7 +172,7 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, onClic
             padding
             anchorX="center"
             anchorY="middle"
-            font="/inter.ttf"
+            font="/fonts/Inter_28pt-Regular.ttf"
             letterSpacing={0.02}
             fillOpacity={0}
           >

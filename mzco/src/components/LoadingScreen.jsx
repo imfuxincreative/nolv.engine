@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
-import './LoadingScreen.css'
+import { useState, useEffect } from 'react'
 
 export default function LoadingScreen({ sceneReady, onComplete }) {
   const [visible, setVisible] = useState(true)
@@ -36,15 +35,15 @@ export default function LoadingScreen({ sceneReady, onComplete }) {
   if (!visible) return null
 
   return (
-    <div className={`loading-screen ${fadeOut ? 'loading-screen--fade' : ''}`}>
-      <div className="loading-screen__inner">
+    <div className={`fixed inset-0 z-[9999] flex items-center justify-center bg-white transition-opacity duration-700 ease-in-out ${fadeOut ? 'opacity-0 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}>
+      <div className="relative flex items-center justify-center">
         <img
-          src="/nolv.png"
+          src="/logo/nolv.png"
           alt=""
-          className="loading-screen__logo w-4"
+          className="w-[27px] h-[27px] object-contain select-none pointer-events-none"
           draggable={false}
         />
-        <svg className="loading-screen__spinner" viewBox="0 0 50 50">
+        <svg className="absolute w-[76px] h-[76px] animate-spin" viewBox="0 0 50 50">
           <circle
             cx="25"
             cy="25"
@@ -64,7 +63,6 @@ export default function LoadingScreen({ sceneReady, onComplete }) {
             stroke="rgba(0,0,0,0.45)"
             strokeWidth="1"
             strokeDasharray="69.11"
-
             strokeLinecap="round"
           />
         </svg>

@@ -5,17 +5,17 @@
   /* ===== Custom Fonts ===== */
   @font-face {
     font-family: inter-regular;
-    src: url(./assets/fonts/Inter_28pt-Regular.ttf);
+    src: url(/fonts/Inter_28pt-Regular.ttf);
   }
 
   @font-face {
     font-family: inter-light;
-    src: url(./assets/fonts/Inter_24pt-Light.ttf);
+    src: url(/fonts/Inter_24pt-Light.ttf);
   }
 
   @font-face {
     font-family: inter-medium;
-    src: url(./assets/fonts/Inter_28pt-Medium.ttf);
+    src: url(/fonts/Inter_28pt-Medium.ttf);
   }
 
 

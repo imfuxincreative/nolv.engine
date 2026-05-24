@@ -6,22 +6,11 @@ import * as THREE from 'three'
 
 import { scrollState, interactState } from './scrollState'
 import { useLayoutMode } from '../../context/LayoutContext.jsx'
-
-// ─── Image pool for floating images ──────────────────────────────────────────
-import imgBeach2 from '../../assets/images/InfiniteImages/beach2.jpg'
-import imgFlower from '../../assets/images/InfiniteImages/flower.jpg'
-
-
-import imgMountain from '../../assets/images/InfiniteImages/mountain.jpg'
-import imgRain from '../../assets/images/InfiniteImages/rain.jpg'
-import imgSerenity from '../../assets/images/InfiniteImages/serenity.jpg'
-import imgBuilding from '../../assets/images/InfiniteImages/building.jpg'
-import imgLake from '../../assets/images/InfiniteImages/lake.jpg'
-
-const CARD_IMAGES = [imgFlower, imgRain, imgSerenity, imgBuilding, '/InfiniteImages/abundance.webp', '/InfiniteImages/monster.webp', '/InfiniteImages/wanted.webp', '/InfiniteImages/cyber.png', '/InfiniteImages/wanted.webp', '/InfiniteImages/flying.png', '/InfiniteImages/pre1.png', '/InfiniteImages/architecture.webp', '/InfiniteImages/starlight.webp', '/fire.jpg', '/InfiniteImages/black.jpg', '/InfiniteImages/white.jpg', '/InfiniteImages/ar.jpg', '/InfiniteImages/vai.webp', '/InfiniteImages/insane.jpg', '/InfiniteImages/air.jpg']
+import { useVisual } from '../../context/VisualContext.jsx'
 
 function ImageCanvas({ count = 80, zRange = 160, dragRef }) {
   const itemRefs = useRef([])
+  const { visuals } = useVisual()
 
 
 
@@ -29,7 +18,7 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }) {
   const items = useMemo(() => {
     const areaSize = 45; // Match random layout area size for 2D wrapping
     return Array.from({ length: count }).map(() => {
-      const img = CARD_IMAGES[Math.floor(Math.random() * CARD_IMAGES.length)]
+      const img = visuals[Math.floor(Math.random() * visuals.length)]
       return {
         type: 'image',
         x: (Math.random() - 0.5) * 8,
@@ -44,7 +33,7 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }) {
         },
       }
     })
-  }, [count, zRange])
+  }, [count, zRange, visuals])
 
   // ── Read Logo points & Load Texture ────────────────────────────────────────────────────────
   const [logoPoints, setLogoPoints] = useState([])
@@ -52,13 +41,13 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }) {
   const realLogoRef = useRef()
 
   useEffect(() => {
-    new THREE.TextureLoader().load('/nolv.png', (tex) => {
+    new THREE.TextureLoader().load('/logo/nolv.png', (tex) => {
       tex.colorSpace = THREE.SRGBColorSpace
       setLogoTex(tex)
     })
 
     const img = new Image()
-    img.src = '/nolv.png'
+    img.src = '/logo/nolv.png'
     img.onload = () => {
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
