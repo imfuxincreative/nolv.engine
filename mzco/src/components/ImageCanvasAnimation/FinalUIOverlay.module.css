@@ -10,7 +10,8 @@
 }
 
 .inner {
-  margin-top: 1rem; /* mt-4 */
+  margin-top: 0.5rem;
+  /* mt-4 */
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -18,19 +19,25 @@
 }
 
 .title {
-  font-size: 15px; /* text-[15px] */
-  font-weight: 500; /* font-medium */
-  margin-bottom: 0; /* mb-0 */
+  font-size: 15px;
+  /* text-[15px] */
+  font-weight: 500;
+  /* font-medium */
+  margin-bottom: 0;
+  /* mb-0 */
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 500ms;
 }
 
 .subtitle {
-  font-size: 14px; /* text-[14px] */
+  font-size: 14px;
+  /* text-[14px] */
   font-weight: 500;
-  opacity: 0.66; /* opacity-[0.66] */
-  margin-bottom: 0.75rem; /* mb-3 */
+  opacity: 0.66;
+  /* opacity-[0.66] */
+  margin-bottom: 0.75rem;
+  /* mb-3 */
   transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 500ms;
@@ -45,16 +52,21 @@
 }
 
 .btn {
-  padding-left: 1.25rem; /* px-5 */
+  padding-left: 1.25rem;
+  /* px-5 */
   padding-right: 1.25rem;
-  padding-top: 0.375rem; /* py-1.5 */
+  padding-top: 0.375rem;
+  /* py-1.5 */
   padding-bottom: 0.375rem;
-  font-size: 13px; /* text-[13px] */
-  border-radius: 2px; /* rounded-[2px] */
+  font-size: 13px;
+  /* text-[13px] */
+  border-radius: 2px;
+  /* rounded-[2px] */
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 500ms;
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); /* shadow-xl */
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  /* shadow-xl */
   cursor: pointer;
 }
 
@@ -72,7 +84,8 @@
 }
 
 .btnLight:hover {
-  background-color: rgb(31 41 55); /* hover:bg-gray-800 */
+  background-color: rgb(31 41 55);
+  /* hover:bg-gray-800 */
 }
 
 .btnDark {
@@ -81,5 +94,6 @@
 }
 
 .btnDark:hover {
-  background-color: rgb(229 231 235); /* hover:bg-gray-200 */
+  background-color: rgb(229 231 235);
+  /* hover:bg-gray-200 */
 }

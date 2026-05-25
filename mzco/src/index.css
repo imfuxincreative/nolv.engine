@@ -11,7 +11,13 @@ html, body {
   padding: 0;
   line-height: 1.5;
   -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent; /* Fix blue div on mobile tap */
   font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Reset typography margins like Tailwind */
+blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre {
+  margin: 0;
 }
 
 button, input, optgroup, select, textarea {
