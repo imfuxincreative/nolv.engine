@@ -98,9 +98,9 @@ export default function ImageCanvasAnimation() {
   );
 
   return (
-    <div 
-      {...(is2DMode ? bind() : {})} 
-      className={`relative w-full bg-transparent ${is2DMode ? 'touch-none cursor-grab active:cursor-grabbing' : ''}`} 
+    <div
+      {...(is2DMode ? bind() : {})}
+      className={`relative w-full bg-transparent ${is2DMode ? 'touch-none cursor-grab active:cursor-grabbing' : ''}`}
       style={{ height: mobile ? '12000px' : '20000px' }}
     >
       <LoadingScreen sceneReady={sceneReady} onComplete={handleLoadingComplete} />
@@ -120,16 +120,16 @@ export default function ImageCanvasAnimation() {
         <InfiniteCamera />
       </Canvas>
       {/* Dark mode vignette */}
-      <div 
-        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-1000 ease-in-out" 
+      <div
+        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-1000 ease-in-out"
         style={{
-          background: 'radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.6) 100%)',
+          background: 'radial-gradient(circle, rgba(255, 0, 0, 0) 40%, rgba(0,0,0,0.6) 100%)',
           opacity: isDarkMode ? 1 : 0
         }}
       />
       {/* Light mode vignette */}
-      <div 
-        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-1000 ease-in-out" 
+      <div
+        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-1000 ease-in-out"
         style={{
           background: 'radial-gradient(circle, rgba(255,255,255,0) 40%, rgba(255,255,255,0.65) 100%)',
           opacity: isDarkMode ? 0 : 1

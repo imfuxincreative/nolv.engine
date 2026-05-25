@@ -59,8 +59,9 @@ const vertexShader = /* glsl */ `
     pos.z += totalBend;
 
     // Pass bend amount to fragment shader for shading.
-    // Exclude the negative touch depression (pressDown) to prevent a dark shadow under the mouse cursor.
-    vBend = bendY + bendX + curl + (ridgeUp * uTouchStrength) + wave;
+    // Include pressDown at reduced strength (0.4x) so we get a subtle shadow under the dent
+    // without it being an overwhelming dark spot.
+    vBend = bendY + bendX + curl + (pressDown * uTouchStrength * 0.4) + (ridgeUp * uTouchStrength) + wave;
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
   }
@@ -90,8 +91,8 @@ const fragmentShader = /* glsl */ `
     // ── Curvature-based shading ──
     // Adds highlight on peaks (positive vBend) and subtle shadow in valleys (negative vBend)
     // to sell the 3D paper texture.
-    float shade = 1.0 + vBend * 2.0;
-    shade = clamp(shade, 0.82, 1.25);
+    float shade = 1.0 + vBend * 3.0;
+    shade = clamp(shade, 0.65, 1.3); // Shadow darkens by up to 35%, highlights brighten by up to 30%
     texColor.rgb *= shade;
 
     // ── Theme fade ──
