@@ -1,17 +1,18 @@
 import React, { useEffect, useRef , useState  , useContext} from 'react';
 import {LoadingContext} from '../context/LoadingContext'
-import {useTheme} from '../context/ThemeContext.jsx'
+import {useTheme} from '../context/ThemeContext'
+import styles from './ScrollProgressBer.module.css'
 function ScrollProgressBar() {
 const {isDarkMode} = useTheme()
-  const progressRef = useRef();
-const {isLoading , setIsLoding , showMessage , setShowMessage} = useContext(LoadingContext)
+  const progressRef = useRef<HTMLDivElement>(null);
+const {isLoading , setIsLoading , showMessage , setShowMessage} = useContext(LoadingContext)
  useEffect(() => {
     if (!progressRef.current) return;
     const bar = progressRef.current;
 
     // Reset styles
-    bar.classList.remove('ml-auto');
-    bar.classList.remove('right-0');
+    bar.classList.remove(styles.mlAuto);
+    bar.classList.remove(styles.right0);
 
     if (isLoading) {
       // Step 1: grow from left
@@ -20,16 +21,16 @@ const {isLoading , setIsLoding , showMessage , setShowMessage} = useContext(Load
       // Step 2: after full width, shrink from right
       setTimeout(() => {
         if (bar) {
-          bar.classList.add('ml-auto');     // Push it to the right
-          bar.classList.add('right-0');     // Anchor it to the right
+          bar.classList.add(styles.mlAuto);     // Push it to the right
+          bar.classList.add(styles.right0);     // Anchor it to the right
           bar.style.width = '0%';           // Shrink from right
         }
       }, 1000); // Wait until grow finishes
     } else {
       // reset
       bar.style.width = '0%';
-      bar.classList.remove('ml-auto');
-      bar.classList.remove('right-0');
+      bar.classList.remove(styles.mlAuto);
+      bar.classList.remove(styles.right0);
     }
   }, [isLoading]);
   useEffect(() => {
@@ -51,10 +52,10 @@ const {isLoading , setIsLoding , showMessage , setShowMessage} = useContext(Load
   }, []);
 
   return (
-    <div className='pointer-events-none'>
+    <div className={styles.container}>
     <div
       ref={progressRef}
-      className={` fixed z-[120] top-0 duration-1000 left-0  ${isDarkMode ? 'bg-white' :'bg-black' }  h-[5px] w-0 `}
+      className={`${styles.bar} ${isDarkMode ? styles.bgWhite : styles.bgBlack}`}
       />
       </div>
   );

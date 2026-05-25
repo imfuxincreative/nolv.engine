@@ -1,0 +1,22 @@
+.bgContainer {
+  position: fixed;
+  top: 0;
+  pointer-events: none;
+  z-index: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bgInner {
+  border-radius: 9999px; /* rounded-full */
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 1000ms;
+  height: 50vw;
+  width: 50vw;
+  background-color: black;
+}

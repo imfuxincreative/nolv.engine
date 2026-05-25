@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LoadingContext } from '../context/LoadingContext.jsx';
-import { useCursor } from '../context/CursorContext.jsx';
+import { LoadingContext } from '../context/LoadingContext';
+import { useCursor } from '../context/CursorContext';
 import { CiLight } from "react-icons/ci";
-import { useTheme } from '../context/ThemeContext.jsx'
-import { useLayoutMode } from '../context/LayoutContext.jsx'
+import { useTheme } from '../context/ThemeContext'
+import { useLayoutMode } from '../context/LayoutContext'
 import { RiBox2Fill } from "react-icons/ri"
 import { FaSquareFull } from "react-icons/fa"
+import styles from './Controls.module.css'
 
 export default function Controls() {
   const { setIsDarkMode, isDarkMode } = useTheme()
@@ -28,26 +29,25 @@ export default function Controls() {
 
   return (
     <>
-      <div className='flex fixed items-center top-10 right-10 gap-1 z-[999]'>
-        <button onClick={handleThemeClick} className={` h-[27px]  w-[27px] flex items-center justify-center  px-2 rounded-full ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} duration-500 `} ><CiLight size={23} className='' /></button>
+      <div className={styles.topRightContainer}>
+        <button onClick={handleThemeClick} className={`${styles.themeBtn} ${isDarkMode ? styles.bgWhiteTextBlack : styles.bgBlackTextWhite}`} ><CiLight size={23} /></button>
         <button
           onClick={handleLogin}
           onMouseLeave={() => setCursorAnimation('onhome-animation')} onMouseEnter={() => setCursorAnimation('whatif-animation')}
-          className={` ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'} duration-500 h-fit py-2  w-fit px-3 rounded-full `}
+          className={`${styles.loginBtn} ${isDarkMode ? styles.bgWhiteTextBlack : styles.bgBlackTextWhite}`}
         >
           Join Now
         </button>
       </div>
 
-      <div className='flex flex-col gap-1 bg-[#ededed] rounded-full fixed right-3 top-1/2 -translate-y-1/2 z-[999] items-center'>
+      <div className={styles.navContainer}>
         {/* HOME */}
         <button
           onClick={() => {
             if (location.pathname !== '/') navigate('/')
             setIs2DMode(false)
           }}
-          className={`h-7 w-7 flex items-center justify-center rounded-full
-            ${isHome ? 'bg-black text-white' : 'bg-[#ededed]'}`}
+          className={`${styles.navBtn} ${isHome ? styles.bgBlackTextWhite : styles.bgEdeded}`}
         >
           <RiBox2Fill />
         </button>
@@ -58,8 +58,7 @@ export default function Controls() {
             if (location.pathname !== '/') navigate('/')
             setIs2DMode(true)
           }}
-          className={`h-7 w-7 flex items-center justify-center rounded-full
-            ${isProjects ? 'bg-black text-white' : ''}`}
+          className={`${styles.navBtn} ${isProjects ? styles.bgBlackTextWhite : ''}`}
         >
           <FaSquareFull size={8} />
         </button>

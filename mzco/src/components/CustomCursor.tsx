@@ -8,7 +8,8 @@ import { IoIosLink } from "react-icons/io";
 import { GoHome } from "react-icons/go";
 import { TbArrowRoundaboutRight } from "react-icons/tb";
 import { GrProjects } from "react-icons/gr";
-import { useTheme } from '../context/ThemeContext.jsx';
+import { useTheme } from '../context/ThemeContext';
+import styles from './CustomCursor.module.css';
 function CustomCursor() {
   const cursorRef = useRef(null);
   const { cursorAnimation } = useCursor();
@@ -17,7 +18,7 @@ function CustomCursor() {
     if (!cursorRef.current) return;
 
     if (window.innerWidth > 640) {
-      const onMouseMove = (event) => {
+      const onMouseMove = (event: MouseEvent) => {
         const { clientX: x, clientY: y } = event;
 
         // Animate cursor position
@@ -204,34 +205,34 @@ gsap.to('.projects' , {opacity : 0});
   return (
 <div
   ref={cursorRef}
-  className={`fixed top-0 z-[9999] left-0 w-10 h-10 scale-30 ${isDarkMode ? 'bg-white text-black' : 'bg-black text-white'}  rounded-full pointer-events-none transform -translate-x-1/2 -translate-y-1/2 pt-2 pl-2`}
+  className={`${styles.cursorContainer} ${isDarkMode ? styles.bgDark : styles.bgLight} home cursor`}
 >
-  <IoIosLink   className="link opacity-0 text-white lg:text-[25px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-  <h1  className="question opacity-0 lg:text-[25px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">?</h1>
+  <IoIosLink   className={`link ${styles.iconCommon} ${styles.textWhite} ${styles.lgText25}`} />
+  <h1  className={`question ${styles.iconCommon} ${styles.lgText25}`}>?</h1>
   <MdArrowOutward
-    className="arrow opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+    className={`arrow ${styles.iconCommon}`}
     size={25}
   />
-  <GoHome className="home opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+  <GoHome className={`home ${styles.iconCommon}`}
     size={22}/>
   <LuMenu
-    className="barger opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+    className={`barger ${styles.iconCommon}`}
     size={25}
   />
   <IoEyeOutline
-    className="eye opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+    className={`eye ${styles.iconCommon}`}
     size={24}
   />
   <IoSendSharp
-    className="send opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+    className={`send ${styles.iconCommon}`}
     size={25}
   />
     <TbArrowRoundaboutRight   
-    className="about opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+    className={`about ${styles.iconCommon}`}
     size={20}
   />
       <GrProjects   
-    className="projects opacity-0 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+    className={`projects ${styles.iconCommon}`}
     size={18}
   />
 </div>

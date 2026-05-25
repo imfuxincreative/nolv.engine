@@ -3,14 +3,15 @@ import { Canvas } from '@react-three/fiber'
 import ImageCanvas from './ImageCanvas'
 import { scrollState, interactState } from './scrollState'
 import LoadingScreen from '../LoadingScreen'
-import { useTheme } from '../../context/ThemeContext.jsx'
-import { useLayoutMode } from '../../context/LayoutContext.jsx'
+import { useTheme } from '../../context/ThemeContext'
+import { useLayoutMode } from '../../context/LayoutContext'
 import { useDrag } from '@use-gesture/react'
 import ScrollUpdater from './ScrollUpdater'
 import SceneReadySignal from './SceneReadySignal'
 import InfiniteCamera from './InfiniteCamera'
 import FinalUIOverlay from './FinalUIOverlay'
-import { useSmoothScroll } from '../../context/LenisContext.jsx'
+import { useSmoothScroll } from '../../context/LenisContext'
+import styles from './ImageCanvasAnimation.module.css'
 
 const isMobile = () => typeof window !== 'undefined' && (window.innerWidth < 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent))
 
@@ -42,12 +43,12 @@ export default function ImageCanvasAnimation() {
 
   // Scroll animation — runs AFTER loading screen disappears
   const handleLoadingComplete = useCallback(() => {
-    let start = null
+    let start: number | null = null
     const startY = window.scrollY
     const targetY = 500
     const duration = 200 // fast snap
 
-    const step = (timestamp) => {
+    const step = (timestamp: number) => {
       if (!start) start = timestamp
       const percent = Math.min((timestamp - start) / duration, 1)
       const eased = 1 - Math.pow(1 - percent, 3)
@@ -100,12 +101,12 @@ export default function ImageCanvasAnimation() {
   return (
     <div
       {...(is2DMode ? bind() : {})}
-      className={`relative w-full bg-transparent ${is2DMode ? 'touch-none cursor-grab active:cursor-grabbing' : ''}`}
+      className={`${styles.container} ${is2DMode ? styles.grabMode : ''}`}
       style={{ height: mobile ? '12000px' : '20000px' }}
     >
       <LoadingScreen sceneReady={sceneReady} onComplete={handleLoadingComplete} />
       <Canvas camera={{ position: [0, 0, 10], fov: 50, far: 10000 }}
-        className='!fixed  top-0 left-0 w-full h-screen'
+        className={styles.canvas}
         dpr={mobile ? 1 : [1, 2]}
         gl={{ powerPreference: 'high-performance', antialias: !mobile }}
         performance={{ min: 0.5 }}
@@ -121,7 +122,7 @@ export default function ImageCanvasAnimation() {
       </Canvas>
       {/* Dark mode vignette */}
       <div
-        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-1000 ease-in-out"
+        className={styles.vignette}
         style={{
           background: 'radial-gradient(circle, rgba(255, 0, 0, 0) 40%, rgba(0,0,0,0.6) 100%)',
           opacity: isDarkMode ? 1 : 0
@@ -129,7 +130,7 @@ export default function ImageCanvasAnimation() {
       />
       {/* Light mode vignette */}
       <div
-        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-1000 ease-in-out"
+        className={styles.vignette}
         style={{
           background: 'radial-gradient(circle, rgba(255,255,255,0) 40%, rgba(255,255,255,0.65) 100%)',
           opacity: isDarkMode ? 0 : 1

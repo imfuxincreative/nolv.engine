@@ -1,8 +1,12 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, ReactNode } from 'react';
 
-const VisualContext = createContext();
+export interface VisualContextType {
+  visuals: string[];
+}
 
-export function VisualProvider({ children }) {
+const VisualContext = createContext<VisualContextType | undefined>(undefined);
+
+export function VisualProvider({ children }: { children: ReactNode }) {
   const visuals = [
     '/Visuals/flower.jpg', '/Visuals/rain.jpg', '/Visuals/serenity.jpg', '/Visuals/building.jpg',
     '/Visuals/abundance.webp', '/Visuals/monster.webp', '/Visuals/wanted.webp', '/Visuals/cyber.png',
@@ -19,5 +23,9 @@ export function VisualProvider({ children }) {
 }
 
 export function useVisual() {
-  return useContext(VisualContext);
+  const context = useContext(VisualContext);
+  if (context === undefined) {
+    throw new Error('useVisual must be used within a VisualProvider');
+  }
+  return context;
 }

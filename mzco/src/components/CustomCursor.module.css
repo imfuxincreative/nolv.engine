@@ -1,0 +1,43 @@
+.cursorContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 2.5rem; /* 10 * 0.25rem = 2.5rem = 40px */
+  height: 2.5rem;
+  --tw-scale-x: .3; /* scale-30 */
+  --tw-scale-y: .3;
+  transform: translate(-50%, -50%) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  border-radius: 9999px;
+  pointer-events: none;
+  padding-top: 0.5rem; /* pt-2 */
+  padding-left: 0.5rem; /* pl-2 */
+}
+
+.bgLight {
+  background-color: black;
+  color: white;
+}
+
+.bgDark {
+  background-color: white;
+  color: black;
+}
+
+.iconCommon {
+  opacity: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.textWhite {
+  color: white;
+}
+
+@media (min-width: 1024px) {
+  .lgText25 {
+    font-size: 25px;
+  }
+}

@@ -3,7 +3,11 @@ import { useFrame } from '@react-three/fiber'
 
 // ─── Scene Ready Signal ───────────────────────────────────────────────────────
 // Waits for the 3D scene to render enough frames, then signals the parent.
-export default function SceneReadySignal({ onReady }) {
+interface SceneReadySignalProps {
+  onReady: () => void;
+}
+
+export default function SceneReadySignal({ onReady }: SceneReadySignalProps) {
   const frameCount = useRef(0)
   const signaled = useRef(false)
 

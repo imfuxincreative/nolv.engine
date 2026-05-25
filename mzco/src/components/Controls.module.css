@@ -1,0 +1,73 @@
+.topRightContainer {
+  display: flex;
+  position: fixed;
+  align-items: center;
+  top: 2.5rem; /* top-10 = 40px */
+  right: 2.5rem; /* right-10 = 40px */
+  gap: 0.25rem; /* gap-1 = 4px */
+  z-index: 999;
+}
+
+.themeBtn {
+  height: 27px;
+  width: 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 0.5rem; /* px-2 */
+  padding-right: 0.5rem;
+  border-radius: 9999px; /* rounded-full */
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 500ms;
+}
+
+.loginBtn {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 500ms;
+  height: fit-content;
+  padding-top: 0.5rem; /* py-2 */
+  padding-bottom: 0.5rem;
+  width: fit-content;
+  padding-left: 0.75rem; /* px-3 */
+  padding-right: 0.75rem;
+  border-radius: 9999px;
+}
+
+.bgWhiteTextBlack {
+  background-color: white;
+  color: black;
+}
+
+.bgBlackTextWhite {
+  background-color: black;
+  color: white;
+}
+
+.navContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem; /* gap-1 */
+  background-color: #ededed;
+  border-radius: 9999px; /* rounded-full */
+  position: fixed;
+  right: 0.75rem; /* right-3 */
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  align-items: center;
+}
+
+.navBtn {
+  height: 1.75rem; /* h-7 */
+  width: 1.75rem; /* w-7 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+}
+
+.bgEdeded {
+  background-color: #ededed;
+}

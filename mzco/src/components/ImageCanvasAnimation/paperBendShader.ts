@@ -110,7 +110,7 @@ const fragmentShader = /* glsl */ `
 // ─── Create Paper Bend Material ──────────────────────────────────────────────
 // Factory function: creates a new ShaderMaterial instance with all uniforms.
 // Each image gets its own material (uniforms are per-instance) but shares geometry.
-export function createPaperBendMaterial(texture) {
+export function createPaperBendMaterial(texture: THREE.Texture): THREE.ShaderMaterial {
   return new THREE.ShaderMaterial({
     uniforms: {
       uTexture: { value: texture },

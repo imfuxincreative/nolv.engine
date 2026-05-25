@@ -3,14 +3,27 @@
 // All components read from this object instead of hitting the DOM individually.
 // This eliminates 1200+ redundant DOM reads per frame.
 
-export const scrollState = {
+export interface ScrollState {
+  progress: number;
+  scrollY: number;
+  scrollMax: number;
+  scrollVelocity: number;
+  layoutProgress: number;
+}
+
+export const scrollState: ScrollState = {
   progress: 0,
   scrollY: 0,
   scrollMax: 1,
   scrollVelocity: 0,
+  layoutProgress: 0,
 }
 
-export function updateScrollState() {
+export interface InteractState {
+  focusedIndex: number | null;
+}
+
+export function updateScrollState(): void {
   const prevY = scrollState.scrollY
   scrollState.scrollMax = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
   const newScrollY = window.scrollY
@@ -26,7 +39,6 @@ export function updateScrollState() {
   scrollState.scrollVelocity = newScrollY - prevY
 }
 
-export const interactState = {
+export const interactState: InteractState = {
   focusedIndex: null
 }
-

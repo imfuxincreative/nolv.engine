@@ -5,11 +5,25 @@ import Floating3DItem from './Floating3DItem'
 import * as THREE from 'three'
 
 import { scrollState, interactState } from './scrollState'
-import { useLayoutMode } from '../../context/LayoutContext.jsx'
-import { useVisual } from '../../context/VisualContext.jsx'
+import { useLayoutMode } from '../../context/LayoutContext'
+import { useVisual } from '../../context/VisualContext'
 
-function ImageCanvas({ count = 80, zRange = 160, dragRef }) {
-  const itemRefs = useRef([])
+interface ImageCanvasProps {
+  count?: number;
+  zRange?: number;
+  dragRef: React.MutableRefObject<{
+    x: number;
+    y: number;
+    targetX: number;
+    targetY: number;
+    vx: number;
+    vy: number;
+    isDragging: boolean;
+  }>;
+}
+
+function ImageCanvas({ count = 80, zRange = 160, dragRef }: ImageCanvasProps) {
+  const itemRefs = useRef<(THREE.Group | null)[]>([])
   const { visuals } = useVisual()
 
 
@@ -36,9 +50,8 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }) {
   }, [count, zRange, visuals])
 
   // ── Read Logo points & Load Texture ────────────────────────────────────────────────────────
-  const [logoPoints, setLogoPoints] = useState([])
-  const [logoTex, setLogoTex] = useState(null)
-  const realLogoRef = useRef()
+  const [logoPoints, setLogoPoints] = useState<{ x: number; y: number }[]>([])
+  const [logoTex, setLogoTex] = useState<THREE.Texture | null>(null)
 
   useEffect(() => {
     new THREE.TextureLoader().load('/logo/nolv.png', (tex) => {
@@ -51,13 +64,14 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }) {
     img.onload = () => {
       const canvas = document.createElement('canvas')
       const ctx = canvas.getContext('2d')
+      if (!ctx) return
       const w = 150
       const h = Math.floor(img.height * (150 / img.width))
       canvas.width = w
       canvas.height = h
       ctx.drawImage(img, 0, 0, w, h)
       const data = ctx.getImageData(0, 0, w, h).data
-      const points = []
+      const points: { x: number; y: number }[] = []
 
       for (let y = 0; y < h; y += 2) {
         for (let x = 0; x < w; x += 2) {
@@ -78,7 +92,7 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }) {
   const { is2DMode } = useLayoutMode()
   const layoutProgress = useRef(0)
 
-  const wrap = (val, max) => ((val % max) + max) % max;
+  const wrap = (val: number, max: number) => ((val % max) + max) % max;
 
   useFrame((stateEvent) => {
     if (logoPoints.length === 0) return
@@ -275,7 +289,7 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }) {
           position={[item.x, item.y, item.zBase]}
           itemType={item.type}
           itemData={item.data}
-          ref={(el) => (itemRefs.current[i] = el)}
+          ref={(el) => { itemRefs.current[i] = el }}
         />
       ))}
     </>

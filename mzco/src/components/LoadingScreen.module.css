@@ -1,0 +1,53 @@
+.container {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  transition-property: opacity;
+  transition-duration: 700ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fadeOut {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.fadeIn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 27px;
+  height: 27px;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+.spinner {
+  position: absolute;
+  width: 76px;
+  height: 76px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

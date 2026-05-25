@@ -1,7 +1,7 @@
 import React from 'react'
-import ImageCanvasAnimation from '../../components/ImageCanvasAnimation/ImageCanvasAnimation.jsx'
-import ScrollProgressBer from '../../components/ScrollProgressBer.jsx'
-import { useCursor } from '../../context/CursorContext.jsx'
+import ImageCanvasAnimation from '../../components/ImageCanvasAnimation/ImageCanvasAnimation'
+import ScrollProgressBer from '../../components/ScrollProgressBer'
+import { useCursor } from '../../context/CursorContext'
 function Loop() {
 const {setCursorAnimation} = useCursor()
   return (

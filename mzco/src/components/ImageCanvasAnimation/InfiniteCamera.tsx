@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { scrollState } from './scrollState'
-import { useLayoutMode } from '../../context/LayoutContext.jsx'
+import { useLayoutMode } from '../../context/LayoutContext'
 
 export default function InfiniteCamera() {
   const camera = useThree((s) => s.camera)
@@ -9,7 +9,7 @@ export default function InfiniteCamera() {
   const mouseRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
-    const handleMove = (e) => {
+    const handleMove = (e: PointerEvent) => {
       // Replicate R3F's native pointer state math using generic global coordinates
       mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1;

@@ -1,0 +1,31 @@
+.container {
+  pointer-events: none;
+}
+
+.bar {
+  position: fixed;
+  z-index: 120;
+  top: 0;
+  left: 0;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 1000ms;
+  height: 5px;
+  width: 0;
+}
+
+.bgWhite {
+  background-color: white;
+}
+
+.bgBlack {
+  background-color: black;
+}
+
+.mlAuto {
+  margin-left: auto;
+}
+
+.right0 {
+  right: 0;
+}

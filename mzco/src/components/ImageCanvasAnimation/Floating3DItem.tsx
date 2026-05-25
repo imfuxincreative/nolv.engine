@@ -6,15 +6,20 @@ import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 import { forwardRef } from 'react'
 import { scrollState, interactState } from './scrollState'
-import { useTheme } from '../../context/ThemeContext.jsx'
-import { useLayoutMode } from '../../context/LayoutContext.jsx'
+import { useTheme } from '../../context/ThemeContext'
+import { useLayoutMode } from '../../context/LayoutContext'
 import { createPaperBendMaterial, paperPlaneGeometry } from './paperBendShader'
 
 
 
 // ─── Texture cache to prevent duplicate loads ─────────────────────────────────
 // Stores { tex, aspect, listeners[] } per image source
-const _textureCache = new Map()
+interface TextureCacheEntry {
+  tex: THREE.Texture | null;
+  aspect: number | null;
+  listeners: Array<(aspect: number) => void>;
+}
+const _textureCache = new Map<string, TextureCacheEntry>()
 
 // ─── Shared geometry for ALL image planes ─────────────────────────────────────
 // PERF: One subdivided geometry buffer shared across ~1000 instances.
@@ -29,13 +34,23 @@ const _colorLightText = new THREE.Color('#ffffff')
 const _colorDarkText = new THREE.Color('#000000')
 const _tempColor = new THREE.Color()
 
+// ─── Props for FloatingImage ──────────────────────────────────────────────────
+interface FloatingImageProps {
+  imageSrc: string;
+  scale?: number;
+  title?: string;
+  isDarkMode: boolean;
+  isFocused: boolean;
+  onClick?: (e: THREE.Event) => void;
+}
+
 // ─── 3D Floating Image with Title Overlay ─────────────────────────────────────
 // Each image gets an editorial-style title positioned at bottom-left, matching
 // the magazine/editorial UI reference.
-function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, isFocused, onClick }) {
-  const meshRef = useRef()
-  const bgMatRef = useRef()
-  const textRef = useRef()
+function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, isFocused, onClick }: FloatingImageProps) {
+  const meshRef = useRef<THREE.Mesh>(null)
+  const bgMatRef = useRef<THREE.MeshBasicMaterial>(null)
+  const textRef = useRef<any>(null)
   const themeProgress = useRef(isDarkMode ? 1 : 0)
   const hoverProgress = useRef(0)
   const [aspect, setAspect] = useState(1)
@@ -54,13 +69,13 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, isFocu
 
   const texture = useMemo(() => {
     if (_textureCache.has(imageSrc)) {
-      return _textureCache.get(imageSrc).tex
+      return _textureCache.get(imageSrc)!.tex!
     }
-    const entry = { tex: null, aspect: null, listeners: [] }
+    const entry: TextureCacheEntry = { tex: null, aspect: null, listeners: [] }
     const tex = new THREE.TextureLoader().load(imageSrc, (loaded) => {
       entry.aspect = loaded.image.height / loaded.image.width
       // Notify all subscribed instances
-      entry.listeners.forEach(fn => fn(entry.aspect))
+      entry.listeners.forEach(fn => fn(entry.aspect!))
       entry.listeners = []
     })
     tex.colorSpace = THREE.SRGBColorSpace
@@ -208,8 +223,8 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, isFocu
             targetMouse.current.set(e.uv.x - 0.5, e.uv.y - 0.5)
           }
         }}
-        onPointerOut={(e) => { document.body.style.cursor = 'auto'; setHovered(false) }}
-        onClick={onClick}
+        onPointerOut={(_e) => { document.body.style.cursor = 'auto'; setHovered(false) }}
+        onClick={onClick as any}
       />
 
       {/* ── Editorial Title Overlay ── */}
@@ -242,13 +257,27 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, isFocu
   )
 }
 
+// ─── Props for Floating3DItem ─────────────────────────────────────────────────
+interface ItemData {
+  imageSrc: string;
+  scale?: number;
+  title?: string;
+}
+
+interface Floating3DItemProps {
+  position: [number, number, number];
+  itemType: string;
+  itemData: ItemData;
+  index: number;
+}
+
 // ─── Main Floating 3D Item ───────────────────────────────────────────────────
-const Floating3DItem = forwardRef(function Floating3DItem(
+const Floating3DItem = forwardRef<THREE.Group, Floating3DItemProps>(function Floating3DItem(
   { position, itemType, itemData, index },
   externalRef
 ) {
-  const groupRef = useRef()
-  const innerRef = useRef()
+  const groupRef = useRef<THREE.Group>(null)
+  const innerRef = useRef<THREE.Group>(null)
   const camera = useThree((s) => s.camera)
   const { isDarkMode } = useTheme()
   const { is2DMode } = useLayoutMode()
@@ -276,25 +305,27 @@ const Floating3DItem = forwardRef(function Floating3DItem(
     const cacheKey = `${rounded}_${isDarkMode}`
     if (cacheKey !== lastFade.current) {
       lastFade.current = cacheKey
-      innerRef.current.traverse((child) => {
-        if (child.isMesh && child.material && child.name === 'imagePlane') {
+      innerRef.current.traverse((child: THREE.Object3D) => {
+        const mesh = child as THREE.Mesh
+        if (mesh.isMesh && mesh.material && mesh.name === 'imagePlane') {
           // ─── Shader-based fade: update uniforms instead of material.map/color ──
-          if (child.material.uniforms) {
-            child.material.uniforms.uFade.value = fade
+          const mat = mesh.material as THREE.ShaderMaterial
+          if (mat.uniforms) {
+            mat.uniforms.uFade.value = fade
 
             // Base color drives brightness (replaces old material.color approach)
             if (isDarkMode) {
               if (fade > 0.6) {
-                child.material.uniforms.uBaseColor.value.set(1, 1, 1)
+                mat.uniforms.uBaseColor.value.set(1, 1, 1)
               } else if (fade > 0) {
                 const v = 1 + fade * 8
-                child.material.uniforms.uBaseColor.value.set(v, v, v)
+                mat.uniforms.uBaseColor.value.set(v, v, v)
               } else {
-                child.material.uniforms.uBaseColor.value.set(1, 1, 1)
+                mat.uniforms.uBaseColor.value.set(1, 1, 1)
               }
             } else {
               const v = 1 - fade
-              child.material.uniforms.uBaseColor.value.set(v, v, v)
+              mat.uniforms.uBaseColor.value.set(v, v, v)
             }
           }
         }
@@ -316,7 +347,7 @@ const Floating3DItem = forwardRef(function Floating3DItem(
       title={itemData.title || ''}
       isDarkMode={isDarkMode}
       isFocused={interactState.focusedIndex === index}
-      onClick={(e) => {
+      onClick={(e: any) => {
         e.stopPropagation()
         if (interactState.focusedIndex === index) {
           interactState.focusedIndex = null;
@@ -329,10 +360,10 @@ const Floating3DItem = forwardRef(function Floating3DItem(
 
   return (
     <group
-      ref={(el) => {
-        groupRef.current = el
+      ref={(el: THREE.Group | null) => {
+        (groupRef as React.MutableRefObject<THREE.Group | null>).current = el
         if (typeof externalRef === 'function') externalRef(el)
-        else if (externalRef) externalRef.current = el
+        else if (externalRef) (externalRef as React.MutableRefObject<THREE.Group | null>).current = el
       }}
       position={position}
     >
