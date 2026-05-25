@@ -7,9 +7,11 @@ export const scrollState = {
   progress: 0,
   scrollY: 0,
   scrollMax: 1,
+  scrollVelocity: 0,
 }
 
 export function updateScrollState() {
+  const prevY = scrollState.scrollY
   scrollState.scrollMax = Math.max(1, document.documentElement.scrollHeight - window.innerHeight)
   const newScrollY = window.scrollY
   
@@ -21,6 +23,7 @@ export function updateScrollState() {
 
   scrollState.scrollY = newScrollY
   scrollState.progress = Math.min(1, Math.max(0, scrollState.scrollY / scrollState.scrollMax))
+  scrollState.scrollVelocity = newScrollY - prevY
 }
 
 export const interactState = {

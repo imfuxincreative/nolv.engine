@@ -8,7 +8,7 @@ import { useLayoutMode } from '../context/LayoutContext.jsx'
 import { RiBox2Fill } from "react-icons/ri"
 import { FaSquareFull } from "react-icons/fa"
 
-export default function Navbar() {
+export default function Controls() {
   const { setIsDarkMode, isDarkMode } = useTheme()
   const { setCursorAnimation } = useCursor()
   const { is2DMode, setIs2DMode } = useLayoutMode()

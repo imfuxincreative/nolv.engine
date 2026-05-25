@@ -8,6 +8,7 @@ import { forwardRef } from 'react'
 import { scrollState, interactState } from './scrollState'
 import { useTheme } from '../../context/ThemeContext.jsx'
 import { useLayoutMode } from '../../context/LayoutContext.jsx'
+import { createPaperBendMaterial, paperPlaneGeometry } from './paperBendShader'
 
 
 
@@ -16,9 +17,10 @@ import { useLayoutMode } from '../../context/LayoutContext.jsx'
 const _textureCache = new Map()
 
 // ─── Shared geometry for ALL image planes ─────────────────────────────────────
-// PERF: One geometry buffer shared across ~1000 instances instead of each
-// creating its own. Scale is used to handle different aspect ratios.
-const _sharedPlaneGeo = new THREE.PlaneGeometry(1, 1)
+// PERF: One subdivided geometry buffer shared across ~1000 instances.
+// 16×16 segments allow vertex displacement for paper-bend effect.
+// Scale is used to handle different aspect ratios.
+const _sharedPlaneGeo = paperPlaneGeometry
 
 // ─── Constants for smooth theme color interpolation ───────────────────────────
 const _colorLightBg = new THREE.Color('#111111')
@@ -30,7 +32,7 @@ const _tempColor = new THREE.Color()
 // ─── 3D Floating Image with Title Overlay ─────────────────────────────────────
 // Each image gets an editorial-style title positioned at bottom-left, matching
 // the magazine/editorial UI reference.
-function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, onClick }) {
+function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, isFocused, onClick }) {
   const meshRef = useRef()
   const bgMatRef = useRef()
   const textRef = useRef()
@@ -39,6 +41,16 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, onClic
   const [aspect, setAspect] = useState(1)
   const [hovered, setHovered] = useState(false)
   const fixedWidth = 0.9
+
+  // ─── Smoothed shader drive values (lerped per frame) ──────────────────────
+  const smoothBendX = useRef(0)
+  const smoothBendY = useRef(0)
+  const smoothCurl = useRef(0)
+
+  // ─── Local hover position and touch strength ──────────────────────────────
+  const targetMouse = useRef(new THREE.Vector2(0, 0))
+  const currentMouse = useRef(new THREE.Vector2(0, 0))
+  const touchProgress = useRef(0)
 
   const texture = useMemo(() => {
     if (_textureCache.has(imageSrc)) {
@@ -62,6 +74,11 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, onClic
     return tex
   }, [imageSrc])
 
+  // ─── Paper Bend ShaderMaterial (one per image instance) ────────────────────
+  const paperMaterial = useMemo(() => {
+    return createPaperBendMaterial(texture)
+  }, [texture])
+
   // Subscribe to get correct aspect ratio (works for both cached and fresh textures)
   useEffect(() => {
     const entry = _textureCache.get(imageSrc)
@@ -76,7 +93,7 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, onClic
     }
   }, [imageSrc])
 
-  // Smoothly interpolate label colors on theme change
+  // Smoothly interpolate label colors on theme change + update paper bend uniforms
   useFrame((state, delta) => {
     // Clamp delta to avoid massive jumps when browser hangs during theme toggle
     const safeDelta = Math.min(delta, 0.032)
@@ -111,6 +128,46 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, onClic
     if (textRef.current) {
       textRef.current.fillOpacity = hoverProgress.current
     }
+
+    // ─── Update Paper Bend Shader Uniforms ──────────────────────────────────
+    if (paperMaterial) {
+      // Scroll velocity drives vertical bend (paper pushes back when scrolling)
+      const scrollVel = scrollState.scrollVelocity || 0
+      const targetBendY = Math.max(-1, Math.min(1, scrollVel * 0.05))
+
+      // Mouse-based horizontal bend
+      const pointer = state.pointer // normalized -1..1
+      const targetBendX = pointer.x * 0.3
+
+      // Curl from combined velocity magnitude
+      const velMag = Math.abs(scrollVel)
+      const targetCurl = Math.min(1, velMag * 0.03)
+
+      // Local Touch / Hover Bending Position and Strength
+      const touchTarget = hovered ? 1.0 : 0.0
+      // Lerp touch strength
+      touchProgress.current += (touchTarget - touchProgress.current) * safeDelta * 10.0
+
+      // Lerp touch coordinates under the cursor
+      currentMouse.current.lerp(targetMouse.current, safeDelta * 12.0)
+
+      // Smooth lerp all values for buttery transitions
+      const lerpRate = safeDelta * 4.0
+      smoothBendX.current += (targetBendX - smoothBendX.current) * lerpRate
+      smoothBendY.current += (targetBendY - smoothBendY.current) * lerpRate
+      smoothCurl.current += (targetCurl - smoothCurl.current) * lerpRate
+
+      paperMaterial.uniforms.uBendX.value = smoothBendX.current
+      paperMaterial.uniforms.uBendY.value = smoothBendY.current
+      paperMaterial.uniforms.uCurl.value = smoothCurl.current
+      paperMaterial.uniforms.uTime.value = state.clock.elapsedTime
+
+      // Pass local touch coordinates and strength
+      paperMaterial.uniforms.uMouse.value.copy(currentMouse.current)
+      paperMaterial.uniforms.uTouchStrength.value = touchProgress.current * (isFocused ? 1.8 : 1.0)
+
+      paperMaterial.uniforms.uIsDarkMode.value = themeProgress.current
+    }
   })
 
   const labelWidth = Math.max(0.2, (title?.length || 0) * 0.02) + 0.04
@@ -141,21 +198,22 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, onClic
         name="imagePlane"
         ref={meshRef}
         geometry={_sharedPlaneGeo}
+        material={paperMaterial}
         scale={[fixedWidth, fixedWidth * aspect, 1]}
         key={aspect}
         onPointerOver={(e) => { e.stopPropagation(); document.body.style.cursor = 'pointer'; setHovered(true) }}
+        onPointerMove={(e) => {
+          e.stopPropagation()
+          if (e.uv) {
+            targetMouse.current.set(e.uv.x - 0.5, e.uv.y - 0.5)
+          }
+        }}
         onPointerOut={(e) => { document.body.style.cursor = 'auto'; setHovered(false) }}
         onClick={onClick}
-      >
-        <meshBasicMaterial
-          map={texture}
-          side={THREE.DoubleSide}
-          toneMapped={false}
-        />
-      </mesh>
+      />
 
       {/* ── Editorial Title Overlay ── */}
-      {title && (
+      {/* {title && (
         <group position={[
           -fixedWidth / 2 + labelWidth / 2,
           (fixedWidth * aspect) / 2 + labelHeight / 2,
@@ -176,10 +234,10 @@ function FloatingImage({ imageSrc, scale = 1, title = 'nolv', isDarkMode, onClic
             letterSpacing={0.02}
             fillOpacity={0}
           >
-            {title}
+            #1012
           </Text>
         </group>
-      )}
+      )} */}
     </group>
   )
 }
@@ -213,50 +271,31 @@ const Floating3DItem = forwardRef(function Floating3DItem(
     const isFocused = interactState.focusedIndex === index
     const fade = (is2DMode || isFocused) ? 0 : Math.max(0, Math.min(1, (scrollState.progress - 0.80) / 0.10))
 
-    // Only traverse when fade value or dark mode actually changes
+    // Only update when fade value or dark mode actually changes
     const rounded = (fade * 20 | 0) / 20
     const cacheKey = `${rounded}_${isDarkMode}`
     if (cacheKey !== lastFade.current) {
       lastFade.current = cacheKey
       innerRef.current.traverse((child) => {
         if (child.isMesh && child.material && child.name === 'imagePlane') {
-          // Save original texture map once
-          if (child.material._origMap === undefined) {
-            child.material._origMap = child.material.map
-          }
+          // ─── Shader-based fade: update uniforms instead of material.map/color ──
+          if (child.material.uniforms) {
+            child.material.uniforms.uFade.value = fade
 
-          if (isDarkMode) {
-            if (fade > 0.6) {
-              // High fade: remove texture, solid white for clean logo
-              if (child.material.map !== null) {
-                child.material.map = null
-                child.material.needsUpdate = true
+            // Base color drives brightness (replaces old material.color approach)
+            if (isDarkMode) {
+              if (fade > 0.6) {
+                child.material.uniforms.uBaseColor.value.set(1, 1, 1)
+              } else if (fade > 0) {
+                const v = 1 + fade * 8
+                child.material.uniforms.uBaseColor.value.set(v, v, v)
+              } else {
+                child.material.uniforms.uBaseColor.value.set(1, 1, 1)
               }
-              child.material.color.setRGB(1, 1, 1)
-            } else if (fade > 0) {
-              // Mid fade: boost brightness with texture still visible
-              if (child.material.map !== child.material._origMap) {
-                child.material.map = child.material._origMap
-                child.material.needsUpdate = true
-              }
-              const v = 1 + fade * 8
-              child.material.color.setRGB(v, v, v)
             } else {
-              // No fade: restore original
-              if (child.material.map !== child.material._origMap) {
-                child.material.map = child.material._origMap
-                child.material.needsUpdate = true
-              }
-              child.material.color.setRGB(1, 1, 1)
+              const v = 1 - fade
+              child.material.uniforms.uBaseColor.value.set(v, v, v)
             }
-          } else {
-            // Light mode: fade to black (multiplication naturally works)
-            if (child.material.map !== child.material._origMap) {
-              child.material.map = child.material._origMap
-              child.material.needsUpdate = true
-            }
-            const v = 1 - fade
-            child.material.color.setRGB(v, v, v)
           }
         }
       })
@@ -271,11 +310,12 @@ const Floating3DItem = forwardRef(function Floating3DItem(
   //    EVERY mouse/touch move — extremely expensive, especially on mobile
 
   const renderItem = () => (
-    <FloatingImage 
-      imageSrc={itemData.imageSrc} 
-      scale={itemData.scale || 0.7} 
-      title={itemData.title || ''} 
-      isDarkMode={isDarkMode} 
+    <FloatingImage
+      imageSrc={itemData.imageSrc}
+      scale={itemData.scale || 0.7}
+      title={itemData.title || ''}
+      isDarkMode={isDarkMode}
+      isFocused={interactState.focusedIndex === index}
       onClick={(e) => {
         e.stopPropagation()
         if (interactState.focusedIndex === index) {
