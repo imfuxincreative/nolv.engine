@@ -10,6 +10,7 @@ import ScrollUpdater from './ScrollUpdater'
 import SceneReadySignal from './SceneReadySignal'
 import InfiniteCamera from './InfiniteCamera'
 import FinalUIOverlay from './FinalUIOverlay'
+import { useSmoothScroll } from '../../context/LenisContext.jsx'
 
 const isMobile = () => typeof window !== 'undefined' && (window.innerWidth < 768 || /Android|iPhone|iPad|iPod/i.test(navigator.userAgent))
 
@@ -17,6 +18,7 @@ export default function ImageCanvasAnimation() {
   const [mobile] = useState(() => isMobile())
   const [sceneReady, setSceneReady] = useState(false)
   const { isDarkMode } = useTheme()
+  const lenisRef = useSmoothScroll()
 
   const handleSceneReady = useCallback(() => {
     setSceneReady(true)
@@ -57,13 +59,17 @@ export default function ImageCanvasAnimation() {
 
   const { is2DMode } = useLayoutMode()
 
-  const prevIs2DMode = useRef(is2DMode)
   useEffect(() => {
-    if (is2DMode && !prevIs2DMode.current) {
+    if (is2DMode) {
       interactState.focusedIndex = null;
+      lenisRef.current?.stop()
+    } else {
+      lenisRef.current?.start()
     }
-    prevIs2DMode.current = is2DMode;
-  }, [is2DMode])
+    return () => {
+      lenisRef.current?.start()
+    }
+  }, [is2DMode, lenisRef])
 
   const dragRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0, vx: 0, vy: 0, isDragging: false });
 
@@ -113,6 +119,22 @@ export default function ImageCanvasAnimation() {
         <ImageCanvas count={mobile ? 1200 : 1200} zRange={2400} dragRef={dragRef} />
         <InfiniteCamera />
       </Canvas>
+      {/* Dark mode vignette */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-1000 ease-in-out" 
+        style={{
+          background: 'radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.6) 100%)',
+          opacity: isDarkMode ? 1 : 0
+        }}
+      />
+      {/* Light mode vignette */}
+      <div 
+        className="fixed inset-0 pointer-events-none z-10 transition-opacity duration-1000 ease-in-out" 
+        style={{
+          background: 'radial-gradient(circle, rgba(255,255,255,0) 40%, rgba(255,255,255,0.65) 100%)',
+          opacity: isDarkMode ? 0 : 1
+        }}
+      />
       <FinalUIOverlay />
     </div>
   )
