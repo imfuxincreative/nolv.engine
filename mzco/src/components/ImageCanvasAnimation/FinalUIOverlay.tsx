@@ -16,15 +16,15 @@ export default function FinalUIOverlay() {
     const tick = () => {
       // Sync strictly using 60fps shared R3F state vars rather than DOM scroll events
       const scrollProgress = scrollState.progress || 0;
-      
+
       // Fade in the UI exclusively in the last 5% AFTER the logo slides up
       const fade = Math.max(0, Math.min(1, (scrollProgress - 0.95) / 0.05));
-      
+
       // We only want the overlay mathematically visible when layout is deeply inside 3D mode (progress near 0)
       const lp = scrollState.layoutProgress || 0;
       // Tighten the layoutAlpha so the UI only begins to appear when morph is > 90% complete
       const layoutAlpha = Math.pow(1 - lp, 8);
-      
+
       const isFocused = interactState.focusedIndex !== null;
       const targetFade = isFocused ? 0 : (fade * layoutAlpha);
 
@@ -39,7 +39,7 @@ export default function FinalUIOverlay() {
         overlayRef.current.style.maskImage = `linear-gradient(to top, rgba(0,0,0,1) ${X}%, rgba(0,0,0,0) ${Y}%)`
         overlayRef.current.style.pointerEvents = targetFade > 0.9 ? 'auto' : 'none'
       }
-      
+
       rafId = requestAnimationFrame(tick)
     }
 
@@ -60,8 +60,8 @@ export default function FinalUIOverlay() {
         <p className={`${styles.subtitle} ${isDarkMode ? styles.textWhite : styles.textBlack}`}>
           A creative <span className={styles.fontMedium}>engine </span> for <span className={styles.italic}>visuals </span>recognization
         </p>
-        <button 
-          onClick={() => window.open('https://nolv.vercel.app/signup', '_self')}
+        <button
+          onClick={() => window.open('https://nolv.club/signup', '_self')}
           className={`${styles.btn} ${isDarkMode ? styles.btnDark : styles.btnLight}`}>
           Join now
         </button>

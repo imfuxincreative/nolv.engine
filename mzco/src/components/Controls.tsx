@@ -21,7 +21,7 @@ export default function Controls() {
   }
 
   const handleLogin = () => {
-    window.location.href = `https://nolv.vercel.app/signup`;
+    window.location.href = `https://nolv.club/signup`;
   };
 
   const isHome = location.pathname === '/' && !is2DMode
