@@ -235,7 +235,7 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }: ImageCanvasProps) {
         // Fly in from +400 units closer to camera (starting near camera, flying past into place)
         targetZ += 400 * (1 - eased);
       }
-
+      console.log('df')
       // --- Focus Logic ---
       if (ref.userData.offsetX === undefined) {
         ref.userData.offsetX = 0;
