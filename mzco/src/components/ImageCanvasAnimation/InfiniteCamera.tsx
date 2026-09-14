@@ -19,6 +19,7 @@ export default function InfiniteCamera() {
   }, [])
 
   useFrame(() => {
+
     // PERF: Uses shared scrollState instead of reading DOM
     const cameraProgress = Math.min(1, scrollState.progress / 0.90)
 
@@ -28,9 +29,13 @@ export default function InfiniteCamera() {
 
     const scrollZ = startZ + cameraProgress * (finalZ - startZ);
 
+    // Intro fly-through camera offset along Z axis (scroll direction)
+    const introZOffset = scrollState.introOffset || 0;
+    const targetZ = scrollZ + introZOffset;
+
     // Bind strictly perfectly to the EXACT layout metric used by the structural grid geometry.
     const lp = scrollState.layoutProgress || 0;
-    camera.position.z = scrollZ + (150 - scrollZ) * lp;
+    camera.position.z = targetZ + (150 - targetZ) * lp;
 
     // --- Dynamic Mouse Skew Parallax ---
     // Physical shifting: moving the camera opposite to pointer makes items 'lean' toward pointer

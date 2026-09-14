@@ -6,14 +6,19 @@
   align-items: center;
   justify-content: center;
   background-color: white;
+  will-change: opacity;
   transition-property: opacity;
-  transition-duration: 700ms;
+  transition-duration: 300ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fadeOut {
   opacity: 0;
   pointer-events: none;
+}
+
+.fadeOut .spinner {
+  animation: none !important;
 }
 
 .fadeIn {

@@ -150,6 +150,18 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }: ImageCanvasProps) {
 
     const isMorphing = Math.abs(layoutProgress.current - targetMode) > 0.01;
 
+    // ─── Staggered Intro Fly-In State ──────────────────────────────────────────
+    let isIntroActive = false
+    let introElapsed = 0
+    if (scrollState.introStartTime !== null) {
+      introElapsed = (performance.now() - scrollState.introStartTime) / 1000
+      if (introElapsed < 1.4) {
+        isIntroActive = true
+      } else {
+        scrollState.introStartTime = null
+      }
+    }
+
     for (let i = 0; i < len; i++) {
       const ref = refs[i]
       if (!ref) continue
@@ -210,6 +222,20 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }: ImageCanvasProps) {
       let targetRotX = angleX * lp
       let targetRotY = angleY * lp
 
+      // --- Staggered Intro Fly-Through (Transition Only) ---
+      if (isIntroActive) {
+        const staggerDelay = (((i % 15) / 15) * 0.25) + ((1 - (item.zBase - (-2280)) / 2400) * 0.15);
+        const flightDuration = 0.85;
+        const itemElapsed = Math.max(0, introElapsed - staggerDelay);
+        const p = Math.min(1, itemElapsed / flightDuration);
+
+        // Ease-out cubic for rapid acceleration and smooth glide landing
+        const eased = 1 - Math.pow(1 - p, 3);
+
+        // Fly in from +400 units closer to camera (starting near camera, flying past into place)
+        targetZ += 400 * (1 - eased);
+      }
+
       // --- Focus Logic ---
       if (ref.userData.offsetX === undefined) {
         ref.userData.offsetX = 0;
@@ -219,7 +245,7 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }: ImageCanvasProps) {
         ref.userData.offsetRotX = 0;
         ref.userData.offsetRotY = 0;
       }
-      
+
       const isFocused = interactState.focusedIndex === i;
       const anyFocused = interactState.focusedIndex !== null;
 
@@ -241,7 +267,7 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }: ImageCanvasProps) {
       } else if (anyFocused) {
         let dirX = targetX;
         let dirY = targetY;
-        
+
         if (Math.abs(dirX) < 0.1 && Math.abs(dirY) < 0.1) {
           dirX = (i % 2 === 0) ? 1 : -1;
           dirY = (i % 3 === 0) ? 1 : -1;
