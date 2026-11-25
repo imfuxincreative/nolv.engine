@@ -41,9 +41,21 @@ export default function ImageCanvasAnimation() {
     return () => style.remove()
   }, [])
 
-  // 3D Image Fly-Through Transition — triggered when loading finishes
+  // Scroll animation — runs AFTER loading screen disappears
   const handleLoadingComplete = useCallback(() => {
-    scrollState.introStartTime = performance.now()
+    let start: number | null = null
+    const startY = window.scrollY
+    const targetY = 500
+    const duration = 200 // fast snap
+
+    const step = (timestamp: number) => {
+      if (!start) start = timestamp
+      const percent = Math.min((timestamp - start) / duration, 1)
+      const eased = 1 - Math.pow(1 - percent, 3)
+      window.scrollTo(0, startY + (targetY - startY) * eased)
+      if (percent < 1) requestAnimationFrame(step)
+    }
+    requestAnimationFrame(step)
   }, [])
 
   const { is2DMode } = useLayoutMode()

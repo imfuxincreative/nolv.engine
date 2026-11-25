@@ -29,11 +29,11 @@ export default function LoadingScreen({ sceneReady, onComplete }: LoadingScreenP
   useEffect(() => {
     if (sceneReady && minTimeElapsed) {
       setFadeOut(true)
-      onComplete?.()
       const timer = setTimeout(() => {
         setVisible(false)
         document.body.style.overflow = ''
-      }, 300)
+        onComplete?.()
+      }, 700)
       return () => clearTimeout(timer)
     }
   }, [sceneReady, minTimeElapsed])
