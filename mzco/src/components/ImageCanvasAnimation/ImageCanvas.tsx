@@ -5,6 +5,8 @@ import Floating3DItem from './Floating3DItem'
 import * as THREE from 'three'
 
 import { scrollState, interactState } from './scrollState'
+import { TIMELINE, resolveStageState } from './pillarsData'
+import { loadAllShapePoints, type ShapePointMap } from './shapeSampler'
 import { useLayoutMode } from '../../context/LayoutContext'
 import { useVisual } from '../../context/VisualContext'
 
@@ -49,45 +51,18 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }: ImageCanvasProps) {
     })
   }, [count, zRange, visuals])
 
-  // ── Read Logo points & Load Texture ────────────────────────────────────────────────────────
-  const [logoPoints, setLogoPoints] = useState<{ x: number; y: number }[]>([])
-  const [logoTex, setLogoTex] = useState<THREE.Texture | null>(null)
+  // ── Sample Logo + 4 Pillar Icon point clouds ───────────────────────────────
+  const [shapeMap, setShapeMap] = useState<ShapePointMap | null>(null)
 
   useEffect(() => {
-    new THREE.TextureLoader().load('/logo/nolv.png', (tex) => {
-      tex.colorSpace = THREE.SRGBColorSpace
-      setLogoTex(tex)
+    let active = true
+    loadAllShapePoints(count).then((pointsMap) => {
+      if (active) setShapeMap(pointsMap)
     })
-
-    const img = new Image()
-    img.src = '/logo/nolv.png'
-    img.onload = () => {
-      const canvas = document.createElement('canvas')
-      const ctx = canvas.getContext('2d')
-      if (!ctx) return
-      const w = 150
-      const h = Math.floor(img.height * (150 / img.width))
-      canvas.width = w
-      canvas.height = h
-      ctx.drawImage(img, 0, 0, w, h)
-      const data = ctx.getImageData(0, 0, w, h).data
-      const points: { x: number; y: number }[] = []
-
-      for (let y = 0; y < h; y += 2) {
-        for (let x = 0; x < w; x += 2) {
-          const alpha = data[(y * w + x) * 4 + 3]
-          if (alpha > 128) { // non-transparent
-            const nx = (x / w) - 0.5
-            const ny = -((y / h) - 0.5) * (h / w)
-            points.push({ x: nx, y: ny })
-          }
-        }
-      }
-      // Removed random shuffle so the logo mapping physically ties to the grid map
-      // This prevents the chaotic 'flying across the screen' and anchors their paths.
-      setLogoPoints(points)
+    return () => {
+      active = false
     }
-  }, [])
+  }, [count])
 
   const { is2DMode } = useLayoutMode()
   const layoutProgress = useRef(0)
@@ -95,7 +70,7 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }: ImageCanvasProps) {
   const wrap = (val: number, max: number) => ((val % max) + max) % max;
 
   useFrame((stateEvent) => {
-    if (logoPoints.length === 0) return
+    if (!shapeMap) return
 
     // Interpolate layout mode smoothly and blazingly fast
     const targetMode = is2DMode ? 1 : 0
@@ -105,16 +80,24 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }: ImageCanvasProps) {
     // PERF: Read from shared scrollState instead of accessing DOM
     const scrollProgress = scrollState.progress
 
-    // The camera smoothly travels from z=10 to z=150.
-    // At z=150, the perspective alignment perfectly recreates the logo.
+    // The camera smoothly travels from z=-2200 to z=150.
+    // At z=150, the perspective alignment perfectly recreates the active shape.
     const finalCameraZ = 150
 
     // PERF: Pre-compute values used by all items
-    const cameraProgress = Math.min(1, scrollProgress / 0.90)
+    const cameraProgress = Math.min(1, scrollProgress / TIMELINE.TUNNEL_END)
     const dynamicSizeMultiplier = 1 + (1.5 * (1 - cameraProgress))
-    const finalFade = Math.max(0, Math.min(1, (scrollProgress - 0.90) / 0.04))
+    const liftRange = TIMELINE.LIFT_END - TIMELINE.TUNNEL_END
+    const finalFade = Math.max(0, Math.min(1, (scrollProgress - TIMELINE.TUNNEL_END) / liftRange))
     const targetYOffset = finalFade * 0.8
     const spreadFactor = 0.08
+
+    // Resolve active morph pair (logo <-> pillar icons) for this scroll progress
+    const stage = resolveStageState(scrollProgress)
+    const fromPoints = shapeMap[stage.fromShape]
+    const toPoints = shapeMap[stage.toShape]
+    const sameShape = stage.fromShape === stage.toShape || stage.morphT <= 0 || stage.morphT >= 1
+    const useToOnly = stage.morphT >= 1
 
     const refs = itemRefs.current
     const len = refs.length
@@ -155,15 +138,51 @@ function ImageCanvas({ count = 80, zRange = 160, dragRef }: ImageCanvasProps) {
       if (!ref) continue
 
       const item = items[i]
-      const targetPoint = logoPoints[i % logoPoints.length]
+
+      // Compute morphed 2D target point (preserving 3D anamorphic depth & parallax)
+      let targetPtX: number
+      let targetPtY: number
+      let targetPtZ = 0
+
+      if (sameShape) {
+        const pt = useToOnly ? toPoints[i % toPoints.length] : fromPoints[i % fromPoints.length]
+        targetPtX = pt.x
+        targetPtY = pt.y
+      } else {
+        const pFrom = fromPoints[i % fromPoints.length]
+        const pTo = toPoints[i % toPoints.length]
+
+        // Subtle golden-ratio stagger so particles ripple coherently during the 360° spin
+        const stagger = ((i * 0.6180339887) % 1) * 0.14
+        const rawT = Math.max(0, Math.min(1, (stage.morphT - stagger) / 0.86))
+        const easedT = rawT * rawT * (3 - 2 * rawT)
+
+        // Interpolate base shape coordinates
+        const interpX = pFrom.x + (pTo.x - pFrom.x) * easedT
+        const interpY = pFrom.y + (pTo.y - pFrom.y) * easedT
+
+        // Full 360° horizontal turntable rotation (3D Y-up axis / Blender Z-up axis)
+        const angle = easedT * Math.PI * 2
+        const cosA = Math.cos(angle)
+        const sinA = Math.sin(angle)
+
+        // Subtle organic radial breathing at mid-rotation
+        const arc = Math.sin(easedT * Math.PI)
+        const driftAngle = i * 2.3999632297
+        const driftAmp = 0.03 * arc
+
+        targetPtX = interpX * cosA + Math.cos(driftAngle) * driftAmp
+        targetPtY = interpY + Math.sin(driftAngle) * driftAmp
+        targetPtZ = interpX * sinA
+      }
 
       // --- 3D Anamorphic Layout ---
       const itemZ = item.zBase
       const distanceToFinal = finalCameraZ - itemZ
 
-      const pos3D_x = targetPoint.x * distanceToFinal * spreadFactor
-      const pos3D_y = (targetPoint.y + targetYOffset) * distanceToFinal * spreadFactor
-      const pos3D_z = itemZ
+      const pos3D_x = targetPtX * distanceToFinal * spreadFactor
+      const pos3D_y = (targetPtY + targetYOffset) * distanceToFinal * spreadFactor
+      const pos3D_z = itemZ + targetPtZ * distanceToFinal * spreadFactor
       const scale3D = distanceToFinal * 0.0015 * dynamicSizeMultiplier
 
       // --- 2D Scattered Layout ---

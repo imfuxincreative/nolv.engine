@@ -34,28 +34,33 @@ const {isLoading , setIsLoading , showMessage , setShowMessage} = useContext(Loa
     }
   }, [isLoading]);
   useEffect(() => {
-    const handleScroll = () => {
+    if (isLoading) return;
+
+    let rafId: ReturnType<typeof requestAnimationFrame>;
+    let lastPercent = -1;
+
+    const update = () => {
       const scrollTop = window.scrollY;
+      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      const scrollPercent = Math.min(100, Math.max(0, (scrollTop / maxScroll) * 100));
 
-      const docHeight = document.documentElement.scrollHeight
-  
-      const scrollPercent = (scrollTop / (docHeight - window.innerHeight)) * 100;
-      
-
-      if (progressRef.current) {
+      if (Math.abs(scrollPercent - lastPercent) > 0.01 && progressRef.current) {
+        lastPercent = scrollPercent;
         progressRef.current.style.width = `${scrollPercent}%`;
       }
+
+      rafId = requestAnimationFrame(update);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    rafId = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(rafId);
+  }, [isLoading]);
 
   return (
     <div className={styles.container}>
     <div
       ref={progressRef}
-      className={`${styles.bar} ${isDarkMode ? styles.bgWhite : styles.bgBlack}`}
+      className={`${styles.bar} ${isLoading ? styles.loadingTransition : ''} ${isDarkMode ? styles.bgWhite : styles.bgBlack}`}
       />
       </div>
   );

@@ -7,11 +7,17 @@
   z-index: 120;
   top: 0;
   left: 0;
-  transition-property: all;
+  transition-property: background-color;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 1000ms;
+  transition-duration: 500ms;
   height: 5px;
   width: 0;
+  will-change: width;
+}
+
+.loadingTransition {
+  transition-property: width, background-color;
+  transition-duration: 1000ms;
 }
 
 .bgWhite {

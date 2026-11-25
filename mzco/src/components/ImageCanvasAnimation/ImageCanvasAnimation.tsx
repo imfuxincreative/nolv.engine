@@ -10,6 +10,7 @@ import ScrollUpdater from './ScrollUpdater'
 import SceneReadySignal from './SceneReadySignal'
 import InfiniteCamera from './InfiniteCamera'
 import FinalUIOverlay from './FinalUIOverlay'
+import StorySubtitles from './StorySubtitles'
 import { useSmoothScroll } from '../../context/LenisContext'
 import styles from './ImageCanvasAnimation.module.css'
 
@@ -39,23 +40,6 @@ export default function ImageCanvasAnimation() {
     `
     document.head.appendChild(style)
     return () => style.remove()
-  }, [])
-
-  // Scroll animation — runs AFTER loading screen disappears
-  const handleLoadingComplete = useCallback(() => {
-    let start: number | null = null
-    const startY = window.scrollY
-    const targetY = 500
-    const duration = 200 // fast snap
-
-    const step = (timestamp: number) => {
-      if (!start) start = timestamp
-      const percent = Math.min((timestamp - start) / duration, 1)
-      const eased = 1 - Math.pow(1 - percent, 3)
-      window.scrollTo(0, startY + (targetY - startY) * eased)
-      if (percent < 1) requestAnimationFrame(step)
-    }
-    requestAnimationFrame(step)
   }, [])
 
   const { is2DMode } = useLayoutMode()
@@ -102,9 +86,9 @@ export default function ImageCanvasAnimation() {
     <div
       {...(is2DMode ? bind() : {})}
       className={`${styles.container} ${is2DMode ? styles.grabMode : ''}`}
-      style={{ height: mobile ? '12000px' : '20000px' }}
+      style={{ height: mobile ? '17000px' : '28000px' }}
     >
-      <LoadingScreen sceneReady={sceneReady} onComplete={handleLoadingComplete} />
+      <LoadingScreen sceneReady={sceneReady} />
       <Canvas camera={{ position: [0, 0, 10], fov: 50, far: 10000 }}
         className={styles.canvas}
         dpr={mobile ? 1 : [1, 2]}
@@ -137,6 +121,7 @@ export default function ImageCanvasAnimation() {
         }}
       />
       <FinalUIOverlay />
+      <StorySubtitles />
     </div>
   )
 }

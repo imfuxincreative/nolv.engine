@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { scrollState } from './scrollState'
+import { TIMELINE } from './pillarsData'
 import { useLayoutMode } from '../../context/LayoutContext'
 
 export default function InfiniteCamera() {
@@ -20,7 +21,7 @@ export default function InfiniteCamera() {
 
   useFrame(() => {
     // PERF: Uses shared scrollState instead of reading DOM
-    const cameraProgress = Math.min(1, scrollState.progress / 0.90)
+    const cameraProgress = Math.min(1, scrollState.progress / TIMELINE.TUNNEL_END)
 
     // Linear interpolation for anamorphic perspective
     const startZ = -2200;

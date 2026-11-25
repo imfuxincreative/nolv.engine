@@ -6,6 +6,7 @@ import { Text } from '@react-three/drei'
 import * as THREE from 'three'
 import { forwardRef } from 'react'
 import { scrollState, interactState } from './scrollState'
+import { TIMELINE } from './pillarsData'
 import { useTheme } from '../../context/ThemeContext'
 import { useLayoutMode } from '../../context/LayoutContext'
 import { createPaperBendMaterial, paperPlaneGeometry } from './paperBendShader'
@@ -295,10 +296,11 @@ const Floating3DItem = forwardRef<THREE.Group, Floating3DItemProps>(function Flo
     // PERF: Skip ALL further processing if item is invisible
     if (!g.visible) return
 
-    // Transform items to black/white before the UI state (80% to 90%)
+    // Transform items to black/white before the UI state (FADE_START -> TUNNEL_END)
     // Skip if in 2D grid mode or if this item is currently focused
     const isFocused = interactState.focusedIndex === index
-    const fade = (is2DMode || isFocused) ? 0 : Math.max(0, Math.min(1, (scrollState.progress - 0.80) / 0.10))
+    const fadeRange = TIMELINE.TUNNEL_END - TIMELINE.FADE_START
+    const fade = (is2DMode || isFocused) ? 0 : Math.max(0, Math.min(1, (scrollState.progress - TIMELINE.FADE_START) / fadeRange))
 
     // Only update when fade value or dark mode actually changes
     const rounded = (fade * 20 | 0) / 20

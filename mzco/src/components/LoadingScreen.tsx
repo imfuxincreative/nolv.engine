@@ -10,6 +10,21 @@ export default function LoadingScreen({ sceneReady, onComplete }: LoadingScreenP
   const [visible, setVisible] = useState(true)
   const [fadeOut, setFadeOut] = useState(false)
   const [minTimeElapsed, setMinTimeElapsed] = useState(false)
+  const [phase, setPhase] = useState<'idle' | 'loading' | 'complete'>('idle')
+
+  // Trigger GPU-composited CSS transition after initial paint
+  useEffect(() => {
+    let raf2: number
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        setPhase('loading')
+      })
+    })
+    return () => {
+      cancelAnimationFrame(raf1)
+      if (raf2) cancelAnimationFrame(raf2)
+    }
+  }, [])
 
   // Minimum display time
   useEffect(() => {
@@ -25,20 +40,33 @@ export default function LoadingScreen({ sceneReady, onComplete }: LoadingScreenP
     return () => { document.body.style.overflow = '' }
   }, [visible, fadeOut])
 
-  // Fade out once both conditions are met
+  // Smoothly finish bar to 100%, then fade out once both conditions are met
   useEffect(() => {
     if (sceneReady && minTimeElapsed) {
-      setFadeOut(true)
-      const timer = setTimeout(() => {
+      setPhase('complete')
+      const fadeTimer = setTimeout(() => {
+        setFadeOut(true)
+      }, 320)
+      const hideTimer = setTimeout(() => {
         setVisible(false)
         document.body.style.overflow = ''
         onComplete?.()
-      }, 700)
-      return () => clearTimeout(timer)
+      }, 1020)
+      return () => {
+        clearTimeout(fadeTimer)
+        clearTimeout(hideTimer)
+      }
     }
-  }, [sceneReady, minTimeElapsed])
+  }, [sceneReady, minTimeElapsed, onComplete])
 
   if (!visible) return null
+
+  const fillPhaseClass =
+    phase === 'complete'
+      ? styles.progressComplete
+      : phase === 'loading'
+        ? styles.progressLoading
+        : ''
 
   return (
     <div className={`${styles.container} ${fadeOut ? styles.fadeOut : styles.fadeIn}`}>
@@ -49,29 +77,9 @@ export default function LoadingScreen({ sceneReady, onComplete }: LoadingScreenP
           className={styles.logo}
           draggable={false}
         />
-        <svg className={styles.spinner} viewBox="0 0 50 50">
-          <circle
-            cx="25"
-            cy="25"
-            r="22"
-            fill="none"
-            stroke="rgba(0,0,0,0.45)"
-            strokeWidth="1"
-            strokeDasharray="69.11"
-            strokeDashoffset="0"
-            strokeLinecap="round"
-          />
-          <circle
-            cx="25"
-            cy="25"
-            r="22"
-            fill="none"
-            stroke="rgba(0,0,0,0.45)"
-            strokeWidth="1"
-            strokeDasharray="69.11"
-            strokeLinecap="round"
-          />
-        </svg>
+        <div className={styles.progressTrack} role="progressbar" aria-label="Loading">
+          <div className={`${styles.progressFill} ${fillPhaseClass}`} />
+        </div>
       </div>
     </div>
   )
